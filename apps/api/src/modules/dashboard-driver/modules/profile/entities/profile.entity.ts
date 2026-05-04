@@ -2,12 +2,17 @@ import { User } from '@core/user/entities/auth.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { GenderEnum } from '@shared/enums/gender.enum';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Driver } from '../../driver/entities/driver.entity';
 
 @Entity()
 export class ProfileDriver extends BaseEntity {
   @OneToOne(() => User)
   @JoinColumn()
   user: User;
+
+  @OneToOne(() => Driver)
+  @JoinColumn()
+  driver: Driver;
 
   @Column()
   fullName: string;
