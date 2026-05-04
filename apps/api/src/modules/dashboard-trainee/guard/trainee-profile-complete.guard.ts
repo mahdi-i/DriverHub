@@ -7,13 +7,13 @@ import {
 import { Reflector } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DashboardTrainee } from '../entities/dashboard-trainee.entity';
+import { Trainee } from '../modules/trainee/entities/trainee.entity';
 
 @Injectable()
 export class TraineeProfileCompleteGuard implements CanActivate {
   constructor(
-    @InjectRepository(DashboardTrainee)
-    private traineeProfileRepository: Repository<DashboardTrainee>,
+    @InjectRepository(Trainee)
+    private traineeProfileRepository: Repository<Trainee>,
     private reflector: Reflector,
   ) {}
 
