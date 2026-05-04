@@ -11,6 +11,7 @@ import { CookieModule } from '@shared/modules/cookie.module';
 import { FileModule } from '@shared/modules/file.module';
 import { RedisModule } from '@shared/modules/redis.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { BookingModule } from './modules/booking/booking.module';
 import { DashboardAdminModule } from './modules/dashboard-admin/dashboard-admin.module';
 import { DashboardDriverModule } from './modules/dashboard-driver/dashboard-driver.module';
 import { DashboardTraineeModule } from './modules/dashboard-trainee/dashboard-trainee.module';
@@ -36,6 +37,7 @@ import { UserModule } from './modules/user/user.module';
     DashboardDriverModule,
     DashboardAdminModule,
     DashboardTraineeModule,
+    BookingModule,
   ],
   providers: [
     {
