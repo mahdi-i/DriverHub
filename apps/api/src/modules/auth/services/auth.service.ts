@@ -22,65 +22,78 @@ export class AuthService {
   ) {}
   async requestOtp(createAuthDto: CreateAuthDto) {
     const { phone } = createAuthDto;
-    const exsistUser = await this.userService.findByPhone(phone);
+    const existUser = await this.userService.findByPhone(phone);
 
-    if (exsistUser) {
-      throw new BadRequestException('این شماره قبلاً ثبت شده است');
-    }
-    const exsistOtp = await this.cacheService.get(`otp:${phone}`);
-    if (exsistOtp) {
-      throw new BadRequestException('کد تایید ارسال شده');
+    const existOtp = await this.cacheService.get(`otp:${phone}`);
+    if (existOtp) {
+      throw new BadRequestException('کد تایید قبلا ارسال شده است');
     }
     const otp = generateOtp(6);
     await this.cacheService.set(`otp:${phone}`, otp, 120);
 
     console.log(`OTP for ${phone}`);
 
-    return { message: 'کد تایید ارسال شد', expiresIn: 120, otp };
+    return {
+      message: existUser
+        ? 'کد تایید برای ورود ارسال شد'
+        : 'کد تایید برای ثبت‌نام ارسال شد',
+      expiresIn: 120,
+      otp,
+    };
   }
   async verifyOtp(verifyDto: VerifyOtpDto, roleSend: Roles) {
     const { phone, otp } = verifyDto;
-    const exsistUser = await this.userService.findByPhone(phone);
 
-    if (exsistUser) {
-      throw new BadRequestException('این شماره قبلاً ثبت شده است');
-    }
-    const exsistOtp = await this.cacheService.get(`otp:${phone}`);
-    if (!exsistOtp) {
+    const existOtp = await this.cacheService.get(`otp:${phone}`);
+    if (!existOtp) {
       throw new BadRequestException(
-        'کد تایید منقضی شده است. لطفاً دوباره درخواست کنید',
+        'کد تایید منقضی شده است. لطفا دوباره درخواست کنید',
       );
     }
-    if (exsistOtp !== otp.toString()) {
+    if (existOtp !== otp.toString()) {
       throw new BadRequestException('کد تایید اشتباه است');
     }
-
-    let role: Roles;
-    if (roleSend === Roles.TEACHER) {
-      role = Roles.TEACHER;
-    } else if (roleSend === Roles.TRAINEE) {
-      role = Roles.TRAINEE;
+    const user = await this.userService.findByPhone(phone);
+    if (user) {
+      await this.cacheService.del(`otp:${phone}`);
+      const tokens = await this.tokenService.generateTokens(user);
+      return {
+        message: 'ورود با موفقیت انجام شد',
+        user: {
+          id: user.id,
+          phone: user.phone,
+          role: user.role,
+        },
+        ...tokens,
+      };
     } else {
-      throw new BadRequestException('نقش کاربری نامعتبر است');
+      let role: Roles;
+      if (roleSend === Roles.TEACHER) {
+        role = Roles.TEACHER;
+      } else if (roleSend === Roles.TRAINEE) {
+        role = Roles.TRAINEE;
+      } else {
+        throw new BadRequestException('نقش کاربری نامعتبر است');
+      }
+
+      const newUser = await this.userService.create({
+        phone,
+        role,
+        isActive: true,
+      });
+
+      await this.cacheService.del(`otp:${phone}`);
+      const tokens = await this.tokenService.generateTokens(newUser);
+      return {
+        message: 'ثبت‌ نام با موفقیت انجام شد',
+        user: {
+          id: newUser.id,
+          phone: newUser.phone,
+          role: newUser.role,
+        },
+        ...tokens,
+      };
     }
-
-    const newUser = await this.userService.create({
-      phone,
-      role,
-      isActive: true,
-    });
-
-    await this.cacheService.del(`otp:${phone}`);
-    const tokens = await this.tokenService.generateTokens(newUser);
-    return {
-      message: 'ثبت‌ نام با موفقیت انجام شد',
-      user: {
-        id: newUser.id,
-        phone: newUser.phone,
-        role: newUser.role,
-      },
-      ...tokens,
-    };
   }
   async refreshTokens(refreshToken: string) {
     const tokens = await this.tokenService.refreshAccessToken(refreshToken);
