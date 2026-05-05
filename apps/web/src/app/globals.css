@@ -106,6 +106,6 @@
 }
 
 .pages-container {
-  @apply w-full mx-auto max-w-345 px-5 sm:px-15;
+  @apply w-full mx-auto max-w-400 px-5 sm:px-15;
   @apply py-4 md:py-8 lg:py-5;
 }
