@@ -11,13 +11,14 @@ import {
   TypographyP,
   TypographySmall,
 } from "@/core/components/custom/ui/typography/Typography";
+import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
 function page() {
   return (
-    <div className="container mx-auto py-10 space-y-10">
-      <section className="text-center bg-primary/10 py-20 rounded-2xl">
-        <TypographyBig>
+    <SectionLayout>
+      <section className="text-center bg-primary/10 rounded-2xl">
+        <TypographyH1>
           آموزشگاه <span className="text-primary">رانندگی</span>
-        </TypographyBig>
+        </TypographyH1>
         <TypographyLead className="mt-4">
           با بیش از ۱۵ سال تجربه درخشان
         </TypographyLead>
@@ -86,7 +87,7 @@ function page() {
           © ۱۴۰۴ آموزشگاه رانندگی دکترایکس. تمامی حقوق محفوظ است.
         </TypographySmall>
       </footer>
-    </div>
+    </SectionLayout>
   );
 }
 

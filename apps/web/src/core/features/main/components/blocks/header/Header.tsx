@@ -1,12 +1,17 @@
+import HeaderActions from "../../ui/header/HeaderActions";
 import HeaderListNav from "../../ui/header/HeaderListNav";
 import Logo from "../../ui/logo/Logo";
 
 function Header() {
   return (
     <>
-      <header className="bg-amber-300 flex items-center p-6 gap-4">
-        <Logo width={200} />
-        <HeaderListNav />
+      <header className=" flex items-center justify-between p-6 shadow-sm">
+        <div className="flex items-center gap-6">
+          <Logo width={180} />
+          <HeaderListNav />
+        </div>
+
+        <HeaderActions />
       </header>
     </>
   );

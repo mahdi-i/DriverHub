@@ -20,7 +20,7 @@ export default function RootLayout({
         className={`${yekanBakh.variable} antialiased`}
         suppressHydrationWarning
       >
-        <NextTopLoader />
+        <NextTopLoader color="#fdb913" />
         <Toaster />
 
         {children}

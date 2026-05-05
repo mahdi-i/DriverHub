@@ -95,6 +95,17 @@ function TypographyP({
     </p>
   );
 }
+function TypographySpan({
+  children,
+  className: className,
+  ...props
+}: TypographyTs) {
+  return (
+    <span className={cn("text-base ", className)} {...props}>
+      {children || "Lorem ipsum dolor sit amet consectetur adipiscing."}
+    </span>
+  );
+}
 
 function TypographyList({
   listItems,
@@ -195,4 +206,5 @@ export {
   TypographyMuted,
   TypographyP,
   TypographySmall,
+  TypographySpan,
 };

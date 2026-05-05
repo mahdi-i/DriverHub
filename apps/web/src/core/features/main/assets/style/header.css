@@ -1,0 +1,7 @@
+.link-nav-header {
+  @apply flex items-center text-center gap-2 transition-colors;
+}
+
+.link-nav-header:hover {
+  @apply text-primary;
+}

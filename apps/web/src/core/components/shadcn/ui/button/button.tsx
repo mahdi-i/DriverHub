@@ -5,43 +5,43 @@ import * as React from "react";
 import { cn } from "@/core/utils/shadcn/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-sm   transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-sm text-sm   transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none  shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-md " +
-          "hover:bg-primary-dark hover:shadow-lg hover:scale-105 " +
+          "bg-primary text-primary-foreground shadow-sm " +
+          "hover:bg-primary-dark hover:shadow-sm hover:scale-[1.01] " +
           "active:scale-95 active:shadow-sm " +
           "transform transition-all duration-200",
 
         secondary:
-          "bg-secondary text-secondary-foreground shadow-md " +
-          "hover:bg-secondary/90 hover:shadow-lg hover:scale-105 " +
+          "bg-secondary text-secondary-foreground shadow-sm " +
+          "hover:bg-secondary/90 hover:shadow-sm hover:scale-[1.01] " +
           "active:scale-95 active:shadow-sm " +
           "transform transition-all duration-200",
 
         outline:
           "border-2 border-primary text-primary bg-transparent " +
-          "hover:bg-primary/10 hover:scale-105 hover:shadow-md " +
+          "hover:bg-primary/10 hover:scale-[1.01] hover:shadow-sm " +
           "active:scale-95 " +
           "transform transition-all duration-200",
 
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm " +
-          "hover:bg-destructive/90 hover:scale-105 hover:shadow-md " +
+          "hover:bg-destructive/90 hover:scale-[1.01] hover:shadow-sm " +
           "active:scale-95 " +
           "transform transition-all duration-200",
 
         ghost:
           "bg-white/10 backdrop-blur-sm text-foreground " +
-          "hover:bg-white/20 hover:scale-105 " +
+          "hover:bg-white/20 hover:scale-[1.01] " +
           "active:scale-95 " +
           "transform transition-all duration-200",
 
         link:
           "text-primary underline-offset-4 hover:underline " +
-          "hover:scale-105 " +
+          "hover:scale-[1.01] " +
           "active:scale-95 " +
           "transform transition-all duration-200 p-0",
       },
