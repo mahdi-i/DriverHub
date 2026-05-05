@@ -1,45 +1,55 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
-import { CreateAppointmentDto } from '../dto/create-appointment.dto';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { PaginationOptions } from '@shared/decorators/pagination-option.decorator';
+import { RolesDecorator } from '@shared/decorators/roles.decorator';
+import { UserInfo } from '@shared/decorators/user.decorator';
+import { Roles } from '@shared/enums/role.enum';
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { UpdateAppointmentDto } from '../dto/update-appointment.dto';
 import { AppointmentService } from '../services/appointment.service';
 
 @Controller('appointment')
+@RolesDecorator(Roles.TEACHER)
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
-  @Post()
-  create(@Body() createAppointmentDto: CreateAppointmentDto) {
-    return this.appointmentService.create(createAppointmentDto);
+  @Post(':id/complete')
+  completedAppointment(
+    @Param('id') id: string,
+    @UserInfo('id') userid: string,
+  ) {
+    return this.appointmentService.completedAppointment(id, userid);
+  }
+  @Post('camcelled-appointment')
+  camcelledAppointment(
+    @Param('id') id: string,
+    @UserInfo('id') userid: string,
+  ) {
+    return this.appointmentService.camcelledAppointment(id, userid);
   }
 
   @Get()
-  findAll() {
-    return this.appointmentService.findAll();
+  @PaginationOptions({
+    sortOptions: [{ example: 'startTime:DESC' }],
+    filterOptions: [
+      { field: 'status', example: 'SCHEDULED' },
+      { field: 'student.fullName', example: 'علی' },
+    ],
+  })
+  findAll(@Paginate() query: PaginateQuery, @UserInfo('id') driverId: string) {
+    return this.appointmentService.findAllByDriver(query, driverId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.appointmentService.findOne(+id);
+  async findOne(@Param('id') id: string, @UserInfo('id') driverId: string) {
+    return this.appointmentService.findOne(id, driverId);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
+    @UserInfo('id') driverId: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
   ) {
-    return this.appointmentService.update(+id, updateAppointmentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.appointmentService.remove(+id);
+    return this.appointmentService.update(id, driverId, updateAppointmentDto);
   }
 }
