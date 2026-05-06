@@ -3,6 +3,7 @@ import { BaseEntity } from '@shared/entities/base.entity';
 import { GenderEnum } from '@shared/enums/gender.enum';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
+import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
 
 @Entity()
 export class ProfileDriver extends BaseEntity {
@@ -52,6 +53,13 @@ export class ProfileDriver extends BaseEntity {
 
   @Column({ nullable: false })
   address: string;
+
+  @Column({
+    type: 'enum',
+    enum: LicenseTypeEnum,
+    default: LicenseTypeEnum.CAR,
+  })
+  licenseType: LicenseTypeEnum;
 
   @Column({ default: false })
   isProfileComplete: boolean;

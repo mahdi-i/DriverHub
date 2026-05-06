@@ -1,6 +1,7 @@
 import { User } from '@core/user/entities/auth.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity()
@@ -32,6 +33,13 @@ export class Trainee extends BaseEntity {
 
   @Column({ length: 10 })
   postalCode: string;
+
+  @Column({
+    type: 'enum',
+    enum: LicenseTypeEnum,
+    nullable: true,
+  })
+  desiredLicenseType: LicenseTypeEnum;
 
   @Column({ default: false })
   isProfileComplete: boolean;
