@@ -1,6 +1,6 @@
 import { ImgNormalCustom } from "@/core/components/custom/ui/image/ImgNormalCustom";
 import {
-  TypographyH4,
+  TypographyLarge,
   TypographySpan,
 } from "@/core/components/custom/ui/typography/Typography";
 
@@ -15,7 +15,7 @@ function FooterWhyUs() {
           alt=""
         />
         <div>
-          <TypographyH4>همراه هر آموزشی</TypographyH4>
+          <TypographyLarge>همراه هر آموزشی</TypographyLarge>
           <TypographySpan className="text-text-light">
             ارائه تمامی خدمات رزرو نوبت آموزش رانندگی
           </TypographySpan>
@@ -29,7 +29,7 @@ function FooterWhyUs() {
           alt=""
         />
         <div>
-          <TypographyH4>همراه همه لحظات آموزش</TypographyH4>
+          <TypographyLarge>همراه همه لحظات آموزش</TypographyLarge>
           <TypographySpan className="text-text-light">
             پشتیبانی 24 ساعته همراه با شما در آموزش
           </TypographySpan>
@@ -43,7 +43,7 @@ function FooterWhyUs() {
           alt=""
         />
         <div>
-          <TypographyH4>رتبه یک رزرو</TypographyH4>
+          <TypographyLarge>رتبه یک رزرو</TypographyLarge>
           <TypographySpan className="text-text-light">
             معتبرترین عرضه‌کننده رزرو نوبت آموزشگاه رانندگی در ایران
           </TypographySpan>

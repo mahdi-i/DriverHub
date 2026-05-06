@@ -1,6 +1,6 @@
 "use client";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
-import { BookOpen, Calendar, Contact, Home, Info, Users } from "lucide-react";
+import { BookOpen, Calendar, Contact, Info, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,15 +10,6 @@ export default function HeaderListNav() {
   return (
     <nav>
       <ul className="flex gap-6">
-        <li>
-          <Link
-            href="/"
-            className={`link-nav-header  ${searchParams === "/" ? "text-primary" : ""}`}
-          >
-            <Home className="h-5 w-5" />
-            <TypographyP className=" font-normal mb-2">خانه</TypographyP>
-          </Link>
-        </li>
         <li>
           <Link
             href="/instructors"
