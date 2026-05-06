@@ -1,12 +1,9 @@
-import { SearchParamsTs } from "@/core/assets/@types/searchParams";
+import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
 
-async function page({ searchParams }: SearchParamsTs) {
-  const params = await searchParams;
-  const selectedLicense = params?.licenseType;
-  console.log(selectedLicense, "ssssssssss");
+function page() {
   return (
     <>
-      <div className="mt-20">1</div>
+      <SectionLayout>1</SectionLayout>
     </>
   );
 }

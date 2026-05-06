@@ -15,7 +15,7 @@ export function DynamicSearchForm() {
   const pathname = usePathname();
   const [valueCalendar, setValueCalendar] = useState<Date | null>(null);
 
-  const isCar = pathname.includes("/car");
+  const isCar = pathname.includes("/");
   const isMotorcycle = pathname.includes("/motorcycle");
   const isHeavyMotor = pathname.includes("/heavy-motorcycle");
   const isBase1 = pathname.includes("/car-base1");

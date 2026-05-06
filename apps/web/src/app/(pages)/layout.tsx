@@ -1,4 +1,3 @@
-import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
 import { Card } from "@/core/components/shadcn/ui/card/card";
 import { DynamicSearchForm } from "@/core/features/booking/components/blocks/search/DynamicSearchForm";
 import Footer from "@/core/features/main/components/blocks/footer/Footer";
@@ -22,13 +21,16 @@ async function layout({
     <main>
       <Header />
 
-      <HeroImageMainPage />
-      <SectionLayout>
-        <Card className="py-0 ">
-          <LicenseFilter />
-          <DynamicSearchForm />
-        </Card>
-      </SectionLayout>
+      <section className="relative w-full mb-35">
+        <HeroImageMainPage />
+
+        <div className="absolute -bottom-59 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-300  z-10">
+          <Card className="w-full py-4 ">
+            <LicenseFilter />
+            <DynamicSearchForm />
+          </Card>
+        </div>
+      </section>
       {children}
       <Footer />
     </main>

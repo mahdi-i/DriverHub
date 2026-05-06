@@ -2,10 +2,10 @@ import { Bike, Bus, Car, Truck } from "lucide-react";
 
 export const licenses = [
   {
-    id: "car",
+    id: "",
     name: "ماشین سواری",
     icon: Car,
-    href: "car",
+    href: "/",
     description: "آموزش رانندگی خودروهای سواری",
   },
   {
