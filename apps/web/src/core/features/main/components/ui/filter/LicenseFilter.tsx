@@ -4,22 +4,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { licenses } from "../../../assets/mock/licenses";
 
-interface LicenseFilterProps {
-  selectedLicense: string;
-}
-
-export function LicenseFilter({ selectedLicense }: LicenseFilterProps) {
-  const pathname = usePathname();
-
+export function LicenseFilter() {
+  const searchParams = usePathname();
+  console.log(searchParams);
+  console.log(searchParams, "selectedLicense");
   return (
     <div className="  flex gap-5 justify-around border-b border-border">
       {licenses.map((license) => {
         const Icon = license.icon;
-        const isActive = selectedLicense === license.id;
+        const isActive = searchParams === `/${license.id}`;
 
         return (
           <Link
-            href={`${pathname}${license.href}`}
+            href={`/${license.id}`}
             key={license.id}
             scroll={false}
             className={`
