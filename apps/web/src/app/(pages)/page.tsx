@@ -1,9 +1,23 @@
 import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
-function page() {
+import FilterBookinkMainPage from "@/core/features/main/components/blocks/filter/FilterBookinkMainPage";
+import HeroImageMainPage from "@/core/features/main/components/ui/hero-img/HeroImageMainPage";
+
+async function page({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | undefined }>;
+}) {
+  const params = await searchParams;
+  const selectedLicense = params?.licenseType;
+  console.log(selectedLicense, "ssssssssss");
   return (
-    <SectionLayout>
-      <div className="w-[1200px]">1</div>
-    </SectionLayout>
+    <>
+      <HeroImageMainPage />
+      <SectionLayout>
+        <FilterBookinkMainPage selectedLicense={selectedLicense} />
+      </SectionLayout>
+      <div className="mt-20">1</div>
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 .link-nav-header {
-  @apply flex items-center text-center gap-2 transition-colors;
+  @apply flex items-center  gap-1 p-1;
 }
 
 .link-nav-header:hover {
-  @apply text-primary;
+  @apply bg-muted p-1 rounded-md transform duration-300;
 }

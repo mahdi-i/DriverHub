@@ -7,7 +7,7 @@ function HeroImageMainPage() {
   if (isMobile) return null;
 
   return (
-    <section className="w-full flex justify-center items-center">
+    <section className="w-full  justify-center items-center hidden md:flex">
       <ImgNormalCustom
         src={"/img/main/home/hero-824e4df4.webp"}
         alt="hero img"
