@@ -19,7 +19,7 @@ export class AppointmentController {
   ) {
     return this.appointmentService.completedAppointment(id, userid);
   }
-  @Post('camcelled-appointment')
+  @Post(':id/camcelled')
   camcelledAppointment(
     @Param('id') id: string,
     @UserInfo('id') userid: string,

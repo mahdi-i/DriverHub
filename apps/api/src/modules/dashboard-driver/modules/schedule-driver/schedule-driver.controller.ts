@@ -4,42 +4,62 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
 } from '@nestjs/common';
+import { RolesDecorator } from '@shared/decorators/roles.decorator';
+import { UserInfo } from '@shared/decorators/user.decorator';
+import { Roles } from '@shared/enums/role.enum';
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { CreateScheduleDriverDto } from './dto/create-schedule-driver.dto';
 import { UpdateScheduleDriverDto } from './dto/update-schedule-driver.dto';
+import { CheckOneShiftPipe } from './pipe/check-has-one-shift.pipe';
+import { NoOverlapPipe } from './pipe/no-overlap-shift.pipe';
 import { ScheduleDriverService } from './schedule-driver.service';
 
 @Controller('schedule-driver')
 export class ScheduleDriverController {
   constructor(private readonly scheduleDriverService: ScheduleDriverService) {}
 
-  @Post()
-  create(@Body() createScheduleDriverDto: CreateScheduleDriverDto) {
-    return this.scheduleDriverService.create(createScheduleDriverDto);
+  @Post('set-schedule')
+  @RolesDecorator(Roles.TEACHER)
+  create(
+    @Body(CheckOneShiftPipe, NoOverlapPipe)
+    createScheduleDriverDto: CreateScheduleDriverDto,
+    @UserInfo('id') userId: string,
+  ) {
+    return this.scheduleDriverService.create(createScheduleDriverDto, userId);
   }
 
-  @Get()
-  findAll() {
-    return this.scheduleDriverService.findAll();
+  @Get('filter-my-schedule')
+  @RolesDecorator(Roles.TEACHER)
+  findAll(@UserInfo('id') userId: string, @Paginate() query: PaginateQuery) {
+    return this.scheduleDriverService.findAll(userId, query);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.scheduleDriverService.findOne(+id);
+  @RolesDecorator(Roles.TEACHER)
+  findOne(@Param('id') id: string, @UserInfo('id') userId: string) {
+    return this.scheduleDriverService.findOne(id, userId);
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @RolesDecorator(Roles.TEACHER)
   update(
     @Param('id') id: string,
     @Body() updateScheduleDriverDto: UpdateScheduleDriverDto,
+    @UserInfo('id') userId: string,
   ) {
-    return this.scheduleDriverService.update(+id, updateScheduleDriverDto);
+    return this.scheduleDriverService.update(
+      id,
+      updateScheduleDriverDto,
+      userId,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.scheduleDriverService.remove(+id);
+  @RolesDecorator(Roles.TEACHER)
+  remove(@Param('id') id: string, @UserInfo('id') userId: string) {
+    return this.scheduleDriverService.remove(id, userId);
   }
 }
