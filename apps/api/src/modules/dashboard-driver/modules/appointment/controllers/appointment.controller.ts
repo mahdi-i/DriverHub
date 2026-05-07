@@ -39,11 +39,12 @@ export class AppointmentController {
 
   @Get()
   @PaginationOptions({
-    sortOptions: [{ example: 'startTime:DESC' }],
+    sortOptions: [{ example: 'createdAt:DESC' }],
     filterOptions: [
-      { field: 'status', example: 'SCHEDULED' },
-      { field: 'student.fullName', example: 'علی' },
+      { field: 'status', example: 'PENDING' },
+      { field: 'student.gender', example: 'MALE' },
     ],
+    searchOptions: [{ field: 'student.fullName', example: 'علی' }],
   })
   findAll(@Paginate() query: PaginateQuery, @UserInfo('id') driverId: string) {
     return this.appointmentService.findAllByDriver(query, driverId);

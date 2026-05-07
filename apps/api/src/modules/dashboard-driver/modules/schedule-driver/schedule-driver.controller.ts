@@ -9,6 +9,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { PaginationOptions } from '@shared/decorators/pagination-option.decorator';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
 import { Roles } from '@shared/enums/role.enum';
@@ -36,6 +37,10 @@ export class ScheduleDriverController {
 
   @Get('filter-my-schedule')
   @RolesDecorator(Roles.TEACHER)
+  @PaginationOptions({
+    sortOptions: [{ example: 'createdAt:DESC' }],
+    filterOptions: [{ field: 'dayOfWeek', example: 'MONDAY' }],
+  })
   findAll(@UserInfo('id') userId: string, @Paginate() query: PaginateQuery) {
     return this.scheduleDriverService.findAll(userId, query);
   }

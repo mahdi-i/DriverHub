@@ -1,17 +1,9 @@
 import { TraineeProfileCompleteGuard } from '@core/dashboard-trainee/guard/trainee-profile-complete.guard';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { PaginationOptions } from '@shared/decorators/pagination-option.decorator';
+import { UserInfo } from '@shared/decorators/user.decorator';
+import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { AppointmentRequestsService } from './appointment-requests.service';
-import { CreateAppointmentRequestDto } from './dto/create-appointment_request.dto';
-import { UpdateAppointmentRequestDto } from './dto/update-appointment_request.dto';
 
 @Controller('appointment-requests')
 @UseGuards(TraineeProfileCompleteGuard)
@@ -20,34 +12,23 @@ export class AppointmentRequestsController {
     private readonly appointmentRequestsService: AppointmentRequestsService,
   ) {}
 
-  @Post()
-  create(@Body() createAppointmentRequestDto: CreateAppointmentRequestDto) {
-    return this.appointmentRequestsService.create(createAppointmentRequestDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.appointmentRequestsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.appointmentRequestsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
+  @Post(':id/camcelled')
+  camcelledAppointment(
     @Param('id') id: string,
-    @Body() updateAppointmentRequestDto: UpdateAppointmentRequestDto,
+    @UserInfo('id') userid: string,
   ) {
-    return this.appointmentRequestsService.update(
-      +id,
-      updateAppointmentRequestDto,
-    );
+    return this.appointmentRequestsService.camcelledAppointment(id, userid);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.appointmentRequestsService.remove(+id);
+  @Get('all-my-appointment')
+  @PaginationOptions({
+    sortOptions: [{ example: 'createdAt:DESC' }],
+    filterOptions: [
+      { field: 'filter.status', example: 'PENDING' },
+      { field: 'filter.student.gender', example: 'MALE' },
+    ],
+  })
+  findAll(@Paginate() query: PaginateQuery, @UserInfo('id') userId: string) {
+    return this.appointmentRequestsService.findAll(query, userId);
   }
 }

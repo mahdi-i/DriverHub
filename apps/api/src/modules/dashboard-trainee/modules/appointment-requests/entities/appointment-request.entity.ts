@@ -14,11 +14,8 @@ export class AppointmentRequest extends BaseEntity {
   @JoinColumn({ name: 'driver_id' })
   driver: Driver;
 
-  @Column({ type: 'date' })
-  requestedDate: Date;
-
   @Column({ type: 'time' })
-  requestedTime: string;
+  requestedDate: Date;
 
   @Column({ type: 'text', nullable: true })
   message: string;
