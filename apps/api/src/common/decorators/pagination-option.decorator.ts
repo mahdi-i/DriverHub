@@ -11,10 +11,15 @@ interface FilterOption {
 interface SortOption {
   example: string;
 }
+interface SearchOption {
+  field: string;
+  example?: string;
+}
 
 interface PaginateOptionsInput {
   filterOptions?: FilterOption[];
   sortOptions?: SortOption[];
+  searchOptions?: SearchOption[];
 }
 
 export function PaginationOptions(options: PaginateOptionsInput) {
