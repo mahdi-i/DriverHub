@@ -4,27 +4,18 @@
 
 <div align="center">
 
-![Next.js](https://img.shields.io/badge/Next.js-16.2.4-black?style=flat-square&logo=next.js)
-![NestJS](https://img.shields.io/badge/NestJS-11-red?style=flat-square&logo=nestjs)
-![React](https://img.shields.io/badge/React-19.2.4-blue?style=flat-square&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=flat-square&logo=typescript)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=flat-square&logo=postgresql)
-![Redis](https://img.shields.io/badge/Redis-7-red?style=flat-square&logo=redis)
+
+![Next.js](https://img.shields.io/badge/Next.js-16.1.6-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Upstash_Redis-FF4438?style=for-the-badge&logo=redis&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-4.0-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Radix UI](https://img.shields.io/badge/Radix_UI-161618?style=for-the-badge&logo=radix-ui&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
 </div>
-
----
-
-## 📋 فهرست مطالب
-
-- [درباره پروژه](#-درباره-پروژه)
-- [معماری](#-معماری)
-- [پیش‌نیازها](#-پیش‌نیازها)
-- [نصب و راه‌اندازی](#-نصب-و-راه‌اندازی)
-- [ساختار پروژه](#-ساختار-پروژه)
-- [پکیج‌ها](#-پکیج‌ها)
-- [مستندات API](#-مستندات-api)
-- [نویسندگان](#-نویسندگان)
 
 ---
 
