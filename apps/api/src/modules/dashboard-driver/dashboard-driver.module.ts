@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 
 import { AppointmentRequest } from '@core/dashboard-trainee/modules/appointment-requests/entities/appointment-request.entity';
-import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfileCompleteGuard } from './guards/profile-complete.guard';
+import { AnalysisModule } from './modules/analysis/analysis.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
 import { DriverModule } from './modules/driver/driver.module';
 import { Driver } from './modules/driver/entities/driver.entity';
@@ -24,12 +23,7 @@ import { ScheduleDriverModule } from './modules/schedule-driver/schedule-driver.
     DriverModule,
     ScheduleDriverModule,
     AppointmentModule,
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ProfileCompleteGuard,
-    },
+    AnalysisModule,
   ],
 })
 export class DashboardDriverModule {}

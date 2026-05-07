@@ -10,7 +10,6 @@ import { AppCacheModule } from '@shared/modules/cache.module';
 import { CookieModule } from '@shared/modules/cookie.module';
 import { FileModule } from '@shared/modules/file.module';
 import { RedisModule } from '@shared/modules/redis.module';
-import { WsModule } from '@shared/modules/ws.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BookingModule } from './modules/booking/booking.module';
 import { DashboardAdminModule } from './modules/dashboard-admin/dashboard-admin.module';
@@ -39,7 +38,6 @@ import { UserModule } from './modules/user/user.module';
     DashboardAdminModule,
     DashboardTraineeModule,
     BookingModule,
-    WsModule,
   ],
   providers: [
     {
