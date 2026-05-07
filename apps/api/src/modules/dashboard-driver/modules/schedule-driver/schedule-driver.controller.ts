@@ -1,3 +1,4 @@
+import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
 import {
   Body,
   Controller,
@@ -6,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
@@ -18,6 +20,7 @@ import { NoOverlapPipe } from './pipe/no-overlap-shift.pipe';
 import { ScheduleDriverService } from './schedule-driver.service';
 
 @Controller('schedule-driver')
+@UseGuards(ProfileCompleteGuard)
 export class ScheduleDriverController {
   constructor(private readonly scheduleDriverService: ScheduleDriverService) {}
 

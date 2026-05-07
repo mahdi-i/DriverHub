@@ -1,4 +1,5 @@
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
@@ -21,6 +22,7 @@ export class CreateBasicProfileDto {
 
   @IsNumber()
   @Min(0)
+  @Type(() => Number)
   experienceYears: number;
 
   @IsString()

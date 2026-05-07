@@ -1,9 +1,9 @@
 import { User } from '@core/user/entities/auth.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
-import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
 
 @Entity()
 export class ProfileDriver extends BaseEntity {
@@ -21,37 +21,37 @@ export class ProfileDriver extends BaseEntity {
   @Column({ type: 'enum', enum: GenderEnum })
   gender: GenderEnum;
 
-  @Column({ unique: true })
+  @Column({ unique: false })
   licenseNumber: string;
 
   @Column({ default: 0 })
   experienceYears: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   carModel: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   carColor: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true, nullable: false })
   bankAccountNumber: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   certificateUrl: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   age: number;
 
-  @Column({ unique: true, nullable: false })
+  @Column({ unique: true, nullable: true })
   nationalCode: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   hasGlasses: boolean;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   medicalConditions: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   address: string;
 
   @Column({

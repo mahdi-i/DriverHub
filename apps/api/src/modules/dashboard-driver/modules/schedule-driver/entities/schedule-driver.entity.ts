@@ -15,14 +15,14 @@ export class ScheduleDriver extends BaseEntity {
   dayOfWeek: DaysOfWeek;
 
   @Column({ type: 'time', nullable: true })
-  startTimeFirst?: string;
+  startTimeFirst?: Date;
 
   @Column({ type: 'time', nullable: true })
-  endTimeFirst?: string;
+  endTimeFirst?: Date;
 
   @Column({ type: 'time', nullable: true })
-  startTimeSecond?: string;
+  startTimeSecond?: Date;
 
   @Column({ type: 'time', nullable: true })
-  endTimeSecond?: string;
+  endTimeSecond?: Date;
 }
