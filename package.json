@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm dev:web",
-    "start:dev": "pnpm run start:dev:api",
+    "api": "pnpm dev:api",
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api start:dev",
     "build": "pnpm build:types && pnpm build:api && pnpm build:web",
