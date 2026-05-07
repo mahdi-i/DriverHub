@@ -1,9 +1,11 @@
-import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
-
+import Chart from "@/core/components/custom/blook/chart/Chart";
+import SocketClient from "@/core/test/SocketClient";
 function page() {
   return (
     <>
-      <SectionLayout>1</SectionLayout>
+      <h1>پروژه Next.js متصل به NestJS</h1>
+      <SocketClient />
+      <Chart />
     </>
   );
 }
