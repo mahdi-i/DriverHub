@@ -1,3 +1,4 @@
+import { TraineeProfileCompleteGuard } from '@core/dashboard-trainee/guard/trainee-profile-complete.guard';
 import {
   Body,
   Controller,
@@ -6,12 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { AppointmentRequestsService } from './appointment-requests.service';
 import { CreateAppointmentRequestDto } from './dto/create-appointment_request.dto';
 import { UpdateAppointmentRequestDto } from './dto/update-appointment_request.dto';
 
 @Controller('appointment-requests')
+@UseGuards(TraineeProfileCompleteGuard)
 export class AppointmentRequestsController {
   constructor(
     private readonly appointmentRequestsService: AppointmentRequestsService,

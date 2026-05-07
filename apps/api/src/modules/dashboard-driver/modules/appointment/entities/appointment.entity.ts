@@ -2,8 +2,9 @@ import { Driver } from '@core/dashboard-driver/modules/driver/entities/driver.en
 import { Trainee } from '@core/dashboard-trainee/modules/trainee/entities/trainee.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { AppointmentStatus } from '@shared/enums/appointment-status.enum';
-import { Column, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
+@Entity()
 export class Appointment extends BaseEntity {
   @ManyToOne(() => Trainee)
   @JoinColumn({ name: 'student_id' })
@@ -13,10 +14,10 @@ export class Appointment extends BaseEntity {
   @JoinColumn({ name: 'driver_id' })
   driver: Driver;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'time' })
   startTime: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'time' })
   endTime: Date;
 
   @Column({

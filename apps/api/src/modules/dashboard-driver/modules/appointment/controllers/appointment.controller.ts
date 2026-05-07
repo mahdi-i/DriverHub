@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { PaginationOptions } from '@shared/decorators/pagination-option.decorator';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
@@ -9,6 +18,7 @@ import { AppointmentService } from '../services/appointment.service';
 
 @Controller('appointment')
 @RolesDecorator(Roles.TEACHER)
+@UseGuards(ProfileCompleteGuard)
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
