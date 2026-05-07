@@ -4,6 +4,9 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
 @Entity()
 export class ScheduleDriver extends BaseEntity {
+  @Column({ name: 'driver_id' })
+  driverId: string;
+
   @ManyToOne(() => Driver)
   @JoinColumn({ name: 'driver_id' })
   driver: Driver;
@@ -11,15 +14,15 @@ export class ScheduleDriver extends BaseEntity {
   @Column({ type: 'enum', enum: DaysOfWeek })
   dayOfWeek: DaysOfWeek;
 
-  @Column({ type: 'time' })
-  startTime: string;
+  @Column({ type: 'time', nullable: true })
+  startTimeFirst?: string;
 
-  @Column({ type: 'time' })
-  endTime: string;
+  @Column({ type: 'time', nullable: true })
+  endTimeFirst?: string;
 
-  @Column({ type: 'int', default: 60 })
-  slotDuration: number;
+  @Column({ type: 'time', nullable: true })
+  startTimeSecond?: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column({ type: 'time', nullable: true })
+  endTimeSecond?: string;
 }
