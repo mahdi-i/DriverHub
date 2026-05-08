@@ -1,6 +1,5 @@
 "use client";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
-import { BookOpen, Calendar, Contact, Info, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,8 +14,7 @@ export default function HeaderListNav() {
             href="/instructors"
             className={`link-nav-header ${searchParams === "/instructors" ? "text-primary" : ""}`}
           >
-            <Users className="h-5 w-5" />
-            <TypographyP className=" font-normal mb-2">مربیان</TypographyP>
+            <TypographyP className=" font-normal ">مربیان</TypographyP>
           </Link>
         </li>
         <li>
@@ -24,8 +22,7 @@ export default function HeaderListNav() {
             href="/booking"
             className={`link-nav-header  ${searchParams === "/booking" ? "text-primary" : ""}`}
           >
-            <Calendar className="h-5 w-5" />
-            <TypographyP className=" font-normal mb-2">رزرو نوبت</TypographyP>
+            <TypographyP className=" font-normal ">رزرو نوبت</TypographyP>
           </Link>
         </li>
         <li>
@@ -33,8 +30,7 @@ export default function HeaderListNav() {
             href="/blog"
             className={`link-nav-header ${searchParams === "/blog" ? "text-primary" : ""}`}
           >
-            <BookOpen className="h-5 w-5" />
-            <TypographyP className=" font-normal mb-2">مجله</TypographyP>
+            <TypographyP className=" font-normal ">مجله</TypographyP>
           </Link>
         </li>
         <li>
@@ -42,8 +38,7 @@ export default function HeaderListNav() {
             href="/about"
             className={`link-nav-header ${searchParams === "/about" ? "text-primary" : ""}`}
           >
-            <Info className="h-5 w-5" />
-            <TypographyP className=" font-normal mb-2">درباره ما</TypographyP>
+            <TypographyP className=" font-normal ">درباره ما</TypographyP>
           </Link>
         </li>
         <li>
@@ -51,8 +46,7 @@ export default function HeaderListNav() {
             href="/contact"
             className={`link-nav-header ${searchParams === "/contact" ? "text-primary" : ""}`}
           >
-            <Contact className="h-5 w-5" />
-            <TypographyP className=" font-normal mb-2">تماس با ما</TypographyP>
+            <TypographyP className=" font-normal ">تماس با ما</TypographyP>
           </Link>
         </li>
       </ul>
