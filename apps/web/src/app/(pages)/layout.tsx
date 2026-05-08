@@ -1,9 +1,11 @@
+import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
 import { Card } from "@/core/components/shadcn/ui/card/card";
 import { DynamicSearchForm } from "@/core/features/booking/components/blocks/search/DynamicSearchForm";
 import Footer from "@/core/features/main/components/blocks/footer/Footer";
 import Header from "@/core/features/main/components/blocks/header/Header";
 import { LicenseFilter } from "@/core/features/main/components/ui/filter/LicenseFilter";
 import HeroImageMainPage from "@/core/features/main/components/ui/hero-img/HeroImageMainPage";
+import MapSectionMainPage from "@/core/features/main/components/ui/home-page/MapSectionMainPage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -31,6 +33,9 @@ async function layout({
           </Card>
         </div>
       </section>
+      <SectionLayout>
+        <MapSectionMainPage />
+      </SectionLayout>
       {children}
       <Footer />
     </main>

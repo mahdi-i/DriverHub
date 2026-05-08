@@ -22,13 +22,7 @@ export const licenses = [
     href: "heavy-motorcycle",
     description: "آموزش رانندگی موتورسیکلت‌های سنگین",
   },
-  {
-    id: "car-base3",
-    name: "پایه سه",
-    icon: Car,
-    href: "car-base3",
-    description: "گواهینامه پایه سه (شخصی)",
-  },
+
   {
     id: "car-base2",
     name: "پایه دو",
