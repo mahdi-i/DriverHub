@@ -1,5 +1,13 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
-import { CreateBookingDto } from './create-booking.dto';
+export class UpdateBookingDto {
+  @IsString()
+  @IsOptional()
+  note?: string;
 
-export class UpdateBookingDto extends PartialType(CreateBookingDto) {}
+  @IsInt()
+  @Min(0)
+  @Max(5)
+  @IsOptional()
+  score?: number;
+}
