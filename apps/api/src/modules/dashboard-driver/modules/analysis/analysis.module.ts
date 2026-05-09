@@ -1,15 +1,12 @@
-import { AppointmentRequest } from '@core/dashboard-trainee/modules/appointment-requests/entities/appointment-request.entity';
+import { Booking } from '@core/booking/entities/booking.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Appointment } from '../appointment/entities/appointment.entity';
 import { ProfileDriver } from '../profile/entities/profile.entity';
 import { AnalysisController } from './analysis.controller';
 import { AnalysisService } from './analysis.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Appointment, AppointmentRequest, ProfileDriver]),
-  ],
+  imports: [TypeOrmModule.forFeature([ProfileDriver, Booking])],
   controllers: [AnalysisController],
   providers: [AnalysisService],
 })
