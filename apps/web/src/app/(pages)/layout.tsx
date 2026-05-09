@@ -9,9 +9,9 @@ import MapSectionMainPage from "@/core/features/main/components/ui/home-page/Map
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "kicks",
+  title: "DriverHub",
   description:
-    "Step up your shoe game with Kicks! Find the latest styles for men and women, shop online, and get them fast.",
+    "Step up your shoe game with DriverHub! Find the latest styles for men and women, shop online, and get them fast.",
 };
 
 async function layout({
