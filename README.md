@@ -110,13 +110,7 @@ Swagger docs: http://localhost:3000/api/docs
 
 
 ---
-## 👥 Team
 
-| نقش | نام | تخصص |
-| :--- | :--- | :--- |
-|  Full-Stack Lead | [Mahdi-Devm](https://github.com/Mahdi-Devm) | Backend + Frontend Support |
-|  Frontend | [Sogand-mohamadiPour](https://github.com/Sogand-mohamadiPour) | Frontend |
-|  Frontend | [Amir-mohammad-ahmady-1234](https://github.com/Amir-mohammad-ahmady-1234) | Frontend |
 
 
 ساخته شده با ❤️
