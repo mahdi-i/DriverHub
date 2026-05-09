@@ -1,4 +1,5 @@
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,
@@ -38,8 +39,8 @@ export class CreateCompletProfileDto {
   @IsNotEmpty()
   age: number;
 
-  @IsNumber()
-  nationalCode: number;
+  @IsString()
+  nationalCode: string;
 
   @IsNotEmpty()
   @IsBoolean()
@@ -50,7 +51,6 @@ export class CreateCompletProfileDto {
   @IsString()
   medicalConditions?: string;
 
-  @IsNotEmpty()
-  @IsString()
-  address: string;
+  @IsEnum(IranProvinceEnum)
+  address: IranProvinceEnum;
 }

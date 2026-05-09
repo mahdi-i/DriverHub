@@ -1,4 +1,5 @@
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import {
   IsBoolean,
   IsEnum,
@@ -33,8 +34,8 @@ export class CreateProfileTraineeDto {
   @IsString()
   medicalConditions?: string;
 
-  @IsString()
-  address: string;
+  @IsEnum(IranProvinceEnum)
+  address: IranProvinceEnum;
 
   @IsString()
   @Length(10, 10, { message: 'کد پستی باید ۱۰ رقم باشد' })

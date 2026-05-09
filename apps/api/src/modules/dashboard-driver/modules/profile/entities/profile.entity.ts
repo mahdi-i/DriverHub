@@ -1,6 +1,7 @@
 import { User } from '@core/user/entities/auth.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
@@ -43,7 +44,7 @@ export class ProfileDriver extends BaseEntity {
   age: number;
 
   @Column({ unique: true, nullable: true })
-  nationalCode: number;
+  nationalCode: string;
 
   @Column({ nullable: true })
   hasGlasses: boolean;
@@ -51,8 +52,15 @@ export class ProfileDriver extends BaseEntity {
   @Column({ nullable: true })
   medicalConditions: string;
 
+  @Column({
+    type: 'enum',
+    enum: IranProvinceEnum,
+    nullable: true,
+  })
+  address: IranProvinceEnum;
+
   @Column({ nullable: true })
-  address: string;
+  city: string;
 
   @Column({
     type: 'enum',

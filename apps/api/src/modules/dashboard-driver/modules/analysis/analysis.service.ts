@@ -1,10 +1,8 @@
-import { AppointmentRequest } from '@core/dashboard-trainee/modules/appointment-requests/entities/appointment-request.entity';
+import { Booking } from '@core/booking/entities/booking.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppointmentStatus } from '@shared/enums/appointment-status.enum';
-import { RequestStatus } from '@shared/enums/request-status.enum';
 import { Repository } from 'typeorm';
-import { Appointment } from '../appointment/entities/appointment.entity';
 import {
   AppointmentAnalysis,
   ConversionAnalysis,
@@ -15,99 +13,97 @@ import {
 @Injectable()
 export class AnalysisService {
   constructor(
-    @InjectRepository(AppointmentRequest)
-    private requestRepo: Repository<AppointmentRequest>,
-    @InjectRepository(Appointment)
-    private appointmentRepo: Repository<Appointment>,
+    @InjectRepository(Booking)
+    private bookingRepo: Repository<Booking>,
   ) {}
+
   async getAnalysis(driverId: string): Promise<DriverAnalysisResponseDto> {
-    const [requests, appointments] = await Promise.all([
-      this.requestRepo.find({ where: { driver: { id: driverId } } }),
-      this.appointmentRepo.find({ where: { driver: { id: driverId } } }),
-    ]);
+    const bookings = await this.bookingRepo.find({
+      where: { driver: { id: driverId } },
+    });
 
     return {
-      requests: this.calculateRequestAnalysis(requests),
-      appointments: this.calculateAppointmentAnalysis(appointments),
-      conversion: this.calculateConversion(requests, appointments),
+      requests: this.calculateRequestAnalysis(bookings),
+      appointments: this.calculateAppointmentAnalysis(bookings),
+      conversion: this.calculateConversion(bookings),
     };
   }
-  private calculateRequestAnalysis(
-    requests: AppointmentRequest[],
-  ): RequestAnalysis {
+
+  private calculateRequestAnalysis(bookings: Booking[]): RequestAnalysis {
     const now = new Date();
     const startOfDay = new Date(now.setHours(0, 0, 0, 0));
     const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const pending = requests.filter((r) => r.status === RequestStatus.PENDING);
-
-    const rejected = requests.filter(
-      (r) => r.status === RequestStatus.REJECTED,
+    const pending = bookings.filter(
+      (b) => b.status === AppointmentStatus.PENDING,
+    );
+    const rejected = bookings.filter(
+      (b) => b.status === AppointmentStatus.REJECTED,
     );
 
     return {
-      total: requests.length,
+      total: bookings.length,
       pending: pending.length,
-
       rejected: rejected.length,
-      today: requests.filter((r) => new Date(r.requestedDate) >= startOfDay)
+      today: bookings.filter((b) => new Date(b.startTime) >= startOfDay).length,
+      thisWeek: bookings.filter((b) => new Date(b.startTime) >= startOfWeek)
         .length,
-      thisWeek: requests.filter((r) => new Date(r.requestedDate) >= startOfWeek)
+      thisMonth: bookings.filter((b) => new Date(b.startTime) >= startOfMonth)
         .length,
-      thisMonth: requests.filter(
-        (r) => new Date(r.requestedDate) >= startOfMonth,
-      ).length,
     };
   }
 
   private calculateAppointmentAnalysis(
-    appointments: Appointment[],
+    bookings: Booking[],
   ): AppointmentAnalysis {
     const now = new Date();
     const startOfDay = new Date(now.setHours(0, 0, 0, 0));
     const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const scheduled = appointments.filter(
-      (a) => a.status === AppointmentStatus.SCHEDULED,
+    const confirmed = bookings.filter(
+      (b) => b.status === AppointmentStatus.CONFIRMED,
     );
-    const completed = appointments.filter(
-      (a) => a.status === AppointmentStatus.COMPLETED,
+    const completed = bookings.filter(
+      (b) => b.status === AppointmentStatus.COMPLETED,
     );
-    const cancelled = appointments.filter(
-      (a) => a.status === AppointmentStatus.CANCELLED,
+    const cancelled = bookings.filter(
+      (b) => b.status === AppointmentStatus.CANCELLED,
     );
 
-    const completedWithScore = completed.filter((a) => a.score > 0);
+    const completedWithScore = completed.filter(
+      (b) => b.score !== undefined && b.score > 0,
+    );
     const averageScore =
       completedWithScore.length > 0
-        ? completedWithScore.reduce((sum, a) => sum + a.score, 0) /
+        ? completedWithScore.reduce((sum, b) => sum + (b.score ?? 0), 0) /
           completedWithScore.length
         : 0;
 
     return {
-      total: appointments.length,
-      scheduled: scheduled.length,
+      total: confirmed.length + completed.length + cancelled.length,
+      scheduled: confirmed.length,
       completed: completed.length,
       cancelled: cancelled.length,
       averageScore: Math.round(averageScore * 10) / 10,
-      today: appointments.filter((a) => new Date(a.startTime) >= startOfDay)
+      today: completed.filter((b) => new Date(b.startTime) >= startOfDay)
         .length,
-      thisWeek: appointments.filter((a) => new Date(a.startTime) >= startOfWeek)
+      thisWeek: completed.filter((b) => new Date(b.startTime) >= startOfWeek)
         .length,
-      thisMonth: appointments.filter(
-        (a) => new Date(a.startTime) >= startOfMonth,
-      ).length,
+      thisMonth: completed.filter((b) => new Date(b.startTime) >= startOfMonth)
+        .length,
     };
   }
 
-  private calculateConversion(
-    requests: AppointmentRequest[],
-    appointments: Appointment[],
-  ): ConversionAnalysis {
-    const totalRequests = requests.length;
-    const totalAppointments = appointments.length;
+  private calculateConversion(bookings: Booking[]): ConversionAnalysis {
+    const totalRequests = bookings.length;
+    const totalAppointments = bookings.filter(
+      (b) =>
+        b.status === AppointmentStatus.CONFIRMED ||
+        b.status === AppointmentStatus.COMPLETED,
+    ).length;
+
     const rate =
       totalRequests > 0
         ? Math.round((totalAppointments / totalRequests) * 100)

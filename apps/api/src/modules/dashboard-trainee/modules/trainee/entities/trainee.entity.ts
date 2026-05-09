@@ -1,8 +1,10 @@
+import { Booking } from '@core/booking/entities/booking.entity';
 import { User } from '@core/user/entities/auth.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity()
 export class Trainee extends BaseEntity {
@@ -28,8 +30,15 @@ export class Trainee extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   medicalConditions: string;
 
-  @Column({ type: 'text' })
-  address: string;
+  @Column({
+    type: 'enum',
+    enum: IranProvinceEnum,
+    nullable: true,
+  })
+  address: IranProvinceEnum;
+
+  @Column({ nullable: true })
+  city: string;
 
   @Column({ length: 10 })
   postalCode: string;
@@ -40,6 +49,9 @@ export class Trainee extends BaseEntity {
     nullable: true,
   })
   desiredLicenseType: LicenseTypeEnum;
+
+  @OneToMany(() => Booking, (booking) => booking.student)
+  bookings: Booking[];
 
   @Column({ default: false })
   isProfileComplete: boolean;
