@@ -54,21 +54,16 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
               ? "fixed inset-0 z-50 transform transition-transform duration-300 ease-in-out"
               : "relative w-64 shrink-0"
           }
-          ${isMobile && !sidebarOpen ? "translate-x-full" : "translate-x-0"}
-
-          flex flex-col
-          bg-white border-l border-gray-200
-          shadow-lg shadow-gray-200/50
-        `}
+${isMobile && !sidebarOpen ? "translate-x-full" : "translate-x-0"} bg-white border-l border-muted shadow-sm shadow-muborder-muted/50 `}
       >
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
+        <div className="flex items-center justify-between p-5 border-b border-muted">
           <div className="gap-3 mx-auto">
             <Logo />
           </div>
           {isMobile && (
             <button
               onClick={() => setSidebarOpen(false)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-500"
+              className="p-2 rounded-md hover:bg-mutborder-muted transition-colors text-gray-500"
             >
               <X className="h-5 w-5" />
             </button>
@@ -84,7 +79,7 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
                 href={item.href}
                 onClick={() => isMobile && setSidebarOpen(false)}
                 className={`
-                  flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200
+                  flex items-center gap-3 px-4 py-2.5 rounded-sm transition-all duration-200
                   ${
                     isActive
                       ? "bg-linear-to-r from-primary/15 to-primary/5 text-foreground font-semibold border border-primary/30"
@@ -101,13 +96,6 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
             );
           })}
         </nav>
-
-        <div className="p-4 border-t border-gray-100">
-          <div className="px-3 py-2 flex justify-between">
-            <p className="text-xs text-gray-400">نسخه</p>
-            <p className="text-sm text-gray-600 font-medium">v1.0.0</p>
-          </div>
-        </div>
       </aside>
     </>
   );
