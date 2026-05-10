@@ -14,9 +14,8 @@ interface MainSidebarProps {
 const defaultNavItems = [{ href: "/", label: "داشبورد", icon: "🏠" }];
 
 const driverNavItems = [
-  { href: "/", label: "داشبورد", icon: "🏠" },
-  { href: "/dashboard/driver", label: "پنل کاربری", icon: "👤" },
-  { href: "/dashboard/driver/profile", label: "پروفایل", icon: "📋" },
+  { href: "/dashboard/driver", label: "پنل کاربری", icon: "🏠" },
+  { href: "/dashboard/driver/profile", label: "پروفایل", icon: "👤" },
   { href: "/dashboard/driver/schedule", label: "برنامه", icon: "📅" },
   { href: "/dashboard/driver/bookings", label: "رزروها", icon: "📝" },
   { href: "/dashboard/driver/analysis", label: "آمار", icon: "📊" },
@@ -24,9 +23,8 @@ const driverNavItems = [
 ];
 
 const traineeNavItems = [
-  { href: "/", label: "داشبورد", icon: "🏠" },
-  { href: "/dashboard/trainee", label: "پنل کاربری", icon: "👤" },
-  { href: "/dashboard/trainee/profile", label: "پروفایل", icon: "📋" },
+  { href: "/dashboard/trainee", label: "پنل کاربری", icon: "🏠" },
+  { href: "/dashboard/trainee/profile", label: "پروفایل", icon: "👤" },
   { href: "/dashboard/trainee/bookings", label: "رزروها", icon: "📝" },
   { href: "/dashboard/trainee/schedule", label: "برنامه آموزشی", icon: "📅" },
   { href: "/dashboard/trainee/progress", label: "پیشرفت", icon: "📈" },
