@@ -1,6 +1,8 @@
 import { User } from '@core/user/entities/auth.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
+import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
 
@@ -20,38 +22,52 @@ export class ProfileDriver extends BaseEntity {
   @Column({ type: 'enum', enum: GenderEnum })
   gender: GenderEnum;
 
-  @Column({ unique: true })
+  @Column({ unique: false })
   licenseNumber: string;
 
   @Column({ default: 0 })
   experienceYears: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   carModel: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   carColor: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true, nullable: false })
   bankAccountNumber: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   certificateUrl: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   age: number;
 
-  @Column({ unique: true, nullable: false })
-  nationalCode: number;
+  @Column({ unique: true, nullable: true })
+  nationalCode: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   hasGlasses: boolean;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   medicalConditions: string;
 
-  @Column({ nullable: false })
-  address: string;
+  @Column({
+    type: 'enum',
+    enum: IranProvinceEnum,
+    nullable: true,
+  })
+  address: IranProvinceEnum;
+
+  @Column({ nullable: true })
+  city: string;
+
+  @Column({
+    type: 'enum',
+    enum: LicenseTypeEnum,
+    default: LicenseTypeEnum.CAR,
+  })
+  licenseType: LicenseTypeEnum;
 
   @Column({ default: false })
   isProfileComplete: boolean;

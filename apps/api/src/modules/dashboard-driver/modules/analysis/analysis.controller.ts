@@ -1,34 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { RolesDecorator } from '@shared/decorators/roles.decorator';
+import { UserInfo } from '@shared/decorators/user.decorator';
+import { Roles } from '@shared/enums/role.enum';
 import { AnalysisService } from './analysis.service';
-import { CreateAnalysisDto } from './dto/create-analysis.dto';
-import { UpdateAnalysisDto } from './dto/update-analysis.dto';
+import { DriverAnalysisResponseDto } from './dto/create-analysis.dto';
 
-@Controller('analysis')
+@Controller('analysis-driver')
+@UseGuards(ProfileCompleteGuard)
 export class AnalysisController {
   constructor(private readonly analysisService: AnalysisService) {}
-
-  @Post()
-  create(@Body() createAnalysisDto: CreateAnalysisDto) {
-    return this.analysisService.create(createAnalysisDto);
-  }
-
   @Get()
-  findAll() {
-    return this.analysisService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.analysisService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAnalysisDto: UpdateAnalysisDto) {
-    return this.analysisService.update(+id, updateAnalysisDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.analysisService.remove(+id);
+  @RolesDecorator(Roles.TEACHER, Roles.ADMIN)
+  async getAnalysis(
+    @UserInfo('id') driverId: string,
+  ): Promise<DriverAnalysisResponseDto> {
+    return this.analysisService.getAnalysis(driverId);
   }
 }

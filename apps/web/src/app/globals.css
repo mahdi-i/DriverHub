@@ -42,7 +42,7 @@
   --primary: #fdb913;
   --primary-dark: #e3a107;
   --primary-foreground: #1f2937;
-  --secondary: #1e3a8a;
+  --secondary: #0077db;
   --secondary-foreground: #ffffff;
   --background: #ffffff;
   --foreground: #1f2937;
@@ -107,6 +107,6 @@
 }
 
 .pages-container {
-  @apply w-full mx-auto max-w-400 px-5 sm:px-15;
+  @apply w-full mx-auto max-w-325 px-5 sm:px-15;
   @apply py-4 md:py-8 lg:py-5;
 }

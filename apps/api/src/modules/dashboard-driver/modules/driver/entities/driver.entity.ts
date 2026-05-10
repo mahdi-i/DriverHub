@@ -1,4 +1,4 @@
-import { AppointmentRequest } from '@core/dashboard-trainee/modules/appointment-requests/entities/appointment-request.entity';
+import { Booking } from '@core/booking/entities/booking.entity';
 import { User } from '@core/user/entities/auth.entity';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
@@ -18,6 +18,6 @@ export class Driver extends BaseEntity {
   @OneToMany(() => ScheduleDriver, (schedule) => schedule.driver)
   schedules: ScheduleDriver[];
 
-  @OneToMany(() => AppointmentRequest, (req) => req.driver)
-  requests: AppointmentRequest[];
+  @OneToMany(() => Booking, (booking) => booking.driver)
+  bookings: Booking[];
 }

@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { TraineeProfileCompleteGuard } from '@core/dashboard-trainee/guard/trainee-profile-complete.guard';
+import { Body, Controller, Get, Post, Put, UseGuards } from '@nestjs/common';
 import { SkipTraineeProfileCheck } from '@shared/decorators/skip-profile-trainee.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
 import { CreateProfileTraineeDto } from './dto/create-profile-trainee.dto';
@@ -24,6 +25,7 @@ export class ProfileTraineeController {
   }
 
   @Put('profile')
+  @UseGuards(TraineeProfileCompleteGuard)
   async updateProfile(
     @UserInfo('id') userId: string,
     @Body() updateDto: UpdateProfileTraineeDto,

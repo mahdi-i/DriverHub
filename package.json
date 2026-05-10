@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm dev:web & pnpm dev:api",
+    "dev": "pnpm dev:web",
+    "api": "pnpm dev:api",
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter api start:dev",
     "build": "pnpm build:types && pnpm build:api && pnpm build:web",

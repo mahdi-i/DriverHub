@@ -1,5 +1,4 @@
 export const quickLinks = [
-  { href: "/", label: "خانه" },
   { href: "/instructors", label: "مربیان" },
   { href: "/booking", label: "رزرو نوبت" },
   { href: "/about", label: "درباره ما" },

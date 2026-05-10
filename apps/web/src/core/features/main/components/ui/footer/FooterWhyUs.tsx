@@ -1,12 +1,12 @@
 import { ImgNormalCustom } from "@/core/components/custom/ui/image/ImgNormalCustom";
 import {
-  TypographyH4,
+  TypographyLarge,
   TypographySpan,
 } from "@/core/components/custom/ui/typography/Typography";
 
 function FooterWhyUs() {
   return (
-    <div className="flex justify-between">
+    <div className="md:flex  justify-between">
       <div className=" w-full p-4 flex items-center">
         <ImgNormalCustom
           src={"/img/footer/gaget.webp"}
@@ -15,8 +15,10 @@ function FooterWhyUs() {
           alt=""
         />
         <div>
-          <TypographyH4>همراه هر آموزشی</TypographyH4>
-          <TypographySpan className="text-text-light">
+          <TypographyLarge className="md:text-lg text-md">
+            همراه هر آموزشی
+          </TypographyLarge>
+          <TypographySpan className="text-text-light md:text-md text-sm">
             ارائه تمامی خدمات رزرو نوبت آموزش رانندگی
           </TypographySpan>
         </div>
@@ -29,8 +31,10 @@ function FooterWhyUs() {
           alt=""
         />
         <div>
-          <TypographyH4>همراه همه لحظات آموزش</TypographyH4>
-          <TypographySpan className="text-text-light">
+          <TypographyLarge className="md:text-lg text-md">
+            همراه همه لحظات آموزش
+          </TypographyLarge>
+          <TypographySpan className="text-text-light md:text-md text-sm">
             پشتیبانی 24 ساعته همراه با شما در آموزش
           </TypographySpan>
         </div>
@@ -43,8 +47,10 @@ function FooterWhyUs() {
           alt=""
         />
         <div>
-          <TypographyH4>رتبه یک رزرو</TypographyH4>
-          <TypographySpan className="text-text-light">
+          <TypographyLarge className="md:text-lg text-md">
+            رتبه یک رزرو
+          </TypographyLarge>
+          <TypographySpan className="text-text-light md:text-md text-sm">
             معتبرترین عرضه‌کننده رزرو نوبت آموزشگاه رانندگی در ایران
           </TypographySpan>
         </div>

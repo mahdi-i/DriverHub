@@ -1,3 +1,4 @@
+import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
 import {
   Body,
   Controller,
@@ -6,12 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { DriverService } from './driver.service';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 
 @Controller('driver')
+@UseGuards(ProfileCompleteGuard)
 export class DriverController {
   constructor(private readonly driverService: DriverService) {}
 

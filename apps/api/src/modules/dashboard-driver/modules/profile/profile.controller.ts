@@ -1,3 +1,4 @@
+import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
 import {
   Body,
   Controller,
@@ -6,6 +7,7 @@ import {
   Post,
   Put,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -79,6 +81,7 @@ export class ProfileController {
   }
 
   @Post('complet-profile')
+  @UseGuards(ProfileCompleteGuard)
   async completProfile(
     @Body() createCompletProfile: CreateCompletProfileDto,
     @UserInfo('id') id: string,
@@ -92,6 +95,7 @@ export class ProfileController {
   }
 
   @Put(':id')
+  @UseGuards(ProfileCompleteGuard)
   update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
     return this.profileService.update(id, updateProfileDto);
   }

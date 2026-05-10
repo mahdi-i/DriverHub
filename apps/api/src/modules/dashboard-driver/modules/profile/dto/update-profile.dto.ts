@@ -1,4 +1,5 @@
 import { GenderEnum } from '@shared/enums/gender.enum';
+import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import { IsBoolean, IsEnum, IsNumber, IsString, Min } from 'class-validator';
 
 export class UpdateProfileDto {
@@ -25,6 +26,6 @@ export class UpdateProfileDto {
   @IsString()
   medicalConditions: string;
 
-  @IsString()
-  address: string;
+  @IsEnum(IranProvinceEnum)
+  address: IranProvinceEnum;
 }
