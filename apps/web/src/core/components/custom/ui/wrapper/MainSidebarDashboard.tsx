@@ -1,174 +1,122 @@
 "use client";
-
-import Logo from "@/core/features/main/components/ui/logo/Logo";
 import { useIsMobile } from "@/core/hooks/useIsMobile";
-import {
-  BarChart,
-  CalendarDays,
-  ChevronDown,
-  ChevronRight,
-  ChevronUp,
-  Clock,
-  CreditCard,
-  FileText,
-  Scissors,
-  User,
-  UserCircle,
-  Users,
-  WorkflowIcon,
-} from "lucide-react";
+import { X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Fragment, useState } from "react";
+import { useEffect } from "react";
 
 interface MainSidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }
 
-interface SubNavItem {
-  name: string;
-  href: string;
-  icon: React.ElementType;
-}
+const navItems = [
+  { href: "/", label: "داشبورد", icon: "🏠" },
+  { href: "/bookings", label: "رزروها", icon: "📅" },
+  { href: "/users", label: "کاربران", icon: "👥" },
+  { href: "/settings", label: "تنظیمات", icon: "⚙️" },
+];
 
-interface NavItem {
-  name: string;
-  href?: string;
-  icon: React.ElementType;
-  sub?: SubNavItem[];
-}
 export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
   const isMobile = useIsMobile();
-  const [show, setshow] = useState(false);
   const pathname = usePathname();
 
-  const isadmin = pathname.startsWith("/adminbarber");
-  const menuItems = [
-    {
-      name: "برنامه کاری",
-      icon: Clock,
-      href: "/adminbarber/schedule",
-    },
-    {
-      name: "پروفایل",
-      icon: UserCircle,
-      href: "/adminbarber/profile",
-    },
-  ];
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && sidebarOpen) {
+        setSidebarOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [sidebarOpen, setSidebarOpen]);
 
-  const navItems: NavItem[] = [
-    { name: "داشبورد", href: "/barberly/dashboard", icon: BarChart },
-    { name: "مشتریان", href: "/barberly/clients", icon: Users },
-    { name: "رزرو نوبت", href: "/barberly/appointments", icon: CalendarDays },
-    { name: "پروفایل", href: "/barberly/profile", icon: User },
-    { name: "زمان کاری", href: "/barberly/worktime", icon: Clock },
-    { name: "خدمات آرایشگاه", href: "/barberly/bookType", icon: Scissors },
-    { name: "وضعیت پلن", href: "/barberly/plans", icon: CreditCard },
-    {
-      name: "بیشتر",
-      icon: ChevronDown,
-      sub: [
-        { name: "گزارشات", href: "/barberly/reports", icon: FileText },
-        { name: "ادمین داری ؟", href: "/barberly/auth", icon: User },
-        { name: "موقعیت شغلی", href: "/barberly/work", icon: WorkflowIcon },
-      ],
-    },
-  ];
-  function showsub() {
-    setshow(!show);
-  }
+  useEffect(() => {
+    if (isMobile) {
+      document.body.style.overflow = sidebarOpen ? "hidden" : "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobile, sidebarOpen]);
+
   return (
-    <aside
-      className={`${
-        isMobile
-          ? "fixed inset-0 z-50 transform transition-transform duration-300 ease-in-out bg-secondary-foreground"
-          : "w-64 "
-      } ${
-        isMobile && !sidebarOpen ? "translate-x-full" : "translate-x-0"
-      } flex flex-col`}
-    >
-      <div className="flex justify-between border-b border-gray-700">
-        {isMobile && (
-          <div className="flex justify-start p-4">
-            <button
-              className="text-gray-300 hover:text-secondary-100"
-              onClick={() => setSidebarOpen(false)}
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
+    <>
+      {/* اورلی تیره */}
+      {isMobile && sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* سایدبار */}
+      <aside
+        className={`
+          ${
+            isMobile
+              ? "fixed inset-0 z-50 transform transition-transform duration-300 ease-in-out"
+              : "relative w-64 flex-shrink-0"
+          }
+          ${isMobile && !sidebarOpen ? "translate-x-full" : "translate-x-0"}
+
+          flex flex-col backdrop-blur-xl
+          bg-[#1e293b]/80 border-r border-white/[0.05]
+        `}
+      >
+        {/* هدر سایدبار */}
+        <div className="flex items-center justify-between p-5 border-b border-white/[0.05]">
+          <div className="flex items-center gap-3">
+            {/* لوگو */}
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#fdb913] to-[#e3a107] flex items-center justify-center shadow-lg shadow-[#fdb913]/20">
+              <span className="text-[#1f2937] font-bold text-sm">آ</span>
+            </div>
+            <span className="text-white font-bold">آکادمی</span>
           </div>
-        )}
-        <span className="flex items-center h-20 transition-transform duration-300 hover:scale-105 group text-secondary-100 ">
-          <Logo />
-        </span>
-      </div>
-      <div className="flex-1 py-4 overflow-y-auto">
-        <nav className="space-y-1 px-2">
-          {(isadmin ? menuItems : navItems).map((item) =>
-            item.href ? (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => {
-                  if (isMobile) setSidebarOpen(false);
-                }}
-                className={`flex items-center w-full px-4 py-3 text-sm rounded-l-md transition-delay ${
-                  pathname === item.href
-                    ? "text-gray-600 bg-secondary-100 border-r-4 border-primary"
-                    : "text-gray-300 hover:bg-secondary-100/20 hover:text-secondary-100 "
-                }`}
-              >
-                <item.icon className="ml-3 h-5 w-5" />
-                {item.name}
-              </Link>
-            ) : (
-              <Fragment key={item.name}>
-                <span
-                  key={item.name}
-                  className={`flex items-center w-full px-4 py-3 text-sm rounded-l-md transition-delay ${
-                    pathname === item.href
-                      ? "text-gray-600 bg-secondary-100 border-r-4 border-primary"
-                      : "text-gray-300 hover:bg-secondary-100/20 hover:text-secondary-100 "
-                  }`}
-                  onClick={() => showsub()}
-                >
-                  {" "}
-                  {show ? (
-                    <ChevronUp className="ml-3 h-5 w-5" />
-                  ) : (
-                    <item.icon className="ml-3 h-5 w-5" />
-                  )}
-                  {item.name}
-                </span>
-                {show
-                  ? navItems.map((item: NavItem) => (
-                      <div key={item.name}>
-                        {item.sub?.map((subItem: SubNavItem) => (
-                          <Link
-                            key={subItem.name}
-                            href={subItem.href}
-                            onClick={() => {
-                              if (isMobile) setSidebarOpen(false);
-                            }}
-                            className={`flex items-center w-full px-4 py-3 text-sm rounded-l-md transition-delay mr-4 ${
-                              pathname === subItem.href
-                                ? "text-gray-600 bg-secondary-100 border-r-4 border-primary"
-                                : "text-gray-300 hover:bg-secondary-100/20 hover:text-secondary-100"
-                            }`}
-                          >
-                            <subItem.icon className="ml-3 h-5 w-5" />
-                            {subItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    ))
-                  : ""}
-              </Fragment>
-            ),
+
+          {isMobile && (
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/60"
+            >
+              <X className="h-5 w-5" />
+            </button>
           )}
+        </div>
+
+        {/* لینک‌ها */}
+        <nav className="flex-1 p-3 space-y-1">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => isMobile && setSidebarOpen(false)}
+                className={`
+                  flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
+                  ${
+                    isActive
+                      ? "bg-gradient-to-r from-[#fdb913]/20 to-[#fdb913]/10 text-[#fdb913] border border-[#fdb913]/30"
+                      : "text-white/60 hover:text-white hover:bg-white/[0.05]"
+                  }
+                `}
+              >
+                <span className="text-lg">{item.icon}</span>
+                <span className="font-medium text-sm">{item.label}</span>
+              </Link>
+            );
+          })}
         </nav>
-      </div>
-    </aside>
+
+        {/* فوتر */}
+        <div className="p-4 border-t border-white/[0.05]">
+          <div className="px-3 py-2">
+            <p className="text-xs text-white/30">نسخه</p>
+            <p className="text-sm text-white/60 font-medium">v2.0.26</p>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }
