@@ -1,9 +1,9 @@
 "use client";
-import Link from "next/link"; 
-import { Home, Bell, User, PlusCircle, MapPin } from "lucide-react";
+import { Bell, Home, MapPin, PlusCircle, User } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const FooterFixed = () => {
+export default function FooterFixed() {
   const pathname = usePathname();
 
   const items = [
@@ -15,7 +15,7 @@ const FooterFixed = () => {
   ];
 
   return (
-    <footer className="fixed bottom-0 left-0 z-50 w-full border-t bg-white shadow-md md:hidden">
+    <footer className="fixed bottom-0 left-0 z-50 w-full border-t bg-white shadow-sm md:hidden">
       <div className="flex items-center justify-around py-2">
         {items.map((item) => {
           const Icon = item.icon;
@@ -29,7 +29,9 @@ const FooterFixed = () => {
                 isActive ? "text-blue-500 font-bold" : "text-gray-600"
               }`}
             >
-              <Icon className={`h-5 w-5 ${isActive ? "stroke-blue-500" : "stroke-gray-600"}`} />
+              <Icon
+                className={`h-5 w-5 ${isActive ? "stroke-blue-500" : "stroke-gray-600"}`}
+              />
               <span>{item.name}</span>
             </Link>
           );
@@ -37,6 +39,4 @@ const FooterFixed = () => {
       </div>
     </footer>
   );
-};
-
-export default FooterFixed;
+}

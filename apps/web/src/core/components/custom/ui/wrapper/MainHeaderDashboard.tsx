@@ -21,7 +21,7 @@ export function MainHeader({ setSidebarOpen }: MainHeaderProps) {
           </button>
         )}
 
-        <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 hover:border-[#fdb913]/50 transition-colors cursor-text">
+        <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 hover:border-primary/50 transition-colors cursor-text">
           <Search className="h-4 w-4 text-gray-400" />
           <input
             type="text"
@@ -32,9 +32,9 @@ export function MainHeader({ setSidebarOpen }: MainHeaderProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="relative p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-500">
+        <button className="relative p-2 rounded-lg hover:bg-white transition-colors text-gray-500">
           <Bell className="h-5 w-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#fdb913]" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary" />
         </button>
 
         <div className="flex items-center gap-3 pl-3  border-r border-gray-200">
@@ -42,7 +42,7 @@ export function MainHeader({ setSidebarOpen }: MainHeaderProps) {
             <p className="text-sm font-medium text-gray-900">علی محمدی</p>
             <p className="text-xs text-gray-500">مدیر سیستم</p>
           </div>
-          <div className="w-9 h-9 rounded-lg bg-linear-to-br from-[#0077db] to-[#005bb5] flex items-center justify-center text-white font-bold text-sm shadow-md shadow-[#0077db]/20">
+          <div className="w-9 h-9 rounded-lg bg-linear-to-br from-secondary to-secondary/90 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-secondary/20">
             ع
           </div>
         </div>
