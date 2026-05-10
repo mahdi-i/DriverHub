@@ -1,5 +1,5 @@
+import { DaysOfWeek } from '@driverhub/shared-types';
 import { BaseEntity } from '@shared/entities/base.entity';
-import { DaysOfWeek } from '@shared/enums/week-day.enum';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Driver } from '../../driver/entities/driver.entity';
 @Entity()

@@ -1,4 +1,4 @@
-import { GenderEnum } from '@shared/enums/gender.enum';
+import { GenderEnum, LicenseTypeEnum } from '@driverhub/shared-types';
 import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import { Type } from 'class-transformer';
 import {
@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
   IsOptional,
   IsString,
   Min,
@@ -19,6 +20,7 @@ export class CreateBasicProfileDto {
   gender: GenderEnum;
 
   @IsString()
+  @IsNumberString({}, { message: 'شماره گواهی نامه باید فقط شامل عدد باشد' })
   licenseNumber: string;
 
   @IsNumber()
@@ -33,13 +35,19 @@ export class CreateBasicProfileDto {
   carColor: string;
 
   @IsString()
+  @IsNumberString({}, { message: 'شماره حساب باید فقط شامل عدد باشد' })
   bankAccountNumber: string;
+
+  @IsEnum(LicenseTypeEnum)
+  @IsNotEmpty()
+  licenseType: LicenseTypeEnum;
 }
 export class CreateCompletProfileDto {
   @IsNotEmpty()
   age: number;
 
   @IsString()
+  @IsNumberString({}, { message: ' کدملی نامه باید فقط شامل عدد باشد' })
   nationalCode: string;
 
   @IsNotEmpty()
@@ -53,4 +61,7 @@ export class CreateCompletProfileDto {
 
   @IsEnum(IranProvinceEnum)
   address: IranProvinceEnum;
+
+  @IsString()
+  city: string;
 }

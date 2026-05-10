@@ -1,4 +1,4 @@
-import { Roles } from '@shared/enums/role.enum';
+import { Roles } from '@driverhub/shared-types';
 import { IsBoolean, IsEnum, IsNotEmpty, IsPhoneNumber } from 'class-validator';
 
 export class CreateUserDto {

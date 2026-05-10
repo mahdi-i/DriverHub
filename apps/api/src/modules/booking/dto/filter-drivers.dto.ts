@@ -1,8 +1,9 @@
-// src/modules/booking/dto/filter-drivers.dto.ts
-import { GenderEnum } from '@shared/enums/gender.enum';
+import {
+  DaysOfWeek,
+  GenderEnum,
+  LicenseTypeEnum,
+} from '@driverhub/shared-types';
 import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
-import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
-import { DaysOfWeek } from '@shared/enums/week-day.enum';
 import { Type } from 'class-transformer';
 import {
   IsBoolean,

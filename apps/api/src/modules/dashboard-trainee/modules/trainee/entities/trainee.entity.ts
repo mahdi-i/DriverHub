@@ -1,9 +1,8 @@
 import { Booking } from '@core/booking/entities/booking.entity';
 import { User } from '@core/user/entities/auth.entity';
+import { GenderEnum, LicenseTypeEnum } from '@driverhub/shared-types';
 import { BaseEntity } from '@shared/entities/base.entity';
-import { GenderEnum } from '@shared/enums/gender.enum';
 import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
-import { LicenseTypeEnum } from '@shared/enums/license-type.enum';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity()

@@ -1,4 +1,4 @@
-import { AppointmentStatus } from '@shared/enums/appointment-status.enum';
+import { AppointmentStatus } from '@driverhub/shared-types';
 import { IsEnum, IsOptional } from 'class-validator';
 
 export class BookingQueryDto {

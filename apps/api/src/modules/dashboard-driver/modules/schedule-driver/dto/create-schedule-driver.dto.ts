@@ -1,5 +1,5 @@
+import { DaysOfWeek } from '@driverhub/shared-types';
 import { ApiProperty } from '@nestjs/swagger';
-import { DaysOfWeek } from '@shared/enums/week-day.enum';
 import {
   ArrayNotEmpty,
   IsEnum,

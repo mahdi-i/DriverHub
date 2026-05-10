@@ -1,7 +1,7 @@
 import { Driver } from '@core/dashboard-driver/modules/driver/entities/driver.entity';
 import { Trainee } from '@core/dashboard-trainee/modules/trainee/entities/trainee.entity';
+import { AppointmentStatus } from '@driverhub/shared-types';
 import { BaseEntity } from '@shared/entities/base.entity';
-import { AppointmentStatus } from '@shared/enums/appointment-status.enum';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('bookings')

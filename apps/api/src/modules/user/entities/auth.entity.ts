@@ -1,5 +1,5 @@
+import { Roles } from '@driverhub/shared-types';
 import { BaseEntity } from '@shared/entities/base.entity';
-import { Roles } from '@shared/enums/role.enum';
 import { Column, Entity } from 'typeorm';
 
 @Entity()

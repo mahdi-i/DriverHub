@@ -1,4 +1,4 @@
-import { GenderEnum } from '@shared/enums/gender.enum';
+import { GenderEnum } from '@driverhub/shared-types';
 import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import {
   IsBoolean,
