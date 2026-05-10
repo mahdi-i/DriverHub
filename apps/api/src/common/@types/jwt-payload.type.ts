@@ -1,4 +1,4 @@
-import { Roles } from '@shared/enums/role.enum';
+import { Roles } from '@driverhub/shared-types';
 
 export type JwtPayload = {
   sub: string;
