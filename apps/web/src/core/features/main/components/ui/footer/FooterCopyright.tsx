@@ -1,5 +1,5 @@
 import { TypographySmall } from "@/core/components/custom/ui/typography/Typography";
-import FooterFixed from "./FooterFixed";
+import Navigationbar from "./Navigationbar";
 
 export default function FooterCopyright() {
   return (
@@ -7,7 +7,7 @@ export default function FooterCopyright() {
       <TypographySmall className="text-muted-foreground">
         ساخته شده با 👈💗
       </TypographySmall>
-      <FooterFixed />
+      <Navigationbar />
     </div>
   );
 }
