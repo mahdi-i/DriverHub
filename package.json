@@ -15,5 +15,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "react-date-object": "^2.1.9",
+    "react-multi-date-picker": "^4.5.2",
+    "recharts": "^3.8.1"
+  }
 }

@@ -118,7 +118,7 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
                   flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200
                   ${
                     isActive
-                      ? "bg-gradient-to-r from-[#fdb913]/15 to-[#fdb913]/5 text-[#1f2937] font-semibold border border-[#fdb913]/30"
+                      ? "bg-linear-to-r from-[#fdb913]/15 to-[#fdb913]/5 text-[#1f2937] font-semibold border border-[#fdb913]/30"
                       : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   }
                 `}
