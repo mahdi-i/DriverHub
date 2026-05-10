@@ -22,10 +22,8 @@ async function layout({
   return (
     <main>
       <Header />
-
-      <section className="relative w-full mb-35">
+      <section className="relative w-full mb-35 hidden md:flex">
         <HeroImageMainPage />
-
         <div className="absolute -bottom-59 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-300  z-10">
           <Card className="w-full py-4 ">
             <LicenseFilter />
