@@ -51,10 +51,10 @@ function Modal({
               ) : (
                 <>
                   <DialogClose asChild>
-                    <Button variant="outline">cancel</Button>
+                    <Button variant="outline">لغو کردن</Button>
                   </DialogClose>
                   <Button type="submit" form="modal-form">
-                    done
+                    تایید
                   </Button>
                 </>
               )}
@@ -62,7 +62,7 @@ function Modal({
           )}
           {showCloseButton && (
             <DialogClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
-              <span className="sr-only">cancel</span>×
+              <span className="sr-only">لغو کردن</span>×
             </DialogClose>
           )}
         </DialogContent>
