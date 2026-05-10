@@ -4,7 +4,7 @@ import { TypographyLarge } from "@/core/components/custom/ui/typography/Typograp
 export default function FooterTrustBadges() {
   return (
     <div>
-      <TypographyLarge className="font-bold mb-4 ">
+      <TypographyLarge className="font-medium mb-4 ">
         نمادهای اعتماد
       </TypographyLarge>
       <div className="flex  gap-4">

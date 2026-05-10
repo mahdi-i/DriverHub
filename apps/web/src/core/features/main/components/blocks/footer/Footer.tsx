@@ -1,5 +1,3 @@
-"use client";
-
 import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
 import FooterCopyright from "../../ui/footer/FooterCopyright";
 import FooterLinksAndContact from "../../ui/footer/FooterLinksAndContact";
