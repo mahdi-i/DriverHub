@@ -17,7 +17,7 @@ function DynamicSearchSubmitBtn({
         isBase2 ||
         isBase3 ||
         isHeavyMotor) && (
-        <div className="md:w-[35%] flex justify-end">
+        <div className="md:w-[35%] justify-end md:flex hidden">
           <Button variant="default" className="w-full">
             <Search className="w-4 h-4 ml-2" />
             جستجو

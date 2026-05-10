@@ -18,7 +18,7 @@ export const licenses = [
   {
     id: "heavy-motorcycle",
     name: "موتور سنگین",
-    icon: Ship, // کشتی برای نشون دادن سنگین بودن
+    icon: Ship,
     href: "heavy-motorcycle",
     description: "آموزش رانندگی موتورسیکلت‌های سنگین",
   },
