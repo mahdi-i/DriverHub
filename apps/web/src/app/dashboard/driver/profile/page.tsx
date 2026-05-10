@@ -1,5 +1,7 @@
+import ProfileDriver from "@/core/features/driver/components/blocks/profile/ProfileDriver";
+
 function page() {
-  return <div>page</div>;
+  return <ProfileDriver />;
 }
 
 export default page;

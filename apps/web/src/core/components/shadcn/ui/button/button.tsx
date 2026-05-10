@@ -22,7 +22,7 @@ const buttonVariants = cva(
           "transform transition-all duration-200",
 
         outline:
-          "border-2 border-primary text-primary bg-transparent " +
+          "border-1 border-primary text-primary bg-transparent " +
           "hover:bg-primary/10 hover:scale-[1.01] hover:shadow-sm " +
           "active:scale-95 " +
           "transform transition-all duration-200",
