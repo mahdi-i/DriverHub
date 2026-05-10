@@ -1,41 +1,24 @@
 "use client";
+import {
+  defaultNavItems,
+  driverNavItems,
+  traineeNavItems,
+} from "@/core/assets/mock/navItems";
 import Logo from "@/core/features/main/components/ui/logo/Logo";
 import { useIsMobile } from "@/core/hooks/useIsMobile";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
-
 interface MainSidebarProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }
 
-const defaultNavItems = [{ href: "/", label: "داشبورد", icon: "🏠" }];
-
-const driverNavItems = [
-  { href: "/dashboard/driver", label: "پنل کاربری", icon: "🏠" },
-  { href: "/dashboard/driver/profile", label: "پروفایل", icon: "👤" },
-  { href: "/dashboard/driver/schedule", label: "برنامه", icon: "📅" },
-  { href: "/dashboard/driver/bookings", label: "رزروها", icon: "📝" },
-  { href: "/dashboard/driver/analysis", label: "آمار", icon: "📊" },
-  { href: "/dashboard/driver/settings", label: "تنظیمات", icon: "⚙️" },
-];
-
-const traineeNavItems = [
-  { href: "/dashboard/trainee", label: "پنل کاربری", icon: "🏠" },
-  { href: "/dashboard/trainee/profile", label: "پروفایل", icon: "👤" },
-  { href: "/dashboard/trainee/bookings", label: "رزروها", icon: "📝" },
-  { href: "/dashboard/trainee/schedule", label: "برنامه آموزشی", icon: "📅" },
-  { href: "/dashboard/trainee/progress", label: "پیشرفت", icon: "📈" },
-  { href: "/dashboard/trainee/settings", label: "تنظیمات", icon: "⚙️" },
-];
-
 export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
   const isMobile = useIsMobile();
   const pathname = usePathname();
 
-  // انتخاب آیتم‌ها بر اساس مسیر
   const navItems = useMemo(() => {
     if (pathname.includes("/driver")) {
       return driverNavItems;
@@ -45,16 +28,6 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
     }
     return defaultNavItems;
   }, [pathname]);
-
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && sidebarOpen) {
-        setSidebarOpen(false);
-      }
-    };
-    window.addEventListener("keydown", handleEscape);
-    return () => window.removeEventListener("keydown", handleEscape);
-  }, [sidebarOpen, setSidebarOpen]);
 
   useEffect(() => {
     if (isMobile) {
@@ -67,7 +40,6 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
 
   return (
     <>
-      {/* اورلی تیره */}
       {isMobile && sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
@@ -75,7 +47,6 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
         />
       )}
 
-      {/* سایدبار */}
       <aside
         className={`
           ${
@@ -90,7 +61,6 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
           shadow-lg shadow-gray-200/50
         `}
       >
-        {/* هدر */}
         <div className="flex items-center justify-between p-5 border-b border-gray-100">
           <div className="gap-3 mx-auto">
             <Logo />
@@ -105,7 +75,6 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
           )}
         </div>
 
-        {/* ناوبری */}
         <nav className="flex-1 p-3 space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
@@ -118,7 +87,7 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
                   flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200
                   ${
                     isActive
-                      ? "bg-linear-to-r from-[#fdb913]/15 to-[#fdb913]/5 text-[#1f2937] font-semibold border border-[#fdb913]/30"
+                      ? "bg-linear-to-r from-primary/15 to-primary/5 text-foreground font-semibold border border-primary/30"
                       : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
                   }
                 `}
@@ -126,14 +95,13 @@ export function MainSidebar({ sidebarOpen, setSidebarOpen }: MainSidebarProps) {
                 <span className="text-lg">{item.icon}</span>
                 <span className="font-medium text-sm">{item.label}</span>
                 {isActive && (
-                  <div className="mr-auto w-1.5 h-1.5 rounded-full bg-[#fdb913]" />
+                  <div className="mr-auto w-1.5 h-1.5 rounded-full bg-primary" />
                 )}
               </Link>
             );
           })}
         </nav>
 
-        {/* فوتر */}
         <div className="p-4 border-t border-gray-100">
           <div className="px-3 py-2 flex justify-between">
             <p className="text-xs text-gray-400">نسخه</p>
