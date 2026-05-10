@@ -1,7 +1,7 @@
 import { ScheduleDriver } from '@core/dashboard-driver/modules/schedule-driver/entities/schedule-driver.entity';
+import { AppointmentStatus } from '@driverhub/shared-types';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AppointmentStatus } from '@shared/enums/appointment-status.enum';
 import { getSecondsFromMidnight } from '@shared/utils/seconds-from-midnight.util';
 import { EntityManager, Repository } from 'typeorm';
 import { Booking } from '../entities/booking.entity';

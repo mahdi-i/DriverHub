@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Public } from '@shared/decorators/public.decorator';
-import { Roles } from '@shared/enums/role.enum';
+import { Roles } from '@driverhub/shared-types';
 import { CookieService } from '@shared/services/cookie.service';
 import { Request, Response } from 'express';
 import { CreateAuthDto } from '../dto/create-phone.dto';

@@ -2,7 +2,7 @@ import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-comp
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
-import { Roles } from '@shared/enums/role.enum';
+import { Roles } from '@driverhub/shared-types';
 import { ActionBookingService } from '../services/action-booking.service';
 
 @Controller('action-booking')

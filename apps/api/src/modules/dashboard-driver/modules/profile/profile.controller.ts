@@ -15,8 +15,8 @@ import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { SkipProfileCheck } from '@shared/decorators/skip-profile-driver.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
-import { GenderEnum } from '@shared/enums/gender.enum';
-import { Roles } from '@shared/enums/role.enum';
+
+import { GenderEnum, LicenseTypeEnum, Roles } from '@driverhub/shared-types';
 import {
   CreateBasicProfileDto,
   CreateCompletProfileDto,
@@ -53,6 +53,7 @@ export class ProfileController {
         carModel: { type: 'string', example: 'پژو ۲۰۶' },
         carColor: { type: 'string', example: 'سفید' },
         bankAccountNumber: { type: 'string', example: '1234567890123456' },
+        licenseType: { type: 'enum', example: LicenseTypeEnum.CAR },
       },
       required: [
         'fullName',
@@ -61,6 +62,7 @@ export class ProfileController {
         'experienceYears',
         'bankAccountNumber',
         'file',
+        'licenseType',
         'carModel',
         'carColor',
       ],

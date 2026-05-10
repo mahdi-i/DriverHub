@@ -1,4 +1,5 @@
 import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
+import { Roles } from '@driverhub/shared-types';
 import {
   Body,
   Controller,
@@ -12,7 +13,6 @@ import {
 import { PaginationOptions } from '@shared/decorators/pagination-option.decorator';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
-import { Roles } from '@shared/enums/role.enum';
 import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { CreateScheduleDriverDto } from './dto/create-schedule-driver.dto';
 import { UpdateScheduleDriverDto } from './dto/update-schedule-driver.dto';

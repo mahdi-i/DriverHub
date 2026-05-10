@@ -1,9 +1,9 @@
 import { User } from '@core/user/entities/auth.entity';
 import { UserService } from '@core/user/user.service';
+import { Roles } from '@driverhub/shared-types';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Roles } from '@shared/enums/role.enum';
 import { CacheService } from '@shared/services/cache.service';
 import { generateOtp } from '@shared/utils/code-generator.util';
 import { Repository } from 'typeorm';

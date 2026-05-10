@@ -1,3 +1,4 @@
+import { AppointmentStatus } from '@driverhub/shared-types';
 import {
   BadRequestException,
   ForbiddenException,
@@ -5,7 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AppointmentStatus } from '@shared/enums/appointment-status.enum';
 import { Repository } from 'typeorm';
 import { Booking } from '../entities/booking.entity';
 

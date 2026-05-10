@@ -1,8 +1,8 @@
 import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
+import { Roles } from '@driverhub/shared-types';
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
-import { Roles } from '@shared/enums/role.enum';
 import { AnalysisService } from './analysis.service';
 import { DriverAnalysisResponseDto } from './dto/create-analysis.dto';
 

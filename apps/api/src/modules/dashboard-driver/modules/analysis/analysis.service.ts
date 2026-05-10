@@ -1,7 +1,7 @@
 import { Booking } from '@core/booking/entities/booking.entity';
+import { AppointmentStatus } from '@driverhub/shared-types';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AppointmentStatus } from '@shared/enums/appointment-status.enum';
 import { Repository } from 'typeorm';
 import {
   AppointmentAnalysis,

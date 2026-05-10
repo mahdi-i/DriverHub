@@ -1,5 +1,6 @@
 import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
 import { TraineeProfileCompleteGuard } from '@core/dashboard-trainee/guard/trainee-profile-complete.guard';
+import { Roles } from '@driverhub/shared-types';
 import {
   Body,
   Controller,
@@ -13,7 +14,6 @@ import { PaginationOptions } from '@shared/decorators/pagination-option.decorato
 import { Public } from '@shared/decorators/public.decorator';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
-import { Roles } from '@shared/enums/role.enum';
 import { ValidateStartvsEndPipe } from '@shared/pipes/compare-start-vs-end.pipe';
 import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { CreateBookingDto } from '../dto/create-booking.dto';
