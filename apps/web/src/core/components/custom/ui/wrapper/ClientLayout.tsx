@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
-import { MainHeader } from "./MainHeaderDashboard";
-import { MainSidebar } from "./MainSidebarDashboard";
+import { DashboardHeader } from "./DashboardHeader";
+import { DashboardSidebar } from "./DashboardSidebar";
 
 export default function ClientLayout({
   children,
@@ -12,10 +12,13 @@ export default function ClientLayout({
 
   return (
     <main className="flex h-screen overflow-hidden bg-muted">
-      <MainSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <DashboardSidebar
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
+      />
 
       <section className="flex-1 flex flex-col overflow-hidden">
-        <MainHeader setSidebarOpen={setSidebarOpen} />
+        <DashboardHeader setSidebarOpen={setSidebarOpen} />
 
         <div className="flex-1 overflow-x-auto">{children}</div>
       </section>
