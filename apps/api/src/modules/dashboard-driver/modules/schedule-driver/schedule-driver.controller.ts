@@ -40,6 +40,7 @@ export class ScheduleDriverController {
   @PaginationOptions({
     sortOptions: [{ example: 'createdAt:DESC' }],
     filterOptions: [{ field: 'dayOfWeek', example: 'MONDAY' }],
+    searchOptions: [{ field: 'search-dayOfWeek', example: 'MONDAY' }],
   })
   findAll(@UserInfo('id') userId: string, @Paginate() query: PaginateQuery) {
     return this.scheduleDriverService.findAll(userId, query);

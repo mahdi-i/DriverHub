@@ -6,9 +6,7 @@ function DynamicSearchCarModle({ isCar, isMotorcycle, isHeavyMotor }) {
     <>
       {isCar && (
         <div className="md:w-full space-y-1">
-          <TypographyP className="text-xs font-medium text-muted-foreground">
-            مدل خودرو
-          </TypographyP>
+          <TypographyP className="text-select">مدل خودرو</TypographyP>
           <Input
             type="text"
             placeholder="مثال: پژو 206، دنا..."

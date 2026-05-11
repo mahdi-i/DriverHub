@@ -52,6 +52,7 @@ export class ScheduleDriverService {
       where: {
         driverId: userId,
       },
+      searchableColumns: ['dayOfWeek'],
       defaultSortBy: [['createdAt', 'DESC']],
       select: [
         'id',
@@ -73,6 +74,17 @@ export class ScheduleDriverService {
   async findOne(id: string, userId: string) {
     const schedule = await this.schduleDriverRepository.findOne({
       where: { id, driverId: userId },
+      select: [
+        'id',
+        'driverId',
+        'dayOfWeek',
+        'startTimeFirst',
+        'endTimeFirst',
+        'startTimeSecond',
+        'endTimeSecond',
+        'createdAt',
+        'updatedAt',
+      ],
     });
 
     if (!schedule) {

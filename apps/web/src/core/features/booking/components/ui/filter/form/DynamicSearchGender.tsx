@@ -9,9 +9,7 @@ import {
 function DynamicSearchGender() {
   return (
     <div className="md:w-full space-y-1">
-      <TypographyP className="text-xs font-medium text-muted-foreground">
-        جنسیت
-      </TypographyP>
+      <TypographyP className="text-select">جنسیت</TypographyP>
       <Select>
         <SelectTrigger className="w-full ">
           <SelectValue placeholder="انتخاب" />

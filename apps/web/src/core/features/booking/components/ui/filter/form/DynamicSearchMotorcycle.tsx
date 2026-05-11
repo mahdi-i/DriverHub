@@ -11,9 +11,7 @@ function DynamicSearchMotorcycle({ isMotorcycle, isHeavyMotor }) {
     <>
       {(isMotorcycle || isHeavyMotor) && (
         <div className="md:col-span-6 space-y-1">
-          <TypographyP className="text-xs font-medium text-muted-foreground">
-            نوع موتور
-          </TypographyP>
+          <TypographyP className="text-select">نوع موتور</TypographyP>
           <Select>
             <SelectTrigger className="w-full ">
               <SelectValue placeholder="نوع موتور" />

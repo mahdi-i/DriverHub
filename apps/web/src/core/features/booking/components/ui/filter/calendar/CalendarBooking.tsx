@@ -31,9 +31,7 @@ function CalendarBooking({
 
   return (
     <div className="md:col-span-4 space-y-1.5">
-      <label className="text-xs font-medium text-muted-foreground">
-        تاریخ شروع
-      </label>
+      <label className="text-select">تاریخ شروع</label>
       <Popover>
         <PopoverTrigger asChild>
           <button

@@ -110,3 +110,7 @@
   @apply w-full mx-auto max-w-325 px-5 sm:px-15;
   @apply py-4 md:py-8 lg:py-5;
 }
+
+.text-select {
+  @apply text-xs font-medium;
+}

@@ -1,8 +1,8 @@
 "use client";
-import Link from "next/link";
-import { items } from "../../../assets/mock/navigation";
-import { usePathname } from "next/navigation";
 import { TypographySpan } from "@/core/components/custom/ui/typography/Typography";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { navigationitems } from "../../../assets/mock/navigation";
 
 function Navigationbar() {
   const pathname = usePathname();
@@ -10,7 +10,7 @@ function Navigationbar() {
   return (
     <div className="fixed bottom-0 left-0 z-50 w-full border-t bg-background shadow-sm md:hidden">
       <div className="flex items-center justify-around py-2">
-        {items.map((item) => {
+        {navigationitems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
 
@@ -19,9 +19,7 @@ function Navigationbar() {
               key={item.name}
               href={item.href}
               className={`flex h-auto flex-col items-center gap-1 px-2 py-1 transition-colors duration-200 ${
-                isActive
-                  ? "text-secondary font-bold"
-                  : "text-muted-foreground"
+                isActive ? "text-secondary font-bold" : "text-muted-foreground"
               }`}
             >
               <Icon

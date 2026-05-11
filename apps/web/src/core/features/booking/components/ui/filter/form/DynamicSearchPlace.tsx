@@ -18,7 +18,7 @@ function DynamicSearchPlace({
         isBase3 ||
         isHeavyMotor) && (
         <div className="md:w-full space-y-1">
-          <TypographyP className="text-xs font-medium text-muted-foreground">
+          <TypographyP className="text-select">
             منطقه آموزش
           </TypographyP>
           <Input
