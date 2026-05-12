@@ -5,5 +5,5 @@ export const navigationitems = [
   { name: "مربیان", href: "/trainee", icon: Award },
   { name: "شعبات", href: "/stations", icon: MapPin },
   { name: "اعلان‌ها", href: "/notifications", icon: Bell },
-  { name: "حساب کاربری", href: "/profile", icon: User },
+  { name: "حساب کاربری", href: "/auth", icon: User },
 ];
