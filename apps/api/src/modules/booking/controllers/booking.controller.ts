@@ -72,6 +72,7 @@ export class BookingController {
   driversList(@Paginate() query: PaginateQuery) {
     return this.bookingService.driversList(query);
   }
+
   @Get('my-list-trainee')
   @UseGuards(TraineeProfileCompleteGuard)
   @PaginationOptions({

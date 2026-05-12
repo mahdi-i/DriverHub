@@ -1,4 +1,4 @@
-import DashboardScheduleDriver from "@/core/features/driver/components/ui/schedule/DashboardScheduleDriver";
+import DashboardScheduleDriver from "@/core/features/driver/components/blocks/schedule/DashboardScheduleDriver";
 
 function page() {
   return <DashboardScheduleDriver />;

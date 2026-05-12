@@ -1,5 +1,7 @@
+import BookingDashboardDriver from "@/core/features/driver/components/blocks/bookings/BookingDashboardDriver";
+
 function page() {
-  return <div>page</div>;
+  return <BookingDashboardDriver />;
 }
 
 export default page;
