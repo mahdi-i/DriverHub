@@ -1,5 +1,3 @@
-"use client";
-
 import { Card, CardContent } from "@/core/components/shadcn/ui/card/card";
 
 import { Table } from "@/core/components/shadcn/ui/table/table";

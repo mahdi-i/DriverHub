@@ -1,3 +1,5 @@
+"use client";
+
 import Modal from "@/core/components/custom/ui/modal/Modal";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
 import { Button } from "@/core/components/shadcn/ui/button/button";
