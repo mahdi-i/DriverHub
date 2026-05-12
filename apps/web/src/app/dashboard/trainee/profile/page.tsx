@@ -1,7 +1,9 @@
+import ProfileTrainee from "@/core/features/driver/components/blocks/profile/ProfileTrainee"
+
 function page() {
   return (
     <div>
-      profile
+      <ProfileTrainee />
     </div>
   )
 }

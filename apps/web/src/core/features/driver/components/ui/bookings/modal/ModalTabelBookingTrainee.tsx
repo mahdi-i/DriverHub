@@ -12,10 +12,8 @@ import { fakeBookingsTrinee } from "@/core/features/driver/assets/mock/fakeBooki
 import { getActions } from "@/core/features/driver/utils/getActionsBooking";
 import { getGender } from "@/core/utils/getGender";
 import {
-  AlertCircle,
   Calendar,
   Eye,
-  Glasses,
   MoreHorizontal,
   User,
 } from "lucide-react";
