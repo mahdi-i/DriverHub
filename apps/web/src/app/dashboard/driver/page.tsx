@@ -1,5 +1,7 @@
+import DashboardDriverPage from "@/core/features/driver/components/blocks/dashboard/DashboardDriverPage";
+
 function page() {
-  return <div>page</div>;
+  return <DashboardDriverPage />;
 }
 
 export default page;
