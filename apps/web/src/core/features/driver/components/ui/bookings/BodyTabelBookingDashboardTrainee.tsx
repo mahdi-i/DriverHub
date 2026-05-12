@@ -14,7 +14,7 @@ import { getStatusBadgeVariant } from "@/core/utils/getStatusBadgeVariant";
 import { getStatusLabel } from "@/core/utils/getStatusLabel";
 import { MapPin } from "lucide-react";
 import { fakeBookingsTrinee } from "../../../assets/mock/fakeBookings";
-import ModalTabelBooking from "./modal/ModalTabelBooking";
+import ModalTabelBookingTrainee from "./modal/ModalTabelBookingTrainee";
 function BodyTabelBookingDashboard() {
   return (
     <TableBody>
@@ -29,7 +29,7 @@ function BodyTabelBookingDashboard() {
           <TableRow key={booking.id}>
 
             <TableCell className="font-medium">{index + 1}</TableCell>
-            
+
             <TableCell>
               <div className="flex flex-col gap-1">
                 <TypographySpan>{booking.day}</TypographySpan>
@@ -62,7 +62,7 @@ function BodyTabelBookingDashboard() {
             </TableCell>
 
             <TableCell>
-              <ModalTabelBooking booking={booking} />
+              <ModalTabelBookingTrainee booking={booking} />
             </TableCell>
 
           </TableRow>
