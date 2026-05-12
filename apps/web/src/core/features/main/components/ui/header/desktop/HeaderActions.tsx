@@ -1,9 +1,50 @@
+"use client";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
 import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Calendar, Headphones, User } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
-export default function HeaderActions() {
+export default function HeaderActions({
+  setIsAuthModalOpen,
+  isAuthModalOpen,
+}: {
+  setIsAuthModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  isAuthModalOpen?: boolean;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  function handleOpenModal() {
+    setIsAuthModalOpen(true);
+
+    const params = new URLSearchParams(searchParams);
+    params.set("auth", "open");
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
+  useEffect(() => {
+    if (!isAuthModalOpen) {
+      const params = new URLSearchParams(searchParams);
+      const hadAuthParam = params.has("auth");
+
+      if (hadAuthParam) {
+        params.delete("auth");
+        const newUrl = params.toString()
+          ? `${pathname}?${params.toString()}`
+          : pathname;
+
+        if (
+          newUrl !==
+          `${pathname}${searchParams.toString() ? "?" + searchParams.toString() : ""}`
+        ) {
+          router.push(newUrl, { scroll: false });
+        }
+      }
+    }
+  }, [isAuthModalOpen, pathname, router, searchParams]);
   return (
     <div className="flex items-center ">
       <Button variant="ghost" className="gap-2">
@@ -23,11 +64,9 @@ export default function HeaderActions() {
         </Link>
       </Button>
 
-      <Button variant="default" className="gap-2">
-        <Link href="/auth/login" className="flex items-center gap-2">
-          <User className="h-6 w-6 " />
-          <TypographyP className="font-medium">ورود یا ثبت نام</TypographyP>
-        </Link>
+      <Button variant="default" className="gap-2" onClick={handleOpenModal}>
+        <User className="h-6 w-6 " />
+        <TypographyP className="font-medium">ورود یا ثبت نام</TypographyP>
       </Button>
     </div>
   );
