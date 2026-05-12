@@ -1,6 +1,6 @@
 import { Booking } from '@core/booking/entities/booking.entity';
 import { User } from '@core/user/entities/auth.entity';
-import { GenderEnum, LicenseTypeEnum } from '@driverhub/shared-types';
+import { GenderEnum } from '@driverhub/shared-types';
 import { BaseEntity } from '@shared/entities/base.entity';
 import { IranProvinceEnum } from '@shared/enums/iran-province.enum';
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
@@ -41,13 +41,6 @@ export class Trainee extends BaseEntity {
 
   @Column({ length: 10 })
   postalCode: string;
-
-  @Column({
-    type: 'enum',
-    enum: LicenseTypeEnum,
-    nullable: true,
-  })
-  desiredLicenseType: LicenseTypeEnum;
 
   @OneToMany(() => Booking, (booking) => booking.student)
   bookings: Booking[];
