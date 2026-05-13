@@ -1,5 +1,11 @@
+import DashboardTraineePage from "@/core/features/driver/components/blocks/dashboard/DashboardTraineePage";
+
 function page() {
-  return <div>page</div>;
+  return (
+    <div>
+      <DashboardTraineePage />
+    </div>
+  );
 }
 
 export default page;

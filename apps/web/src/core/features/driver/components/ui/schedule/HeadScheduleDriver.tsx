@@ -17,8 +17,8 @@ import ModalListWorkSchedule from "./modal/ModalListWorkSchedule";
 function HeadScheduleDriver() {
   return (
     <Card>
-      <CardContent className="flex-col md:flex justify-between items-center ">
-        <div className="grid grid-cols-2 md:grid-cols-3  gap-3">
+      <CardContent className="flex-col md:flex md:flex-row justify-between items-center">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
           <div>
             <TypographyP className="text-select">روز هفته</TypographyP>
             <Select>
@@ -55,10 +55,14 @@ function HeadScheduleDriver() {
             <Input placeholder="جستجو روز مدنظر" />
           </div>
         </div>
-        <ModalListWorkSchedule />
+
+        <div className="mt-5 md:mt-0 md:ml-4 w-full md:w-auto flex justify-end">
+          <ModalListWorkSchedule />
+        </div>
       </CardContent>
     </Card>
   );
 }
+
 
 export default HeadScheduleDriver;

@@ -11,7 +11,7 @@ function ModalListWorkSchedule() {
       onOpenChange={setopen}
       title="مشاهده لیست"
       trigger={
-        <Button className="mt-5 md:w-40 w-full" variant="secondary">
+        <Button className="mt-5 ms-5 md:w-40 w-full" variant="secondary">
           مشاهده لیست
         </Button>
       }
