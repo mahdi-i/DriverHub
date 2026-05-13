@@ -22,17 +22,33 @@ export class AuthService {
   ) {}
   async requestOtp(createAuthDto: CreateAuthDto) {
     const { phone } = createAuthDto;
-    const existUser = await this.userService.findByPhone(phone);
+    const rateLimitKey = `rate-limit:${phone}`;
+    const isRateLimited = await this.cacheService.get(rateLimitKey);
 
-    const existOtp = await this.cacheService.get(`otp:${phone}`);
-    if (existOtp) {
-      throw new BadRequestException('کد تایید قبلا ارسال شده است');
+    if (isRateLimited) {
+      throw new BadRequestException(
+        'لطفاً چند دقیقه صبر کنید و دوباره تلاش کنید',
+      );
     }
+
+    const attemptsKey = `attempts:${phone}`;
+    const failedAttempts = await this.cacheService.get(attemptsKey);
+
+    if (failedAttempts && parseInt(failedAttempts as string) >= 3) {
+      await this.cacheService.del(`otp:${phone}`);
+      await this.cacheService.del(attemptsKey);
+      throw new BadRequestException(
+        'تعداد تلاش‌ های ناموفق زیاد بوده است. لطفاً کد جدید درخواست کنید',
+      );
+    }
+    await this.cacheService.del(`otp:${phone}`);
+
     const otp = generateOtp(6);
     await this.cacheService.set(`otp:${phone}`, otp, 120);
 
-    console.log(`OTP for ${phone}`);
+    await this.cacheService.set(rateLimitKey, 'true', 120);
 
+    const existUser = await this.userService.findByPhone(phone);
     return {
       message: existUser
         ? 'کد تایید برای ورود ارسال شد'
@@ -51,11 +67,29 @@ export class AuthService {
       );
     }
     if (existOtp !== otp.toString()) {
+      const attemptsKey = `attempts:${phone}`;
+      let attempts = await this.cacheService.get(attemptsKey);
+
+      if (!attempts) {
+        attempts = '1';
+      } else {
+        attempts = (parseInt(attempts as string) + 1).toString();
+      }
+      if (parseInt(attempts) >= 3) {
+        await this.cacheService.del(`otp:${phone}`);
+        await this.cacheService.del(attemptsKey);
+        throw new BadRequestException(
+          'تعداد تلاش‌ های ناموفق مجاز تمام شده است. لطفا کد جدید بگیرید',
+        );
+      }
+      await this.cacheService.set(attemptsKey, attempts, 300);
+
       throw new BadRequestException('کد تایید اشتباه است');
     }
+    await this.cacheService.del(`otp:${phone}`);
+    await this.cacheService.del(`attempts:${phone}`);
     const user = await this.userService.findByPhone(phone);
     if (user) {
-      await this.cacheService.del(`otp:${phone}`);
       const tokens = await this.tokenService.generateTokens(user);
       return {
         message: 'ورود با موفقیت انجام شد',
@@ -82,7 +116,6 @@ export class AuthService {
         isActive: true,
       });
 
-      await this.cacheService.del(`otp:${phone}`);
       const tokens = await this.tokenService.generateTokens(newUser);
       return {
         message: 'ثبت‌ نام با موفقیت انجام شد',

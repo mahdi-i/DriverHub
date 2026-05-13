@@ -1,3 +1,4 @@
+import { Roles } from '@driverhub/shared-types';
 import {
   Body,
   Controller,
@@ -7,7 +8,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Public } from '@shared/decorators/public.decorator';
-import { Roles } from '@driverhub/shared-types';
 import { CookieService } from '@shared/services/cookie.service';
 import { Request, Response } from 'express';
 import { CreateAuthDto } from '../dto/create-phone.dto';
@@ -51,7 +51,6 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.verifyOtp(verifyDto, Roles.TEACHER);
-
     this.cookieService.setRefreshToken(res, result.refreshToken, 15);
 
     return {
