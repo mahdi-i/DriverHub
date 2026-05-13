@@ -13,7 +13,6 @@ export const traineeNavItems = [
   { href: "/dashboard/trainee", label: "پنل کاربری", icon: "🏠" },
   { href: "/dashboard/trainee/profile", label: "پروفایل", icon: "👤" },
   { href: "/dashboard/trainee/bookings", label: "رزروها", icon: "📝" },
-  { href: "/dashboard/trainee/schedule", label: "برنامه آموزشی", icon: "📅" },
   { href: "/dashboard/trainee/progress", label: "پیشرفت", icon: "📈" },
   { href: "/dashboard/trainee/settings", label: "تنظیمات", icon: "⚙️" },
 ];
