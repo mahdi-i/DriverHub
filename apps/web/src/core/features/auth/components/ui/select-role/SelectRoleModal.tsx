@@ -1,23 +1,60 @@
 "use client";
 import { EType } from "@/core/assets/@types/etype";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
-import { useState } from "react";
+import React from "react";
+import { toast } from "sonner";
 import { authdatafake } from "../../../assets/mock/authdatafake";
+import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";
 import FormActions from "./FormActions";
 import ModalHeader from "./ModalHeader";
 import RoleCard from "./RoleCard";
 
 interface SelectRoleModal {
   setStep: (step: number) => void;
+  selectedRole: string;
+  setSelectedRole: React.Dispatch<React.SetStateAction<string>>;
+  phoneNumber: string;
 }
 
-export default function SelectRoleModal({ setStep }: SelectRoleModal) {
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+export default function SelectRoleModal({
+  setStep,
+  phoneNumber,
+  selectedRole,
+  setSelectedRole,
+}: SelectRoleModal) {
+  console.log(process.env.BACKEND_BASIC_LINK);
 
-  function handleSubmit(e: EType) {
+  async function handleSubmit(e: EType) {
     e.preventDefault();
-    if (!selectedRole) return;
 
+    if (!phoneNumber) {
+      return toast.error("شماره موبایل وارد نشده");
+    }
+
+    if (!selectedRole) {
+      return toast.error("نقش مورد نظر انتخاب نشده, لطفا دوباره تلاش کنید.");
+    }
+
+    const formattedPhone = formatPhoneNumber(phoneNumber);
+    if (!phoneNumber) return toast.error("شماره موبایل وارد نشده");
+    if (!selectedRole)
+      return toast.error("نقش مورد نظر انتخاب نشده, لطفا دوباره تلاش کنید.");
+    const sendOp = await fetch(`http://localhost:3001/auth/request-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone: formattedPhone,
+      }),
+    });
+
+    if (!sendOp.ok) {
+      throw new Error("خطا در ارسال کد");
+    }
+
+    const data = await sendOp.json();
+    console.log("OTP Response:", data);
     setStep(3);
   }
 
