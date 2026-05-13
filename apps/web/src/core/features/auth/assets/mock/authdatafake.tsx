@@ -7,8 +7,8 @@ export const authdatafake = [
     icon: <Car />,
   },
   {
-    id: "learner",
-    title: "درخواست‌کننده گواهینامه",
+    id: "trainee",
+    title: "درخواست ‌کننده گواهینامه",
     description: "من قصد دارم برای گواهینامه اقدام کنم",
     icon: <UserCheck />,
   },

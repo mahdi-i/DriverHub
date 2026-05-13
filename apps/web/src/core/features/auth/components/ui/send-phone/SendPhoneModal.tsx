@@ -8,16 +8,17 @@ import {
 } from "@/core/components/custom/ui/typography/Typography";
 import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Input } from "@/core/components/shadcn/ui/input/input";
-import { useState } from "react";
 import { toast } from "sonner";
 
 export default function SendPhoneModal({
   setStep,
+  phoneNumber,
+  setPhoneNumber,
 }: {
   setStep: React.Dispatch<React.SetStateAction<number>>;
+  phoneNumber: string;
+  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const [phoneNumber, setPhoneNumber] = useState("");
-
   function handleSubmit(e: EType) {
     e.preventDefault();
     if (!phoneNumber) return toast.error("لطفا شماره موبایل خود را وارد کنید.");

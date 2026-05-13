@@ -1,9 +1,10 @@
 "use client";
 
 import { EType } from "@/core/assets/@types/etype";
-import { TypographySmall } from "@/core/components/custom/ui/typography/Typography";
 import { useTimer } from "@/core/hooks/useTimer (3)";
 import { useState } from "react";
+import { toast } from "sonner";
+import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";
 import FormActions from "./FormActions";
 import ModalHeader from "./ModalHeader";
 import OtpInputField from "./OtpInputField";
@@ -12,26 +13,123 @@ import TimerStatus from "./TimerStatus";
 interface SendOtpModalProps {
   setStep: (step: number) => void;
   setIsAuthModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedRole: string;
+  phoneNumber: string;
 }
 
 export default function SendOtpModal({
   setStep,
+  selectedRole,
+  phoneNumber,
   setIsAuthModalOpen,
 }: SendOtpModalProps) {
   const [otpCode, setOtpCode] = useState("");
   const { resetTimer, formattedTime, resindCode } = useTimer(120);
-
-  const phoneNumber = "09124162342";
 
   function handleResendCode() {
     resetTimer();
     setOtpCode("");
   }
 
-  function handleSubmit(e: EType) {
+  async function handleSubmit(e: EType) {
     e.preventDefault();
-    if (otpCode.length !== 6) return;
+    if (otpCode.length !== 6) return toast.error("کد 6 رقمی وارد کنید.");
+    if (!phoneNumber) return toast.error("شماره موبایل وارد نشده");
+    if (!selectedRole)
+      return toast.error("نقش مورد نظر انتخاب نشده, لطفا دوباره تلاش کنید.");
+    const formattedPhone = formatPhoneNumber(phoneNumber);
 
+    if (selectedRole === "trainee") {
+      try {
+        const res = await fetch(
+          `http://localhost:3001/auth/verify-otp/trainee`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              phone: formattedPhone,
+              otp: otpCode,
+            }),
+          },
+        );
+        const data = await res.json();
+        console.log(data);
+
+        if (res.ok) {
+          toast.success(data.message || "با موفقیت وارد شدید.");
+
+          const cookieRes = await fetch("/api/auth/set-token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              accessToken: data.accessToken,
+            }),
+          });
+
+          if (!cookieRes.ok) {
+            console.error("Failed to set cookie");
+          }
+
+          setIsAuthModalOpen(false);
+          setStep(1);
+        } else {
+          toast.error(data.errors || "مشکل پیش آمد لطفا دوباره تلاش کنید");
+        }
+      } catch {
+        return toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
+      }
+    }
+    if (selectedRole === "driver") {
+      try {
+        const res = await fetch(
+          `http://localhost:3001/auth/verify-otp/teacher`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              phone: formattedPhone,
+              otp: otpCode,
+            }),
+          },
+        );
+
+        const data = await res.json();
+        console.log(data);
+        if (res.ok) {
+          toast.success(data.message || "با موفقیت وارد شدید.");
+
+          const cookieRes = await fetch("/api/auth/set-token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              accessToken: data.accessToken,
+            }),
+          });
+
+          if (!cookieRes.ok) {
+            console.error("Failed to set cookie");
+          }
+
+          setIsAuthModalOpen(false);
+          setStep(1);
+        } else {
+          toast.error(data.errors || "مشکل پیش آمد لطفا دوباره تلاش کنید");
+        }
+      } catch {
+        return toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
+      }
+    }
     setIsAuthModalOpen(false);
     setStep(1);
   }
