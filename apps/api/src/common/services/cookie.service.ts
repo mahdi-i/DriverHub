@@ -32,16 +32,18 @@ export class CookieService {
     res.cookie(name, value, finalOptions);
   }
 
-  setRefreshToken(res: Response, token: string, expiresInDays?: number): void {
-    const days =
-      expiresInDays ||
-      this.configService.get<number>('JWT_REFRESH_EXPIRY_SECONDS', 1296000) /
-        (24 * 60 * 60);
+  setRefreshToken(
+    res: Response,
+    token: string,
+    expiresInDays: number = 15,
+  ): void {
+    const oneDayInMs = 24 * 60 * 60 * 1000;
+    const maxAgeMs = expiresInDays * oneDayInMs;
     this.set(res, 'refreshToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: days * 24 * 60 * 60 * 1000,
+      maxAge: maxAgeMs,
       path: '/',
     });
   }
