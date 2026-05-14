@@ -5,7 +5,7 @@ import { Response } from 'express';
 export interface CookieOptions {
   httpOnly?: boolean;
   secure?: boolean;
-  sameSite?: 'strict' | 'lax' | 'none';
+  sameSite?: 'lax' | 'none';
   maxAge?: number;
   path?: string;
   domain?: string;
@@ -16,7 +16,7 @@ export class CookieService {
   private readonly defaultOptions: CookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: 'lax',
     path: '/',
   };
 
@@ -42,7 +42,7 @@ export class CookieService {
     this.set(res, 'refreshToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: maxAgeMs,
       path: '/',
     });
@@ -59,8 +59,8 @@ export class CookieService {
     this.set(res, 'accessToken', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: minutes * 60 * 1000,
+      sameSite: 'lax',
+      maxAge: minutes * 20 * 10,
       path: '/',
     });
   }

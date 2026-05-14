@@ -16,6 +16,7 @@ import { DashboardAdminModule } from './modules/dashboard-admin/dashboard-admin.
 import { DashboardDriverModule } from './modules/dashboard-driver/dashboard-driver.module';
 import { DashboardTraineeModule } from './modules/dashboard-trainee/dashboard-trainee.module';
 import { UserModule } from './modules/user/user.module';
+import { SupportModule } from './modules/support/support.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UserModule } from './modules/user/user.module';
     DashboardAdminModule,
     DashboardTraineeModule,
     BookingModule,
+    SupportModule,
   ],
   providers: [
     {

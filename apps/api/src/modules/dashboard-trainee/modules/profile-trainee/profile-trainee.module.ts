@@ -8,5 +8,6 @@ import { ProfileTraineeService } from './profile-trainee.service';
   imports: [TypeOrmModule.forFeature([Trainee])],
   controllers: [ProfileTraineeController],
   providers: [ProfileTraineeService],
+  exports: [ProfileTraineeService],
 })
 export class ProfileTraineeModule {}

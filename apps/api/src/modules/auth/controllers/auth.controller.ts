@@ -7,6 +7,7 @@ import {
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Cookie } from '@shared/decorators/cookie.decorator';
 import { Public } from '@shared/decorators/public.decorator';
 import { CookieService } from '@shared/services/cookie.service';
 import { Request, Response } from 'express';
@@ -36,11 +37,10 @@ export class AuthController {
     const result = await this.authService.verifyOtp(verifyDto, Roles.TRAINEE);
 
     this.cookieService.setRefreshToken(res, result.refreshToken, 15);
-
+    this.cookieService.setAccessToken(res, result.accessToken);
     return {
       message: result.message,
       user: result.user,
-      accessToken: result.accessToken,
     };
   }
 
@@ -52,29 +52,31 @@ export class AuthController {
   ) {
     const result = await this.authService.verifyOtp(verifyDto, Roles.TEACHER);
     this.cookieService.setRefreshToken(res, result.refreshToken, 15);
-
+    this.cookieService.setAccessToken(res, result.accessToken);
     return {
       message: result.message,
       user: result.user,
-      accessToken: result.accessToken,
     };
   }
 
   @Post('refresh')
+  @Public()
   async refreshTokens(
-    @Req() req: Request,
+    @Cookie('refreshToken') token: string,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const refreshToken = this.cookieService.getRefreshToken(req);
-    if (!refreshToken) {
+    console.log('refresh token received:', token);
+    const result = await this.authService.refreshTokens(token);
+    if (!result) {
       throw new UnauthorizedException('رفرش توکن یافت نشد');
     }
-
-    const result = await this.authService.refreshTokens(refreshToken);
-
+    console.log('refresh result:', result);
     this.cookieService.setRefreshToken(res, result.refreshToken, 15);
 
-    return { accessToken: result.accessToken };
+    this.cookieService.setAccessToken(res, result.accessToken);
+    return {
+      accessToken: result.accessToken,
+    };
   }
 
   @Post('logout')

@@ -9,6 +9,6 @@ import { ProfileService } from './profile.service';
   imports: [TypeOrmModule.forFeature([ProfileDriver])],
   controllers: [ProfileController],
   providers: [ProfileService, FileService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, ProfileService],
 })
 export class ProfileModule {}
