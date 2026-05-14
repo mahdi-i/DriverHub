@@ -61,21 +61,6 @@ export default function SendOtpModal({
         if (res.ok) {
           toast.success(data.message || "با موفقیت وارد شدید.");
 
-          const cookieRes = await fetch("/api/auth/set-token", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              accessToken: data.accessToken,
-            }),
-          });
-
-          if (!cookieRes.ok) {
-            console.error("Failed to set cookie");
-          }
-
           setIsAuthModalOpen(false);
           setStep(1);
         } else {
@@ -106,20 +91,6 @@ export default function SendOtpModal({
         console.log(data);
         if (res.ok) {
           toast.success(data.message || "با موفقیت وارد شدید.");
-
-          const cookieRes = await fetch("/api/auth/set-token", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              accessToken: data.accessToken,
-            }),
-          });
-
-          if (!cookieRes.ok) {
-            console.error("Failed to set cookie");
-          }
 
           setIsAuthModalOpen(false);
           setStep(1);

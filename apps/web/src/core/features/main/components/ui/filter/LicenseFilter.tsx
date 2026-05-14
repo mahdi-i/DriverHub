@@ -6,8 +6,7 @@ import { licenses } from "../../../assets/mock/licenses";
 
 export function LicenseFilter() {
   const searchParams = usePathname();
-  console.log(searchParams);
-  console.log(searchParams, "selectedLicense");
+
   return (
     <div className="  flex gap-5 justify-around border-b border-border">
       {licenses.map((license) => {

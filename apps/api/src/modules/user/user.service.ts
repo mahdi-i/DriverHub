@@ -18,10 +18,10 @@ export class UserService {
     });
     return this.userRepository.save(newUser);
   }
-  async findAll() {
-    return this.userRepository.find();
-  }
 
+  async findByJwt(id: string) {
+    return this.userRepository.findOneBy({ id });
+  }
   async findOne(id: string) {
     return this.userRepository.findOneBy({ id });
   }

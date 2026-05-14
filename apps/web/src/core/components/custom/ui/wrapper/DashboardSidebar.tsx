@@ -1,5 +1,6 @@
 "use client";
 import {
+  adminNavItems,
   defaultNavItems,
   driverNavItems,
   traineeNavItems,
@@ -28,6 +29,9 @@ export function DashboardSidebar({
     }
     if (pathname.includes("/trainee")) {
       return traineeNavItems;
+    }
+    if (pathname.includes("/admin")) {
+      return adminNavItems;
     }
     return defaultNavItems;
   }, [pathname]);

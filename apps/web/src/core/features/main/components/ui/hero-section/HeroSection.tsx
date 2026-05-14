@@ -5,7 +5,7 @@ import { LicenseFilter } from "../filter/LicenseFilter";
 import HeroImageMainPage from "../hero-img/HeroImageMainPage";
 import MapSectionMainPage from "../home-page/MapSectionMainPage";
 
-function HeroSection() {
+async function HeroSection() {
   return (
     <>
       <section className="relative w-full mb-35 hidden md:flex">

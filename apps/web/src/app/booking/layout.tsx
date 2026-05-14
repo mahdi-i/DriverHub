@@ -1,9 +1,5 @@
 import Footer from "@/core/features/main/components/blocks/footer/Footer";
 import Header from "@/core/features/main/components/blocks/header/Header";
-import GETUSER from "@/core/features/main/components/ui/hero-section/GETUSER";
-import HeroSection from "@/core/features/main/components/ui/hero-section/HeroSection";
-import SupportWidget from "@/core/features/support/components/SupportWidget";
-import { FetcherAuth } from "@/core/lib/fetcher/fetchAuth";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,16 +13,10 @@ async function layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const response = await FetcherAuth("/user/me");
-
-  const user = await response.json();
-  console.log(user);
   return (
-    <main>
+    <main className="bg-secondary-foreground">
       <Header />
-      <HeroSection />
-      <GETUSER user={user} />
-      <SupportWidget userId={user.id} isAdmin={false} />
+
       {children}
       <Footer />
     </main>

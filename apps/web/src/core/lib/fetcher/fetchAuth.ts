@@ -1,4 +1,5 @@
-import { getAccessToken } from "../coockie/getAccess";
+import { BASE_URL } from "../basic-link/backendBasicLink";
+import { getAccessTokenSSR, getRefreshTokenSSR } from "../coockie/getAccess";
 
 interface FetchOptions extends RequestInit {
   headers?: Record<string, string>;
@@ -10,51 +11,48 @@ export async function FetcherAuth(
 ): Promise<Response> {
   const method = options.method || "GET";
 
+  const accessToken = getAccessTokenSSR();
+  console.log(accessToken, "accessToken");
+  const refreshToken = getRefreshTokenSSR();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     ...(options.headers || {}),
   };
 
-  const accessToken = getAccessToken();
-
   if (accessToken && !headers.Authorization) {
     headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  let res: Response = await fetch(url, {
+  const cookieHeader = [
+    accessToken ? `accessToken=${accessToken}` : null,
+    refreshToken ? `refreshToken=${refreshToken}` : null,
+  ]
+    .filter(Boolean)
+    .join("; ");
+  console.log(cookieHeader, "cookieHeader");
+  let res: Response = await fetch(`${BASE_URL}${url}`, {
     ...options,
     method,
     headers,
     credentials: "include",
   });
-
+  console.log(res, "res res");
   if (res.status === 401 || res.status === 403) {
-    const refreshRes = await fetch("http://localhost:3001/auth/refresh", {
+    const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
       method: "POST",
-      credentials: "include",
+      headers: {
+        Cookie: cookieHeader,
+      },
     });
-
+    console.log(refreshRes, "refreshRes");
     if (!refreshRes.ok) {
       return res;
     }
 
     const data = await refreshRes.json();
-
+    console.log(data, "data data data");
     if (data.accessToken) {
-      const cookieRes = await fetch("/api/auth/set-token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({ accessToken: data.accessToken }),
-      });
-
-      if (!cookieRes.ok) {
-        return res;
-      }
-
-      res = await fetch(url, {
+      res = await fetch(`${BASE_URL}${url}`, {
         ...options,
         method,
         headers: {
@@ -63,8 +61,6 @@ export async function FetcherAuth(
         },
         credentials: "include",
       });
-    } else {
-      return res;
     }
   }
 

@@ -16,7 +16,7 @@ const buttonVariants = cva(
           "transform transition-all duration-200",
 
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm " +
+          "bg-secondary text-background shadow-sm " +
           "hover:bg-secondary/90 hover:shadow-sm hover:scale-[1.01] " +
           "active:scale-95 active:shadow-sm " +
           "transform transition-all duration-200",

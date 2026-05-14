@@ -5,7 +5,6 @@ import { useIsMobile } from "@/core/hooks/useIsMobile";
 function HeroImageMainPage() {
   const isMobile = useIsMobile();
   if (isMobile) return null;
-
   return (
     <section className="w-full  justify-center items-center hidden md:flex">
       <ImgNormalCustom

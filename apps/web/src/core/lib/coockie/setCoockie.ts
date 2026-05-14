@@ -7,7 +7,7 @@ export async function setCoockie(access_token: string) {
     value: access_token,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "strict" as SameSiteOption,
+    sameSite: "lax" as SameSiteOption,
     path: "/",
     maxAge: 15 * 60,
   };
