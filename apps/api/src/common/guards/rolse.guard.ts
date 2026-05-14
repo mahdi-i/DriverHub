@@ -1,5 +1,10 @@
 import { Roles } from '@driverhub/shared-types';
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
@@ -18,7 +23,12 @@ export class RolesGuard implements CanActivate {
     if (!user) {
       return false;
     }
+    const hasRole = checkRole.some((role) => user.role === role);
 
-    return checkRole.includes(user.role);
+    if (!hasRole) {
+      throw new ForbiddenException('شما اجازه دسترسی به این بخش را ندارید.');
+    }
+
+    return true;
   }
 }
