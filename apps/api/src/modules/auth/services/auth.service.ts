@@ -1,25 +1,27 @@
-import { User } from '@core/user/entities/auth.entity';
 import { UserService } from '@core/user/user.service';
 import { Roles } from '@driverhub/shared-types';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
+import { MaxAge_License } from '@shared/constants/jwt.constants';
+import { LicenseManager } from '@shared/lib/licence/licence.service';
 import { CacheService } from '@shared/services/cache.service';
 import { generateOtp } from '@shared/utils/code-generator.util';
-import { Repository } from 'typeorm';
 import { CreateAuthDto } from '../dto/create-phone.dto';
+import { LoginOwnerDto } from '../dto/login-owner.dto';
 import { VerifyOtpDto } from '../dto/verify-otp.dto';
-import { TokenService } from './token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
     private readonly cacheService: CacheService,
     private readonly userService: UserService,
-    private readonly tokenService: TokenService,
     private readonly configService: ConfigService,
   ) {}
+
   async requestOtp(createAuthDto: CreateAuthDto) {
     const { phone } = createAuthDto;
     const rateLimitKey = `rate-limit:${phone}`;
@@ -57,8 +59,10 @@ export class AuthService {
       otp,
     };
   }
+
   async verifyOtp(verifyDto: VerifyOtpDto, roleSend: Roles) {
     const { phone, otp } = verifyDto;
+    console.log('3');
 
     const existOtp = await this.cacheService.get(`otp:${phone}`);
     if (!existOtp) {
@@ -66,9 +70,12 @@ export class AuthService {
         'کد تایید منقضی شده است. لطفا دوباره درخواست کنید',
       );
     }
+    console.log('4');
+
     if (existOtp !== otp.toString()) {
       const attemptsKey = `attempts:${phone}`;
       let attempts = await this.cacheService.get(attemptsKey);
+      console.log('5');
 
       if (!attempts) {
         attempts = '1';
@@ -86,11 +93,27 @@ export class AuthService {
 
       throw new BadRequestException('کد تایید اشتباه است');
     }
+    console.log('6');
+
     await this.cacheService.del(`otp:${phone}`);
     await this.cacheService.del(`attempts:${phone}`);
+
+    const manager = new LicenseManager();
+    const now = new Date();
+    const expireAt = new Date(now.getTime() + MaxAge_License).toISOString();
+    console.log(MaxAge_License, 'MaxAge_License');
     const user = await this.userService.findByPhone(phone);
+
     if (user) {
-      const tokens = await this.tokenService.generateTokens(user);
+      const payload = manager.buildPayload({
+        userId: Number(user.id),
+        role: user.role,
+        expireAt,
+      });
+      console.log('8');
+      const licenseToken = await manager.createLicense(payload);
+      console.log(licenseToken, 'token');
+
       return {
         message: 'ورود با موفقیت انجام شد',
         user: {
@@ -98,9 +121,11 @@ export class AuthService {
           phone: user.phone,
           role: user.role,
         },
-        ...tokens,
+        license: licenseToken,
       };
     } else {
+      console.log('9');
+
       let role: Roles;
       if (roleSend === Roles.TEACHER) {
         role = Roles.TEACHER;
@@ -115,8 +140,17 @@ export class AuthService {
         role,
         isActive: true,
       });
+      console.log('10');
 
-      const tokens = await this.tokenService.generateTokens(newUser);
+      const payload = manager.buildPayload({
+        userId: Number(newUser.id),
+        role: newUser.role,
+        expireAt,
+      });
+      console.log('11');
+      const licenseToken = await manager.createLicense(payload);
+      console.log(licenseToken, 'out token side');
+
       return {
         message: 'ثبت‌ نام با موفقیت انجام شد',
         user: {
@@ -124,17 +158,40 @@ export class AuthService {
           phone: newUser.phone,
           role: newUser.role,
         },
-        ...tokens,
+        license: licenseToken,
       };
     }
   }
-  async refreshTokens(refreshToken: string) {
-    const tokens = await this.tokenService.refreshAccessToken(refreshToken);
-    return tokens;
+
+  async loginOwner(dto: LoginOwnerDto) {
+    if (dto.username != this.configService.get<string>('OWNER_USERNAME'))
+      throw new UnauthorizedException('نام کاربری ادمین اشتباه است');
+    if (dto.password != this.configService.get<string>('OWNER_PASSWORD'))
+      throw new UnauthorizedException('رمز عبور ادمین اشتباه است');
+    if (
+      dto.secondPassword != this.configService.get<string>('OWNER_PASSWORD_X')
+    )
+      throw new UnauthorizedException('رمز عبور دوم ادمین اشتباه است');
+
+    const manager = new LicenseManager();
+
+    const expireAt = new Date(
+      Date.now() + 15 * 24 * 60 * 60 * 1000,
+    ).toISOString();
+
+    const adminUserId = crypto.randomUUID();
+
+    const payload = manager.buildPayload({
+      userId: Number(adminUserId),
+      role: Roles.ADMIN,
+      expireAt,
+    });
+    const license = await manager.createLicense(payload);
+    return {
+      message: 'ورود ادمین با موفقیت انجام شد',
+      license: license,
+    };
   }
 
-  async logout(refreshToken: string) {
-    const payload = await this.tokenService.validateRefreshToken(refreshToken);
-    await this.tokenService.revokeRefreshToken(payload.sub);
-  }
+  async logout() {}
 }

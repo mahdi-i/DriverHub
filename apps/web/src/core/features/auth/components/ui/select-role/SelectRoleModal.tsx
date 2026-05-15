@@ -36,11 +36,13 @@ export default function SelectRoleModal({
     }
 
     const formattedPhone = formatPhoneNumber(phoneNumber);
+    console.log(formattedPhone, "befor otp");
     if (!phoneNumber) return toast.error("شماره موبایل وارد نشده");
     if (!selectedRole)
       return toast.error("نقش مورد نظر انتخاب نشده, لطفا دوباره تلاش کنید.");
     const sendOp = await fetch(`http://localhost:3001/auth/request-otp`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

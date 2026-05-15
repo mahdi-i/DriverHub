@@ -4,8 +4,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfig } from '@shared/config/typeorm.config';
-import { JwtAuthGuard } from '@shared/guards/jwt-auth.guard';
+import { LicenseAuthGuard } from '@shared/guards/jwt-auth.guard';
 import { RolesGuard } from '@shared/guards/rolse.guard';
+import { LicenseModule } from '@shared/lib/licence/licence.module';
 import { AppCacheModule } from '@shared/modules/cache.module';
 import { CookieModule } from '@shared/modules/cookie.module';
 import { FileModule } from '@shared/modules/file.module';
@@ -15,8 +16,8 @@ import { BookingModule } from './modules/booking/booking.module';
 import { DashboardAdminModule } from './modules/dashboard-admin/dashboard-admin.module';
 import { DashboardDriverModule } from './modules/dashboard-driver/dashboard-driver.module';
 import { DashboardTraineeModule } from './modules/dashboard-trainee/dashboard-trainee.module';
-import { UserModule } from './modules/user/user.module';
 import { SupportModule } from './modules/support/support.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -40,11 +41,12 @@ import { SupportModule } from './modules/support/support.module';
     DashboardTraineeModule,
     BookingModule,
     SupportModule,
+    LicenseModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: JwtAuthGuard,
+      useClass: LicenseAuthGuard,
     },
     {
       provide: APP_GUARD,

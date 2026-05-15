@@ -3,8 +3,9 @@ import Header from "@/core/features/main/components/blocks/header/Header";
 import GETUSER from "@/core/features/main/components/ui/hero-section/GETUSER";
 import HeroSection from "@/core/features/main/components/ui/hero-section/HeroSection";
 import SupportWidget from "@/core/features/support/components/SupportWidget";
-import { FetcherAuth } from "@/core/lib/fetcher/fetchAuth";
+import { BASE_URL } from "@/core/lib/basic-link/backendBasicLink";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "DriverHub",
@@ -17,9 +18,24 @@ async function layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const response = await FetcherAuth("/user/me");
+  const cookieStore = await cookies();
+  const license = cookieStore.get("licenseToken")?.value;
+  console.log(license, "license");
+  const res = await fetch(`${BASE_URL}/user/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${license}`,
+    },
+  });
+  console.log(res);
+  const ress = await fetch(`${BASE_URL}/user/me`, {
+    method: "GET",
 
-  const user = await response.json();
+    credentials: "include",
+  });
+  console.log(ress, "resss");
+  const user = await res.json();
   console.log(user);
   return (
     <main>

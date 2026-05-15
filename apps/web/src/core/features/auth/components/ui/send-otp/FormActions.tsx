@@ -27,7 +27,6 @@ export default function FormActions({
 
       {onBack && (
         <button
-          type="button"
           onClick={onBack}
           className="text-center text-sm text-muted-foreground hover:text-primary transition-colors py-1.5"
         >

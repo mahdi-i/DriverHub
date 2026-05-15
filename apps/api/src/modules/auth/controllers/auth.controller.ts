@@ -1,17 +1,11 @@
 import { Roles } from '@driverhub/shared-types';
-import {
-  Body,
-  Controller,
-  Post,
-  Req,
-  Res,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { Cookie } from '@shared/decorators/cookie.decorator';
+import { Body, Controller, Post, Res } from '@nestjs/common';
+import { MaxAge_License } from '@shared/constants/jwt.constants';
 import { Public } from '@shared/decorators/public.decorator';
 import { CookieService } from '@shared/services/cookie.service';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { CreateAuthDto } from '../dto/create-phone.dto';
+import { LoginOwnerDto } from '../dto/login-owner.dto';
 import { VerifyOtpDto } from '../dto/verify-otp.dto';
 import { AuthService } from '../services/auth.service';
 
@@ -24,8 +18,8 @@ export class AuthController {
 
   @Post('request-otp')
   @Public()
-  async requestOtp(@Body() phone: CreateAuthDto) {
-    return this.authService.requestOtp(phone);
+  async requestOtp(@Body() createAuthDto: CreateAuthDto) {
+    return this.authService.requestOtp(createAuthDto);
   }
 
   @Post('verify-otp/trainee')
@@ -34,13 +28,22 @@ export class AuthController {
     @Body() verifyDto: VerifyOtpDto,
     @Res({ passthrough: true }) res: Response,
   ) {
+    console.log('1');
     const result = await this.authService.verifyOtp(verifyDto, Roles.TRAINEE);
 
-    this.cookieService.setRefreshToken(res, result.refreshToken, 15);
-    this.cookieService.setAccessToken(res, result.accessToken);
+    this.cookieService.setToken(
+      res,
+      result.license,
+      MaxAge_License,
+      'licenseToken',
+    );
+    console.log('2');
+    console.log('first');
+    console.log(result.message);
+
     return {
       message: result.message,
-      user: result.user,
+      user: result.user.id,
     };
   }
 
@@ -51,43 +54,43 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const result = await this.authService.verifyOtp(verifyDto, Roles.TEACHER);
-    this.cookieService.setRefreshToken(res, result.refreshToken, 15);
-    this.cookieService.setAccessToken(res, result.accessToken);
+
+    this.cookieService.setToken(
+      res,
+      result.license,
+      MaxAge_License,
+      'licenseToken',
+    );
+
     return {
       message: result.message,
-      user: result.user,
+      user: result.user.id,
     };
   }
 
-  @Post('refresh')
+  @Post('admin/login')
   @Public()
-  async refreshTokens(
-    @Cookie('refreshToken') token: string,
+  async adminLogin(
+    @Body() dto: LoginOwnerDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    console.log('refresh token received:', token);
-    const result = await this.authService.refreshTokens(token);
-    if (!result) {
-      throw new UnauthorizedException('رفرش توکن یافت نشد');
-    }
-    console.log('refresh result:', result);
-    this.cookieService.setRefreshToken(res, result.refreshToken, 15);
+    const result = await this.authService.loginOwner(dto);
 
-    this.cookieService.setAccessToken(res, result.accessToken);
+    this.cookieService.setToken(
+      res,
+      result.license,
+      MaxAge_License,
+      'licenseToken',
+    );
+
     return {
-      accessToken: result.accessToken,
+      message: result.message,
     };
   }
 
   @Post('logout')
-  async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const refreshToken = this.cookieService.getRefreshToken(req);
-    if (refreshToken) {
-      await this.authService.logout(refreshToken);
-    }
-
-    this.cookieService.clearRefreshToken(res);
-
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('licenseToken');
     return { message: 'با موفقیت خارج شدید' };
   }
 }
