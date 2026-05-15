@@ -3,16 +3,14 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
-import { JwtService } from '@nestjs/jwt';
+import { LicenseManager } from '@shared/lib/licence/licence.service';
 
 @Injectable()
-export class JwtAuthGuard {
+export class LicenseAuthGuard {
   constructor(
     private readonly reflector: Reflector,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+    private readonly licenseManager: LicenseManager,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -20,42 +18,41 @@ export class JwtAuthGuard {
       process.env.IS_PUBLIC_KEY,
       [context.getHandler(), context.getClass()],
     );
-
     if (isPublic) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
-    const token = this.extractToken(request);
+
+    let token = request.cookies?.licenseToken;
 
     if (!token) {
-      throw new UnauthorizedException('توکن پیدا نشد');
+      const authHeader = request.headers['authorization'];
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.slice(7);
+      }
+    }
+
+    if (!token) {
+      throw new UnauthorizedException('لطفاً وارد شوید');
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-      });
+      const payload = await this.licenseManager.validateLicense(token);
 
-      request.user = payload;
+      request.user = {
+        id: payload.userId,
+        role: payload.role,
+      };
       return true;
     } catch (error) {
-      if (error.name === 'TokenExpiredError') {
-        throw new UnauthorizedException('توکن منقضی شده است');
+      if (
+        error.name === 'TokenExpiredError' ||
+        error.message?.includes('expired')
+      ) {
+        throw new UnauthorizedException('لایسنس منقضی شده است');
       }
-      throw new UnauthorizedException('توکن نامعتبر است');
+      throw new UnauthorizedException('لایسنس نامعتبر است');
     }
-  }
-
-  private extractToken(request: any): string | undefined {
-    const authHeader = request.headers.authorization;
-    if (authHeader) {
-      const [type, token] = authHeader.split(' ');
-      if (type === 'Bearer' && token) {
-        return token;
-      }
-    }
-
-    return request.cookies?.accessToken;
   }
 }
