@@ -132,10 +132,6 @@ export function DashboardSidebar({
               );
             })}
           </div>
-
-<<<<<<< HEAD
-=======
-          {/* back to main */}
           <Button
             size="sm"
             className="w-full mt-3"
@@ -144,8 +140,6 @@ export function DashboardSidebar({
             صفحه اصلی
           </Button>
 
-          {/* Logout */}
->>>>>>> 84464c6e15ea406278b895752da9cabbc54cf514
           <Button
             variant="destructive"
             size="sm"
