@@ -2,6 +2,7 @@
 
 import { EType } from "@/core/assets/@types/etype";
 import { useTimer } from "@/core/hooks/useTimer (3)";
+import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { useState } from "react";
 import { toast } from "sonner";
 import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";
@@ -41,20 +42,17 @@ export default function SendOtpModal({
 
     if (selectedRole === "trainee") {
       try {
-        const res = await fetch(
-          `http://localhost:3001/auth/verify-otp/trainee`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              phone: formattedPhone,
-              otp: otpCode,
-            }),
+        const res = await fetch(`${BASE_URL}/auth/verify-otp/trainee`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          credentials: "include",
+          body: JSON.stringify({
+            phone: formattedPhone,
+            otp: otpCode,
+          }),
+        });
         const data = await res.json();
         console.log(data);
 
@@ -72,20 +70,17 @@ export default function SendOtpModal({
     }
     if (selectedRole === "driver") {
       try {
-        const res = await fetch(
-          `http://localhost:3001/auth/verify-otp/teacher`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-              phone: formattedPhone,
-              otp: otpCode,
-            }),
+        const res = await fetch(`${BASE_URL}/auth/verify-otp/teacher`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        );
+          credentials: "include",
+          body: JSON.stringify({
+            phone: formattedPhone,
+            otp: otpCode,
+          }),
+        });
 
         const data = await res.json();
         console.log(data);

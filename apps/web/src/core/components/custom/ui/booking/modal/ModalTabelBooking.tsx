@@ -1,0 +1,107 @@
+"use client";
+
+import Modal from "@/core/components/custom/ui/modal/Modal";
+import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
+import { Button } from "@/core/components/shadcn/ui/button/button";
+import { getGender } from "@/core/utils/getGender";
+import { AlertCircle, Calendar, Eye, Glasses, User } from "lucide-react";
+import { useState } from "react";
+
+function ModalTabelBooking({ booking }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="flex items-center gap-1">
+      <Modal
+        title="اطلاعات هنرجو"
+        open={isOpen}
+        onOpenChange={(open) => setIsOpen(open)}
+        trigger={
+          <Button variant="ghost" size="icon" className="h-8 w-8">
+            <Eye size={18} />
+          </Button>
+        }
+      >
+        <div className="space-y-4 py-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <div>
+                <TypographyP className="text-sm text-muted-foreground">
+                  نام
+                </TypographyP>
+                <TypographyP className="font-medium">
+                  {booking.student.fullName}
+                </TypographyP>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <div>
+                <TypographyP className="text-sm text-muted-foreground">
+                  سن
+                </TypographyP>
+                <TypographyP className="font-medium">
+                  {booking.student.age} سال
+                </TypographyP>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <TypographyP className="text-sm text-muted-foreground">
+                جنسیت
+              </TypographyP>
+              <TypographyP className="font-medium">
+                {getGender(booking.student.gender)}
+              </TypographyP>
+            </div>
+            <div>
+              <TypographyP className="text-sm text-muted-foreground">
+                استان / شهر
+              </TypographyP>
+              <TypographyP className="font-medium">
+                {booking.student.address} / {booking.student.city}
+              </TypographyP>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Glasses className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <TypographyP className="text-sm text-muted-foreground">
+                عینک
+              </TypographyP>
+              <TypographyP className="font-medium">
+                {booking.student.hasGlasses ? "بله" : "خیر"}
+              </TypographyP>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-2">
+            <AlertCircle className="h-4 w-4 text-muted-foreground mt-1" />
+            <div>
+              <TypographyP className="text-sm text-muted-foreground">
+                بیماری یا شرایط خاص
+              </TypographyP>
+              <TypographyP className="font-medium">
+                {booking.student.medicalConditions || "ندارد"}
+              </TypographyP>
+            </div>
+          </div>
+
+          {booking.note && (
+            <div className="rounded-lg bg-muted p-3">
+              <TypographyP className="text-sm text-muted-foreground">
+                یادداشت
+              </TypographyP>
+              <TypographyP className="font-medium">{booking.note}</TypographyP>
+            </div>
+          )}
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+export default ModalTabelBooking;
