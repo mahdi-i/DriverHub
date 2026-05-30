@@ -7,12 +7,3 @@ export const carData = {
   carColor: "سفید",
   licenseType: LicenseTypeEnum.CAR,
 };
-
-export const additionalinitialInfo = {
-  age: 45,
-  nationalCode: "5640113058",
-  hasGlasses: true,
-  medicalConditions: "مشکل دور بینی و تپش قلب",
-  province: "اصفهان",
-  city: "اصفهان",
-};

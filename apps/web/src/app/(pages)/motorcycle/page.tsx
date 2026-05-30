@@ -1,5 +1,5 @@
-function page() {
-  return <div>page</div>;
-}
+import MotorcyclePageComponents from "@/core/features/main/components/blocks/pages/MotorcyclePageComponents";
 
-export default page;
+export default function Page() {
+  return <MotorcyclePageComponents />;
+}

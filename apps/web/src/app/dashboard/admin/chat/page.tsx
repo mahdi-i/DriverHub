@@ -1,11 +1,11 @@
 "use client";
-import { ImgNormalCustom } from "@/core/components/custom/ui/image/ImgNormalCustom";
 import { TypographyMuted } from "@/core/components/custom/ui/typography/Typography";
 import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Card, CardContent } from "@/core/components/shadcn/ui/card/card";
 import { Input } from "@/core/components/shadcn/ui/input/input";
+import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { Loader2, Search, Send } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import io from "socket.io-client";
 
 const socket = io("http://localhost:3001", {
@@ -13,13 +13,11 @@ const socket = io("http://localhost:3001", {
 });
 
 const ADMIN_ID = "fe335b0b-8a8c-4e55-ad8e-a736a54cbd68";
-const ADMIN_NAME = "پشتیبانی";
 const ADMIN_AVATAR = "/img/dashboard/driver/profile/avatar-4c776756.svg";
 
 interface User {
   id: string;
   name: string;
-  avatar: string;
   lastMessage: string;
   time: string;
   unread: number;
@@ -32,9 +30,11 @@ interface Message {
   senderId: string;
   sender?: {
     id: string;
+    role?: string;
     profile?: {
       fullName?: string;
       avatar?: string;
+      role?: string;
     };
   };
 }
@@ -45,29 +45,24 @@ export default function AdminSupportPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 1. اتصال به سوکت
   useEffect(() => {
     socket.connect();
 
     const handleNewMessage = (msg: Message) => {
-      // اگر پیام متعلق به کاربر فعال است، به لیست پیام‌ها اضافه کن
-      // این شرط برای پیام‌های جدید از سمت کاربر یا ادمین است
+      console.log(msg);
       if (
         activeUser &&
-        (msg.senderId === activeUser.id || msg.senderId === ADMIN_ID)
+        (msg.sender.id === activeUser.id || msg.sender.id === ADMIN_ID)
       ) {
         // اگر پیام از سمت ادمین است و کاربر فعال است، اضافه کن
         // اگر پیام از سمت کاربر است و کاربر فعال است، اضافه کن
         setMessages((prev) => [...prev, msg]);
       }
-
-      // آپدیت لیست سمت چپ
-      // اگر پیام از سمت کاربر غیرفعال است، آن را به لیست اضافه کن
-      if (msg.senderId !== ADMIN_ID) {
+      if (msg.sender.id !== ADMIN_ID) {
         setUsers((prevUsers) => {
-          const userIndex = prevUsers.findIndex((u) => u.id === msg.senderId);
+          const userIndex = prevUsers.findIndex((u) => u.id === msg.sender.id);
           if (userIndex >= 0) {
             const updatedUsers = [...prevUsers];
             updatedUsers[userIndex] = {
@@ -81,11 +76,12 @@ export default function AdminSupportPage() {
             };
             return updatedUsers;
           } else {
-            // اگر کاربر در لیست نیست، اضافه کن
             const newUser: User = {
-              id: msg.senderId,
-              name: msg.sender?.profile?.fullName || "کاربر ناشناس",
-              avatar: msg.sender?.profile?.avatar || "/default-avatar.png",
+              id: msg.sender.id,
+              name:
+                msg.sender?.profile?.fullName ||
+                msg.sender?.role ||
+                "کاربر ناشناس",
               lastMessage: msg.content,
               time: new Date(msg.createdAt).toLocaleTimeString("fa-IR", {
                 hour: "2-digit",
@@ -106,7 +102,6 @@ export default function AdminSupportPage() {
     };
   }, [activeUser]);
 
-  // 2. بارگذاری چت‌های فعال
   const loadActiveChats = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -124,8 +119,10 @@ export default function AdminSupportPage() {
             if (!userMap.has(userId)) {
               userMap.set(userId, {
                 id: userId,
-                name: msg.sender?.profile?.fullName || "کاربر ناشناس",
-                avatar: msg.sender?.profile?.avatar || "/default-avatar.png",
+                name:
+                  msg.sender?.profile?.fullName ||
+                  msg.sender?.role ||
+                  "کاربر ناشناس",
                 lastMessage: msg.content,
                 time: new Date(msg.createdAt).toLocaleTimeString("fa-IR", {
                   hour: "2-digit",
@@ -161,13 +158,12 @@ export default function AdminSupportPage() {
     }
   }, [activeUser]);
 
-  // 3. بارگذاری تاریخچه
   useEffect(() => {
     if (activeUser) {
       const loadHistory = async () => {
         try {
           const res = await fetch(
-            `http://localhost:3001/support/history/${activeUser.id}`,
+            `${BASE_URL}/support/history/${activeUser.id}`,
           );
           const data: Message[] = await res.json();
           setMessages(data);
@@ -187,11 +183,6 @@ export default function AdminSupportPage() {
     loadActiveChats();
   }, [loadActiveChats]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  // 4. ارسال پیام توسط ادمین
   const handleSend = () => {
     if (!newMessage.trim() || !activeUser) return;
 
@@ -202,7 +193,6 @@ export default function AdminSupportPage() {
       receiverId: activeUser.id, // خیلی مهم!
     });
 
-    // نمایش موقت پیام
     const tempMsg: Message = {
       id: Date.now().toString(),
       content: newMessage,
@@ -211,7 +201,7 @@ export default function AdminSupportPage() {
       sender: {
         id: ADMIN_ID,
         profile: {
-          fullName: ADMIN_NAME,
+          fullName: "پشتیبانی",
           avatar: ADMIN_AVATAR,
         },
       },
@@ -248,13 +238,6 @@ export default function AdminSupportPage() {
                 }`}
               >
                 <div className="relative">
-                  <ImgNormalCustom
-                    src={user.avatar}
-                    alt={user.name}
-                    width={45}
-                    height={45}
-                    className="rounded-full object-cover"
-                  />
                   <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white"></div>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -286,13 +269,6 @@ export default function AdminSupportPage() {
           <>
             <CardContent className="p-4 border-b flex items-center gap-3 justify-between bg-white">
               <div className="flex items-center gap-3">
-                <ImgNormalCustom
-                  src={activeUser.avatar}
-                  alt={activeUser.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
                 <div>
                   <TypographyMuted className="font-bold text-sm">
                     {activeUser.name}
@@ -306,7 +282,7 @@ export default function AdminSupportPage() {
 
             <CardContent className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
               {messages.map((msg, index) => {
-                const isMe = msg.senderId === ADMIN_ID;
+                const isMe = msg.sender.id === ADMIN_ID;
                 return (
                   <div
                     key={msg.id || index}
@@ -334,7 +310,6 @@ export default function AdminSupportPage() {
                   </div>
                 );
               })}
-              <div ref={messagesEndRef} />
             </CardContent>
 
             <CardContent className="p-4 border-t bg-white">

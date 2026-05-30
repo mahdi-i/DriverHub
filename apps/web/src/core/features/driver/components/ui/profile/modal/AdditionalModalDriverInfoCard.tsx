@@ -1,19 +1,69 @@
+"use client";
 import Modal from "@/core/components/custom/ui/modal/Modal";
+import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Input } from "@/core/components/shadcn/ui/input/input";
-import { additionalinitialInfo } from "@/core/features/driver/assets/mock/carData";
+import { ProfileDriverTs } from "@/core/features/driver/assets/types/profileDriverTs";
+import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { Edit } from "lucide-react";
 import { useState } from "react";
-function AdditionalModalDriverInfoCard() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [infoData, setInfoData] = useState(additionalinitialInfo);
+import { toast } from "sonner";
 
-  const handleInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+function AdditionalModalDriverInfoCard({
+  data,
+  token,
+}: {
+  data: ProfileDriverTs;
+  token: string;
+}) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [infoData, setInfoData] = useState(data);
+
+  function handleInfoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setInfoData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-  };
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const payload = {
+        age: Number(infoData.age),
+        nationalCode: infoData.nationalCode,
+        hasGlasses: infoData.hasGlasses,
+        medicalConditions: infoData.medicalConditions,
+        address: infoData.address,
+        city: infoData.city,
+      };
+
+      const response = await fetch(
+        `${BASE_URL}/profile-driver/complet-profile`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        return toast.error(result.errors || "خطا در بروزرسانی اطلاعات تکمیلی");
+      }
+
+      toast.success(result.message || "اطلاعات تکمیلی با موفقیت ذخیره شد");
+      setIsModalOpen(false);
+    } catch (error) {
+      toast.error(error.message || "مشکل در ذخیره اطلاعات تکمیلی");
+    }
+  }
+
   return (
     <Modal
       title="ویرایش اطلاعات تکمیلی"
@@ -26,61 +76,77 @@ function AdditionalModalDriverInfoCard() {
           className="text-secondary cursor-pointer hover:text-primary"
         />
       }
+      hideDefaultFooter={true}
     >
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-4 py-2">
-        <div className="space-y-2">
-          <Input
-            name="age"
-            label="سن"
-            type="number"
-            value={infoData.age}
-            onChange={handleInfoChange}
-          />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 py-2">
+          <div className="space-y-2">
+            <Input
+              name="age"
+              label="سن"
+              type="number"
+              value={infoData.age}
+              onChange={handleInfoChange}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Input
+              name="nationalCode"
+              label="کد ملی"
+              value={infoData.nationalCode}
+              onChange={handleInfoChange}
+              required
+            />
+          </div>
+          <div className="space-y-2 ">
+            <Input
+              name="address"
+              label="استان"
+              value={infoData.address}
+              onChange={handleInfoChange}
+              placeholder="اصفهان"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Input
+              name="city"
+              label="شهر"
+              value={infoData.city}
+              onChange={handleInfoChange}
+              required
+            />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <Input
+              name="medicalConditions"
+              label="مشکلات پزشکی"
+              value={infoData.medicalConditions}
+              onChange={handleInfoChange}
+              placeholder="در صورت وجود بنویسید، در غیر این صورت خالی بگذارید"
+            />
+          </div>
+          <div className="flex items-center gap-2 mt-2">
+            <input
+              type="checkbox"
+              id="hasGlasses"
+              name="hasGlasses"
+              checked={infoData.hasGlasses}
+              onChange={handleInfoChange}
+              className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+            <label htmlFor="hasGlasses" className="text-sm font-medium">
+              دارای عینک
+            </label>
+          </div>
         </div>
-        <div className="space-y-2">
-          <Input
-            name="nationalCode"
-            label="کد ملی"
-            value={infoData.nationalCode}
-            onChange={handleInfoChange}
-          />
+
+        <div className="flex justify-end pt-4">
+          <Button type="submit">ذخیره اطلاعات تکمیلی</Button>
         </div>
-        <div className="space-y-2">
-          <Input
-            name="province"
-            label="استان"
-            value={infoData.province}
-            onChange={handleInfoChange}
-          />
-        </div>
-        <div className="space-y-2">
-          <Input
-            name="city"
-            label="شهر"
-            value={infoData.city}
-            onChange={handleInfoChange}
-          />
-        </div>
-        <div className="space-y-2">
-          <Input
-            name="medicalConditions"
-            label="مشکلات پزشکی"
-            value={infoData.medicalConditions}
-            onChange={handleInfoChange}
-          />
-        </div>
-        <div className="flex items-center gap-2 mt-4">
-          <input
-            type="checkbox"
-            id="hasGlasses"
-            name="hasGlasses"
-            checked={infoData.hasGlasses}
-            onChange={handleInfoChange}
-            className="w-4 h-4"
-          />
-          <label htmlFor="hasGlasses">دارای عینک</label>
-        </div>
-      </div>
+      </form>
     </Modal>
   );
 }

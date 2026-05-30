@@ -1,5 +1,5 @@
-function page() {
-  return <div>page</div>;
-}
+import HeavyMPageComponents from "@/core/features/main/components/blocks/pages/HeavyMPageComponents";
 
-export default page;
+export default function Page() {
+  return <HeavyMPageComponents />;
+}

@@ -5,20 +5,25 @@ import {
   driverNavItems,
   traineeNavItems,
 } from "@/core/assets/mock/navItems";
+import { Button } from "@/core/components/shadcn/ui/button/button";
 import Logo from "@/core/features/main/components/ui/logo/Logo";
 import { useIsMobile } from "@/core/hooks/useIsMobile";
+import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
+import { toast } from "sonner";
 interface DashboardSidebarTs {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  license: string;
 }
 
 export function DashboardSidebar({
   sidebarOpen,
   setSidebarOpen,
+  license,
 }: DashboardSidebarTs) {
   const isMobile = useIsMobile();
   const pathname = usePathname();
@@ -45,6 +50,20 @@ export function DashboardSidebar({
     };
   }, [isMobile, sidebarOpen]);
 
+  async function logOut() {
+    const res = await fetch(`${BASE_URL}/auth/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${license}`,
+      },
+    });
+    console.log(res);
+    if (!res.ok) {
+      return toast.error("مشکل پیش آمد");
+    }
+    toast.success("با موفقیت خارج شدید");
+  }
   return (
     <>
       {isMobile && sidebarOpen && (
@@ -53,7 +72,6 @@ export function DashboardSidebar({
           onClick={() => setSidebarOpen(false)}
         />
       )}
-
       <aside
         className={`
           ${
@@ -76,32 +94,41 @@ ${isMobile && !sidebarOpen ? "translate-x-full" : "translate-x-0"} bg-white bord
             </button>
           )}
         </div>
-
-        <nav className="flex-1 p-3 space-y-1">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => isMobile && setSidebarOpen(false)}
-                className={`
-                  flex items-center gap-3 px-4 py-2.5 rounded-sm transition-all duration-200
-                  ${
-                    isActive
-                      ? "bg-linear-to-r from-primary/15 to-primary/5 text-foreground font-semibold border border-primary/30"
-                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
-                  }
+        <nav className="flex-1 p-3 space-y-1 justify-between flex flex-col">
+          <div className="flex flex-col space-y-1">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => isMobile && setSidebarOpen(false)}
+                  className={`
+                flex items-center gap-3 px-4 py-2.5 rounded-sm transition-all duration-200
+                ${
+                  isActive
+                    ? "bg-linear-to-r from-primary/15 to-primary/5 text-foreground font-semibold border border-primary/30"
+                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-50"
+                }
                 `}
-              >
-                <span className="text-lg">{item.icon}</span>
-                <span className="font-medium text-sm">{item.label}</span>
-                {isActive && (
-                  <div className="mr-auto w-1.5 h-1.5 rounded-full bg-primary" />
-                )}
-              </Link>
-            );
-          })}
+                >
+                  <span className="text-lg">{item.icon}</span>
+                  <span className="font-medium text-sm">{item.label}</span>
+                  {isActive && (
+                    <div className="mr-auto w-1.5 h-1.5 rounded-full bg-primary" />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+          <Button
+            variant="destructive"
+            size="sm"
+            className="w-full "
+            onClick={() => logOut()}
+          >
+            خروج از حساب
+          </Button>
         </nav>
       </aside>
     </>
