@@ -1,9 +1,8 @@
 import Footer from "@/core/features/main/components/blocks/footer/Footer";
 import Header from "@/core/features/main/components/blocks/header/Header";
-import GETUSER from "@/core/features/main/components/ui/hero-section/GETUSER";
 import HeroSection from "@/core/features/main/components/ui/hero-section/HeroSection";
 import SupportWidget from "@/core/features/support/components/SupportWidget";
-import { BASE_URL } from "@/core/lib/basic-link/backendBasicLink";
+import { GetPayloadByLicense } from "@/core/lib/license/getPayloadByLicense";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 
@@ -20,29 +19,15 @@ async function layout({
 }>) {
   const cookieStore = await cookies();
   const license = cookieStore.get("licenseToken")?.value;
-  console.log(license, "license");
-  const res = await fetch(`${BASE_URL}/user/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${license}`,
-    },
-  });
-  console.log(res);
-  const ress = await fetch(`${BASE_URL}/user/me`, {
-    method: "GET",
 
-    credentials: "include",
-  });
-  console.log(ress, "resss");
-  const user = await res.json();
-  console.log(user);
+  const getUserInfo = await GetPayloadByLicense(license);
+  const userId = getUserInfo?.userId || null;
+  const userRole = getUserInfo?.role || null;
   return (
     <main>
-      <Header />
+      <Header role={userRole} />
       <HeroSection />
-      <GETUSER user={user} />
-      <SupportWidget userId={user.id} isAdmin={false} />
+      <SupportWidget userId={userId} />
       {children}
       <Footer />
     </main>

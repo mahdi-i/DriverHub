@@ -1,5 +1,5 @@
-function page() {
-  return <div>page</div>;
-}
+import CarBaseOnePageComponents from "@/core/features/main/components/blocks/pages/CarBaseOnePageComponents";
 
-export default page;
+export default function Page() {
+  return <CarBaseOnePageComponents />;
+}
