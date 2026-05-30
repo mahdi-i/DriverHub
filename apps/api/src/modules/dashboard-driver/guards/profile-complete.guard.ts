@@ -29,15 +29,14 @@ export class ProfileCompleteGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-
     if (!user) {
       throw new ForbiddenException('کاربر یافت نشد');
     }
-
+    console.log(user, 'sadasssssssssssssssss');
     const profile = await this.profileRepository.findOne({
       where: { user: { id: user.id } },
     });
-
+    console.log(profile, 'profile');
     if (!profile) {
       throw new ForbiddenException('لطفاً ابتدا پروفایل خود را تکمیل کنید');
     }
