@@ -37,74 +37,118 @@ export default function SendOtpModal({
     setOtpCode("");
   }
 
+  // async function handleSubmit(e: EType) {
+  //   e.preventDefault();
+  //   if (otpCode.length !== 6) return toast.error("کد 6 رقمی وارد کنید.");
+  //   if (!phoneNumber) return toast.error("شماره موبایل وارد نشده");
+  //   if (!selectedRole)
+  //     return toast.error("نقش مورد نظر انتخاب نشده, لطفا دوباره تلاش کنید.");
+  //   const formattedPhone = formatPhoneNumber(phoneNumber);
+
+  //   if (selectedRole === "trainee") {
+  //     try {
+  //       const res = await fetch(`${BASE_URL}/auth/verify-otp/trainee`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: "include",
+  //         body: JSON.stringify({
+  //           phone: formattedPhone,
+  //           otp: otpCode,
+  //         }),
+  //       });
+  //       const data = await res.json();
+  //       console.log(data);
+
+  //       if (res.ok) {
+  //         toast.success(data.message || "با موفقیت وارد شدید.");
+
+  //         setIsAuthModalOpen(false);
+  //         setStep(1);
+  //         router.refresh();
+  //       } else {
+  //         toast.error(data.errors || "مشکل پیش آمد لطفا دوباره تلاش کنید");
+  //       }
+  //     } catch {
+  //       return toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
+  //     }
+  //   }
+  //   if (selectedRole === "driver") {
+  //     try {
+  //       const res = await fetch(`${BASE_URL}/auth/verify-otp/teacher`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         credentials: "include",
+  //         body: JSON.stringify({
+  //           phone: formattedPhone,
+  //           otp: otpCode,
+  //         }),
+  //       });
+
+  //       const data = await res.json();
+  //       console.log(data);
+  //       if (res.ok) {
+  //         toast.success(data.message || "با موفقیت وارد شدید.");
+
+  //         setIsAuthModalOpen(false);
+  //         setStep(1);
+  //       } else {
+  //         toast.error(data.errors || "مشکل پیش آمد لطفا دوباره تلاش کنید");
+  //       }
+  //     } catch {
+  //       return toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
+  //     }
+  //   }
+  //   setIsAuthModalOpen(false);
+  //   setStep(1);
+  // }
+
   async function handleSubmit(e: EType) {
-    e.preventDefault();
-    if (otpCode.length !== 6) return toast.error("کد 6 رقمی وارد کنید.");
-    if (!phoneNumber) return toast.error("شماره موبایل وارد نشده");
-    if (!selectedRole)
-      return toast.error("نقش مورد نظر انتخاب نشده, لطفا دوباره تلاش کنید.");
-    const formattedPhone = formatPhoneNumber(phoneNumber);
+  e.preventDefault();
 
-    if (selectedRole === "trainee") {
-      try {
-        const res = await fetch(`${BASE_URL}/auth/verify-otp/trainee`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            phone: formattedPhone,
-            otp: otpCode,
-          }),
-        });
-        const data = await res.json();
-        console.log(data);
+  if (otpCode.length !== 6) return toast.error("کد 6 رقمی وارد کنید.");
 
-        if (res.ok) {
-          toast.success(data.message || "با موفقیت وارد شدید.");
+  const formattedPhone = formatPhoneNumber(phoneNumber);
 
-          setIsAuthModalOpen(false);
-          setStep(1);
-          router.refresh();
-        } else {
-          toast.error(data.errors || "مشکل پیش آمد لطفا دوباره تلاش کنید");
-        }
-      } catch {
-        return toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
-      }
+  const endpoint =
+    selectedRole === "trainee"
+      ? "/auth/verify-otp/trainee"
+      : "/auth/verify-otp/teacher";
+
+  try {
+    const res = await fetch(`${BASE_URL}${endpoint}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        phone: formattedPhone,
+        otp: otpCode,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      return toast.error(data.errors || "مشکل پیش آمد");
     }
-    if (selectedRole === "driver") {
-      try {
-        const res = await fetch(`${BASE_URL}/auth/verify-otp/teacher`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            phone: formattedPhone,
-            otp: otpCode,
-          }),
-        });
 
-        const data = await res.json();
-        console.log(data);
-        if (res.ok) {
-          toast.success(data.message || "با موفقیت وارد شدید.");
+    toast.success(data.message || "با موفقیت وارد شدید.");
 
-          setIsAuthModalOpen(false);
-          setStep(1);
-        } else {
-          toast.error(data.errors || "مشکل پیش آمد لطفا دوباره تلاش کنید");
-        }
-      } catch {
-        return toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
-      }
-    }
     setIsAuthModalOpen(false);
     setStep(1);
+
+
+    router.refresh();
+    router.push("/dashboard"); 
+  } catch {
+    toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
   }
+}
 
   return (
     <div className="flex flex-col ">
