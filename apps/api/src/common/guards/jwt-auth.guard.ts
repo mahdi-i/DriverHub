@@ -39,10 +39,12 @@ export class LicenseAuthGuard {
 
     try {
       const payload = await this.licenseManager.validateLicense(token);
-
       request.user = {
+        driverId: payload?.driverId,
+        traineeId: payload?.trineeId,
         id: payload.userId,
         role: payload.role,
+        expireAt: payload.expireAt,
       };
       return true;
     } catch (error) {
