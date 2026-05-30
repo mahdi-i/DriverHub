@@ -3,29 +3,36 @@
 import { TypographySpan } from "@/core/components/custom/ui/typography/Typography";
 import { Badge } from "@/core/components/shadcn/ui/badge/badge";
 
+import { BookingActionsDropdown } from "@/core/components/custom/ui/booking/BookingActionsDropdown";
+import ModalTabelBooking from "@/core/components/custom/ui/booking/modal/ModalTabelBooking";
 import {
   TableBody,
   TableCell,
   TableRow,
 } from "@/core/components/shadcn/ui/table/table";
+import { BookingRequest } from "@/core/features/booking/assets/types/bookingTs";
 import { formatDateTime } from "@/core/utils/formatDate";
 import { getGender } from "@/core/utils/getGender";
 import { getStatusBadgeVariant } from "@/core/utils/getStatusBadgeVariant";
 import { getStatusLabel } from "@/core/utils/getStatusLabel";
 import { AlertCircle, Glasses, MapPin } from "lucide-react";
-import { fakeBookings } from "../../../assets/mock/fakeBookings";
-import ModalTabelBooking from "./modal/ModalTabelBooking";
-function BodyTabelBookingDashboard() {
+function BodyTabelBookingDashboard({
+  bookings,
+  license,
+}: {
+  bookings: BookingRequest[];
+  license: string;
+}) {
   return (
     <TableBody>
-      {fakeBookings.length === 0 ? (
+      {bookings.length === 0 ? (
         <TableRow>
           <TableCell colSpan={8} className="text-center py-8">
             رکوردی یافت نشد
           </TableCell>
         </TableRow>
       ) : (
-        fakeBookings.map((booking, index) => (
+        bookings.map((booking, index) => (
           <TableRow key={booking.id}>
             <TableCell className="font-medium">{index + 1}</TableCell>
             <TableCell>
@@ -51,7 +58,7 @@ function BodyTabelBookingDashboard() {
             <TableCell>
               <div className="flex items-center gap-1 text-sm">
                 <MapPin className="h-3 w-3 text-muted-foreground" />
-                {booking.student.address} / {booking.student.city}
+                {booking.student.address} / {booking.student.city || ""}
               </div>
             </TableCell>
             <TableCell className="text-sm">
@@ -62,8 +69,13 @@ function BodyTabelBookingDashboard() {
                 {getStatusLabel(booking.status)}
               </Badge>
             </TableCell>
-            <TableCell>
+            <TableCell className="flex items-center">
               <ModalTabelBooking booking={booking} />
+              <BookingActionsDropdown
+                bookingId={booking.id}
+                status={booking.status}
+                license={license}
+              />
             </TableCell>
           </TableRow>
         ))
