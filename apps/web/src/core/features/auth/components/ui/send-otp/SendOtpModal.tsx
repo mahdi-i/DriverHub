@@ -10,6 +10,7 @@ import FormActions from "./FormActions";
 import ModalHeader from "./ModalHeader";
 import OtpInputField from "./OtpInputField";
 import TimerStatus from "./TimerStatus";
+import { useRouter } from "next/navigation";
 
 interface SendOtpModalProps {
   setStep: (step: number) => void;
@@ -26,6 +27,10 @@ export default function SendOtpModal({
 }: SendOtpModalProps) {
   const [otpCode, setOtpCode] = useState("");
   const { resetTimer, formattedTime, resindCode } = useTimer(120);
+
+  // -----------------
+    const router = useRouter();
+  // ----------------
 
   function handleResendCode() {
     resetTimer();
@@ -61,6 +66,7 @@ export default function SendOtpModal({
 
           setIsAuthModalOpen(false);
           setStep(1);
+          router.refresh();
         } else {
           toast.error(data.errors || "مشکل پیش آمد لطفا دوباره تلاش کنید");
         }
