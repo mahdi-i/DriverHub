@@ -1,9 +1,10 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "../core/features/main/assets/style/header.css";
 
 @custom-variant dark (&:is(.dark *));
-
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -121,3 +122,13 @@
 .text-select {
   @apply text-xs font-medium;
 }
+
+/*/ HEADER START/*/
+.link-nav-header {
+  @apply flex items-center  gap-1 p-1;
+}
+
+.link-nav-header:hover {
+  @apply bg-muted p-1 rounded-md transform duration-300;
+}
+/*/ HEADER END /*/

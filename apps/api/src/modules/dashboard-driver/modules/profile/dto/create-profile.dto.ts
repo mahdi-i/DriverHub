@@ -54,9 +54,8 @@ export class CreateCompletProfileDto {
   @IsBoolean()
   hasGlasses: boolean;
 
-  @IsNotEmpty()
-  @IsOptional()
   @IsString()
+  @IsOptional()
   medicalConditions?: string;
 
   @IsEnum(IranProvinceEnum)

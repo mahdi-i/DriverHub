@@ -39,8 +39,6 @@ export class ScheduleDriverController {
   @RolesDecorator(Roles.TEACHER)
   @PaginationOptions({
     sortOptions: [{ example: 'createdAt:DESC' }],
-    filterOptions: [{ field: 'dayOfWeek', example: 'MONDAY' }],
-    searchOptions: [{ field: 'search-dayOfWeek', example: 'MONDAY' }],
   })
   findAll(@UserInfo('id') userId: string, @Paginate() query: PaginateQuery) {
     return this.scheduleDriverService.findAll(userId, query);
@@ -48,8 +46,8 @@ export class ScheduleDriverController {
 
   @Get(':id')
   @RolesDecorator(Roles.TEACHER)
-  findOne(@Param('id') id: string, @UserInfo('id') userId: string) {
-    return this.scheduleDriverService.findOne(id, userId);
+  findOne(@Param('id') id: string, @UserInfo('driverId') driverId: string) {
+    return this.scheduleDriverService.findOne(id, driverId);
   }
 
   @Put(':id')
@@ -68,7 +66,9 @@ export class ScheduleDriverController {
 
   @Delete(':id')
   @RolesDecorator(Roles.TEACHER)
-  remove(@Param('id') id: string, @UserInfo('id') userId: string) {
-    return this.scheduleDriverService.remove(id, userId);
+  remove(@Param('id') id: string, @UserInfo('driverId') driverId: string) {
+    console.log(id, 'xxxxxxxxx');
+    console.log(driverId, 'driverId');
+    return this.scheduleDriverService.remove(id, driverId);
   }
 }

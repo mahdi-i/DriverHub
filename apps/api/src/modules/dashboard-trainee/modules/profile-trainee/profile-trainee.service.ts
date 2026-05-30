@@ -13,6 +13,7 @@ export class ProfileTraineeService {
   ) {}
 
   async createProfile(createDto: CreateProfileTraineeDto, userId: string) {
+    console.log(userId);
     const existingProfile = await this.traineeRepository.findOne({
       where: { nationalCode: createDto.nationalCode },
     });
@@ -22,16 +23,16 @@ export class ProfileTraineeService {
     }
 
     const existingUserProfile = await this.traineeRepository.findOne({
-      where: { user: { id: userId } },
+      where: { id: userId },
     });
-
-    if (existingUserProfile) {
+    console.log(existingUserProfile, 'existingUserProfile xxxxxxxxxx');
+    if (existingUserProfile?.isProfileComplete) {
       throw new BadRequestException('شما قبلاً پروفایل خود را ثبت کرده‌اید');
     }
 
     const profile = this.traineeRepository.create({
       ...createDto,
-      user: { id: userId },
+      id: userId,
       isProfileComplete: true,
     });
 
@@ -45,7 +46,7 @@ export class ProfileTraineeService {
 
   async getProfile(userId: string) {
     const profile = await this.traineeRepository.findOne({
-      where: { user: { id: userId } },
+      where: { id: userId },
       relations: ['user'],
     });
 
@@ -58,7 +59,7 @@ export class ProfileTraineeService {
 
   async updateProfile(userId: string, updateDto: UpdateProfileTraineeDto) {
     const profile = await this.traineeRepository.findOne({
-      where: { user: { id: userId } },
+      where: { id: userId },
     });
 
     if (!profile) {

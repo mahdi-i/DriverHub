@@ -7,8 +7,10 @@ import * as crypto from 'node:crypto';
  */
 export interface LicencePayload {
   licenceId: string;
-  userId: number;
+  userId: string;
   role: string;
+  driverId?: string;
+  trineeId?: string;
   issuedAt: string;
   expireAt: string;
   renewable: boolean;
@@ -161,7 +163,9 @@ export class LicenseManager {
   }
 
   public buildPayload(input: {
-    userId: number;
+    userId: string;
+    trineeId?: string;
+    driverId?: string;
     role: string;
     expireAt?: string;
     maxDevices?: number;
@@ -182,6 +186,8 @@ export class LicenseManager {
       licenceId: crypto.randomUUID(),
       userId: input.userId,
       role: input.role,
+      driverId: input.driverId,
+      trineeId: input.trineeId,
       issuedAt: new Date().toISOString(),
       expireAt:
         input.expireAt ??
@@ -214,7 +220,7 @@ export class LicenseManager {
 
     const decrypted = this.decryptText(enc);
     const payload: LicencePayload = JSON.parse(decrypted);
-
+    console.log(payload, ' payload payload');
     if (new Date(payload.expireAt) < new Date()) {
       throw new Error('⛔ License expired');
     }
@@ -222,32 +228,3 @@ export class LicenseManager {
     return payload;
   }
 }
-
-// ============================================================================
-// Example usage
-// ============================================================================
-
-(async () => {
-  try {
-    const manager = new LicenseManager();
-
-    // Step 1 — Create expireAt = now + 2 minute
-    const expireAt = new Date(Date.now() + 60_000 * 2).toISOString();
-
-    // Step 2 — Build payload with 2-minute expiration
-    const payload = manager.buildPayload({
-      userId: 10,
-      role: 'pro',
-      features: ['export'],
-      hardwareId: 'DEVICE_HASH',
-      maxDevices: 5,
-      expireAt,
-    });
-
-    const license = await manager.createLicense(payload);
-
-    console.log(await manager.validateLicense(license));
-  } catch (err: any) {
-    console.log('ERROR:', err.message);
-  }
-})();
