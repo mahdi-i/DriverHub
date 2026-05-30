@@ -75,6 +75,7 @@ function BodyTabelBookingDashboard({
                 bookingId={booking.id}
                 status={booking.status}
                 license={license}
+                userRole={"DRIVER"}
               />
             </TableCell>
           </TableRow>

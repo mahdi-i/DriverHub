@@ -79,7 +79,10 @@ export class BookingController {
   @Get('my-list-trainee')
   @UseGuards(TraineeProfileCompleteGuard)
   @PaginationOptions({
-    filterOptions: [{ field: 'status', example: 'PENDING' }],
+    filterOptions: [
+      { field: 'status', example: 'pending' },
+      { field: 'student.gender', example: 'MALE' },
+    ],
   })
   findMyRequests(
     @Paginate() query: PaginateQuery,

@@ -198,8 +198,8 @@ export class BookingService {
     traineeId: string,
   ): Promise<Paginated<Booking>> {
     return paginate(query, this.bookingRepo, {
-      sortableColumns: ['createdAt', 'status', 'startTime'],
-      filterableColumns: { status: true },
+      sortableColumns: ['createdAt', 'status', 'startTime', 'student.gender'],
+      filterableColumns: { status: true, 'student.gender': true },
       relations: ['driver', 'driver.profile'],
       where: { student: { id: traineeId } },
     });

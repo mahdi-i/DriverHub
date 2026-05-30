@@ -21,7 +21,7 @@ async function ProfileTrainee() {
   } catch {
     console.log("لطفا اطلاعات پروفایل تکمیل کنید برای باز شدن دسترسی.");
   }
-  if (!profileInfo) {
+  if (!profileInfo || !profileInfo.isProfileComplete) {
     return (
       <CompletModalTraineeInfo
         license={license}
