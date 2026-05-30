@@ -8,7 +8,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 @Index(['driver', 'startTime', 'endTime'])
 export class Booking extends BaseEntity {
   @ManyToOne(() => Trainee, { nullable: true })
-  @JoinColumn({ name: 'student_id' })
+  @JoinColumn()
   student: Trainee;
 
   @ManyToOne(() => Driver, { nullable: true })

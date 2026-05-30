@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsDateString,
   IsMilitaryTime,
   IsNotEmpty,
   IsOptional,
@@ -12,15 +13,18 @@ export class CreateBookingDto {
   @IsNotEmpty()
   driverId: string;
 
-  @ApiProperty({ required: false, example: '10:00' })
-  @IsMilitaryTime({ message: 'زمان وارد شده نامعتبر' })
+  @ApiProperty({ required: false, example: '2026-05-23' })
+  @IsDateString()
   @IsNotEmpty()
-  startTime: Date;
+  bookingDate: string;
 
-  @ApiProperty({ required: false, example: '10:00' })
-  @IsMilitaryTime({ message: 'زمان وارد شده نامعتبر' })
-  @IsNotEmpty()
-  endTime: Date;
+  @ApiProperty({ example: '14:00' })
+  @IsMilitaryTime({ message: 'ساعت نامعتبر است' })
+  startTime: string;
+
+  @ApiProperty({ example: '15:00' })
+  @IsMilitaryTime({ message: 'ساعت نامعتبر است' })
+  endTime: string;
 
   @IsString()
   @IsOptional()
