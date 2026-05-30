@@ -95,6 +95,17 @@ export class ProfileService {
 
     return profile;
   }
+  async getSummary(driverId: string) {
+    const profile = await this.profileRepository.findOne({
+      where: { driver: { id: driverId } },
+      relations: ['user'],
+    });
+    if (!profile) {
+      throw new NotFoundException('پروفایل این راننده یافت نشد.');
+    }
+
+    return { fullName: profile.fullName };
+  }
 
   async completProfile(
     createCompletProfile: CreateCompletProfileDto,

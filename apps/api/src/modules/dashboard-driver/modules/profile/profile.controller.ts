@@ -17,6 +17,7 @@ import { SkipProfileCheck } from '@shared/decorators/skip-profile-driver.decorat
 import { UserInfo } from '@shared/decorators/user.decorator';
 
 import { Roles } from '@driverhub/shared-types';
+import { Public } from '@shared/decorators/public.decorator';
 import {
   CreateBasicProfileDto,
   CreateCompletProfileDto,
@@ -82,6 +83,11 @@ export class ProfileController {
   @Get()
   getProfile(@UserInfo('driverId') driverId: string) {
     return this.profileService.getProfile(driverId);
+  }
+  @Get('summary-driver/:id')
+  @Public()
+  getSummary(@Param('id') driverId: string) {
+    return this.profileService.getSummary(driverId);
   }
 
   @Put(':id')

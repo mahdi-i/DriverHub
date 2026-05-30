@@ -11,6 +11,7 @@ import { AppointmentStatus, GenderEnum } from "@driverhub/shared-types";
 import { toast } from "sonner";
 import HeadBookingDashboard from "../../../../../components/custom/ui/booking/HeadBookingDashboard";
 import TabelBookingDashboard from "../../ui/bookings/TabelBookingDashboard";
+const defaultBookings: BookingRequest[] = [];
 
 async function BookingDashboardDriver({
   searchParams,
@@ -23,37 +24,61 @@ async function BookingDashboardDriver({
     sortBy?: SortEnumBy;
   }>;
 }) {
+  let bookings: BookingRequest[] = defaultBookings;
   const license = await getAccessTokenSSR();
+  try {
+    const Params = await searchParams;
+    const page = Params.page || DEFAULT_PAGE;
+    const limit = Params.limit || DEFAULT_LIMIT;
+    const sortBy = Params.sortBy || DEFAULT_SORT;
+    const status = Params["filter.status"];
+    const gender = Params["filter.student.gender"];
 
-  const Params = await searchParams;
-  const page = Params.page || DEFAULT_PAGE;
-  const limit = Params.limit || DEFAULT_LIMIT;
-  const sortBy = Params.sortBy || DEFAULT_SORT;
-  const status = Params["filter.status"];
-  const gender = Params["filter.student.gender"];
+    const query = new URLSearchParams();
+    query.set("page", page);
+    query.set("limit", limit);
+    if (sortBy) query.set("sortBy", `${sortBy}`);
+    if (gender) query.set("filter.student.gender", `${gender}`);
+    if (status) query.set("filter.status", `${status}`);
 
-  const query = new URLSearchParams();
+    const queryString = query.toString();
 
-  query.set("page", page);
-  query.set("limit", limit);
-  if (sortBy) query.set("sortBy", `${sortBy}`);
-  if (gender) query.set("filter.student.gender", `${gender}`);
-  if (status) query.set("filter.status", `${status}`);
-  const queryString = query.toString();
-  const url = `${BASE_URL}/booking/incoming-requests?${queryString}`;
-  console.log("Request URL:", url);
-  const res = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${license}`,
-    },
-    next: { tags: [`booking-driver`] },
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    return toast.error(data.errors || `لطفا با تنظیمات دیگر تلاش کنید`);
+    const res = await fetch(
+      `${BASE_URL}/booking/incoming-requests?${queryString}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${license}`,
+        },
+        next: { tags: [`booking-driver`] },
+      },
+    );
+
+    if (!res.ok) {
+      let errorMessage = "خطا در دریافت درخواست‌ها";
+      try {
+        const errorData = await res.json();
+        errorMessage = errorData.errors || errorData.message || errorMessage;
+      } catch {
+        errorMessage = `خطای سرور (${res.status})`;
+      }
+
+      toast.error(errorMessage);
+
+      bookings = defaultBookings;
+    } else {
+      const result = await res.json();
+      bookings = result.data || [];
+    }
+  } catch (err) {
+    console.log(
+      err instanceof Error
+        ? err.message
+        : "خطای نامشخص در بارگذاری لیست نوبت‌ها",
+    );
+    bookings = defaultBookings;
   }
-  const bookings: BookingRequest[] = data.data;
 
   return (
     <div>

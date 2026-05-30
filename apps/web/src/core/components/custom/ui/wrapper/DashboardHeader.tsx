@@ -1,33 +1,51 @@
-"use client";
-import { useIsMobile } from "@/core/hooks/useIsMobile";
-import { Bell, Menu, Search } from "lucide-react";
+import { Input } from "@/core/components/shadcn/ui/input/input";
+import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
+import { Bell, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { TypographyP } from "../typography/Typography";
 
-interface DashboardHeaderTs {
+export function DashboardHeader({
+  setSidebarOpen,
+  driverId,
+}: {
   setSidebarOpen: (open: boolean) => void;
-}
+  driverId?: string;
+}) {
+  const [userFullname, setUserFullname] =
+    useState<string>("در حال بارگذاری...");
+  useEffect(() => {
+    async function getSummaryInfo() {
+      const res = await fetch(
+        `${BASE_URL}/profile-driver/summary-driver/${driverId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      const data = await res.json();
+      console.log(data, "datadatadatadatadata");
+      if (data && data.fullName) {
+        setUserFullname(data.fullName);
+      } else {
+        setUserFullname("کاربر مهمان");
+      }
+    }
 
-export function DashboardHeader({ setSidebarOpen }: DashboardHeaderTs) {
-  const isMobile = useIsMobile();
-
+    getSummaryInfo();
+  }, [driverId]);
   return (
     <header className="flex items-center justify-between px-5 py-3 border-b border-gray-100 bg-white shadow-sm">
       <div className="flex items-center gap-4">
-        {isMobile && (
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-sm hover:bg-gray-100 transition-colors text-light"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-        )}
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="p-2 rounded-sm hover:bg-gray-100 transition-colors text-light md:hidden block"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
 
-        <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-sm bg-gray-50 border border-gray-200 hover:border-primary/50 transition-colors cursor-text">
-          <Search className="h-4 w-4 text-light" />
-          <input
-            type="text"
-            placeholder="جستجو..."
-            className="bg-transparent text-gray-900 placeholder:text-light outline-none text-sm w-48"
-          />
+        <div>
+          <Input type="text" placeholder="جستجو..." />
         </div>
       </div>
 
@@ -39,11 +57,10 @@ export function DashboardHeader({ setSidebarOpen }: DashboardHeaderTs) {
 
         <div className="flex items-center gap-3 pl-3  border-r border-gray-200">
           <div className="hidden sm:block text-left ">
-            <p className="text-sm font-medium text-gray-900">علی محمدی</p>
-            <p className="text-xs text-light">مدیر سیستم</p>
+            <TypographyP className=" text-gray-900">{userFullname}</TypographyP>
           </div>
           <div className="w-9 h-9 rounded-lg bg-linear-to-br from-secondary to-secondary/90 flex items-center justify-center text-white font-bold text-sm shadow-md shadow-secondary/20">
-            ع
+            {userFullname.substring(1, 0)}
           </div>
         </div>
       </div>
