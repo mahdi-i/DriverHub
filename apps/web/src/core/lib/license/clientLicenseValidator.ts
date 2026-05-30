@@ -1,9 +1,10 @@
+import { Roles } from "@driverhub/shared-types";
 import * as crypto from "crypto";
 
 export interface LicencePayload {
   licenceId: string;
-  userId: number;
-  role: string;
+  userId: string;
+  role: Roles;
   issuedAt: string;
   expireAt: string;
   renewable: boolean;
@@ -12,6 +13,8 @@ export interface LicencePayload {
   version?: string;
   features?: string[];
   isTrial?: boolean;
+  driverId?: string;
+  trineeId?: string;
 }
 
 export class LicenseManager {
@@ -37,7 +40,7 @@ export class LicenseManager {
     const cipher = crypto.createCipheriv(
       this.algorithm,
       this.encKey,
-      iv
+      iv,
     ) as crypto.CipherGCM;
     const encrypted = Buffer.concat([
       cipher.update(plaintext, "utf8"),
@@ -52,14 +55,14 @@ export class LicenseManager {
     const iv = buf.slice(0, this.ivLength);
     const authTag = buf.slice(
       this.ivLength,
-      this.ivLength + this.authTagLength
+      this.ivLength + this.authTagLength,
     );
     const ciphertext = buf.slice(this.ivLength + this.authTagLength);
 
     const decipher = crypto.createDecipheriv(
       this.algorithm,
       this.encKey,
-      iv
+      iv,
     ) as crypto.DecipherGCM;
     decipher.setAuthTag(authTag);
     const decrypted = Buffer.concat([
@@ -79,7 +82,7 @@ export class LicenseManager {
   }
 
   public async validateLicense(
-    license: string
+    license: string,
   ): Promise<LicencePayload | null> {
     try {
       const [enc, sig] = license.split(".");

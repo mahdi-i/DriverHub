@@ -1,10 +1,10 @@
-import { sortBy } from "../assets/@types/enum/sortBy";
+import { SortEnumBy } from "../assets/@types/enum/sortBy";
 
-export function getSortBy(sortType: sortBy): string {
+export function getSortBy(sortType: SortEnumBy): string {
   switch (sortType) {
-    case sortBy.ASC:
+    case SortEnumBy.ASC:
       return "صعودی"; // Ascending
-    case sortBy.DESC:
+    case SortEnumBy.DESC:
       return "نزولی"; // Descending
     default:
       return "نامشخص";
