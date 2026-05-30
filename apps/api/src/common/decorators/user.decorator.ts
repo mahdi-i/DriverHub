@@ -1,4 +1,8 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  BadRequestException,
+  createParamDecorator,
+  ExecutionContext,
+} from '@nestjs/common';
 
 export const UserInfo = createParamDecorator(
   (data: string | undefined, ctx: ExecutionContext) => {
@@ -6,13 +10,14 @@ export const UserInfo = createParamDecorator(
     const user = request.user;
 
     if (!user) {
-      return null;
+      throw new BadRequestException('کاربر لاگین نکرده است');
     }
 
+    console.log(user, 'user user');
+    console.log(data, 'data data');
     if (data) {
       return user[data];
     }
-
     return user;
   },
 );
