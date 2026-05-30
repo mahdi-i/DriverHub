@@ -16,17 +16,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 
-interface DashboardSidebarTs {
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
-  license: string;
-}
-
 export function DashboardSidebar({
   sidebarOpen,
   setSidebarOpen,
-  license,
-}: DashboardSidebarTs) {
+}: {
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+}) {
   const isMobile = useIsMobile();
   const pathname = usePathname();
   const router = useRouter();
@@ -64,10 +60,9 @@ export function DashboardSidebar({
 
       toast.success("با موفقیت خارج شدید");
 
-      // refresh
       router.refresh();
       router.replace("/");
-    } catch (err) {
+    } catch {
       toast.error("خطا در ارتباط با سرور");
     }
   }
@@ -93,7 +88,6 @@ export function DashboardSidebar({
           } bg-white border-l border-muted shadow-sm
         `}
       >
-        {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-muted">
           <div className="mx-auto">
             <Logo />
@@ -109,7 +103,6 @@ export function DashboardSidebar({
           )}
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 p-3 flex flex-col justify-between">
           <div className="flex flex-col space-y-1">
             {navItems.map((item) => {
@@ -140,7 +133,6 @@ export function DashboardSidebar({
             })}
           </div>
 
-          {/* Logout */}
           <Button
             variant="destructive"
             size="sm"

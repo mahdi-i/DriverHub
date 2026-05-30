@@ -13,12 +13,11 @@ export default async function RootLayout({
   const license = await getAccessTokenSSR();
   const payloadLicense = await GetPayloadByLicense(license);
   const driverId = payloadLicense.driverId;
-  console.log(license, "license");
   if (!license) {
     return forbidden();
   }
   return (
-    <ClientLayout license={license} driverId={driverId}>
+    <ClientLayout driverId={driverId}>
       <ContainerDashboard>{children}</ContainerDashboard>
     </ClientLayout>
   );
