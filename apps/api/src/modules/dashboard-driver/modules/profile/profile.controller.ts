@@ -16,7 +16,7 @@ import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { SkipProfileCheck } from '@shared/decorators/skip-profile-driver.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
 
-import { GenderEnum, LicenseTypeEnum, Roles } from '@driverhub/shared-types';
+import { Roles } from '@driverhub/shared-types';
 import {
   CreateBasicProfileDto,
   CreateCompletProfileDto,
@@ -30,6 +30,20 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Post('introduction')
+  @SkipProfileCheck()
+  async createProfile(
+    @Body() createBasicProfileDto: CreateBasicProfileDto,
+    @UserInfo('driverId') driverId: string,
+    @UserInfo('id') id: string,
+  ) {
+    return this.profileService.createProfile(
+      createBasicProfileDto,
+      driverId,
+      id,
+    );
+  }
+
+  @Post('license-file')
   @UseInterceptors(FileInterceptor('file'))
   @SkipProfileCheck()
   @ApiConsumes('multipart/form-data')
@@ -42,63 +56,40 @@ export class ProfileController {
           format: 'binary',
           description: 'فایل مدرک (تصویر)',
         },
-        fullName: { type: 'string', example: 'مهدی باقری' },
-        gender: {
-          type: 'enum',
-          enum: [GenderEnum.FEMALE, GenderEnum.MALE],
-          example: 'male',
-        },
-        licenseNumber: { type: 'string', example: '1234567890' },
-        experienceYears: { type: 'number', example: 5 },
-        carModel: { type: 'string', example: 'پژو ۲۰۶' },
-        carColor: { type: 'string', example: 'سفید' },
-        bankAccountNumber: { type: 'string', example: '1234567890123456' },
-        licenseType: { type: 'enum', example: LicenseTypeEnum.CAR },
       },
-      required: [
-        'fullName',
-        'gender',
-        'licenseNumber',
-        'experienceYears',
-        'bankAccountNumber',
-        'file',
-        'licenseType',
-        'carModel',
-        'carColor',
-      ],
+      required: ['file'],
     },
   })
-  async createProfile(
-    @Body() createBasicProfileDto: CreateBasicProfileDto,
-    @UserInfo('id') userId: string,
+  async createFile(
+    @UserInfo('driverId') driverId: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(userId);
+    console.log(driverId);
 
-    return this.profileService.createProfile(
-      createBasicProfileDto,
-      userId,
-      file,
-    );
+    return this.profileService.createFile(driverId, file);
   }
 
   @Post('complet-profile')
+  @SkipProfileCheck()
   @UseGuards(ProfileCompleteGuard)
   async completProfile(
     @Body() createCompletProfile: CreateCompletProfileDto,
-    @UserInfo('id') id: string,
+    @UserInfo('driverId') driverId: string,
   ) {
-    return this.profileService.completProfile(createCompletProfile, id);
+    return this.profileService.completProfile(createCompletProfile, driverId);
   }
 
-  @Get(':id')
-  getProfile(@Param('id') id: string) {
-    return this.profileService.getProfile(id);
+  @Get()
+  getProfile(@UserInfo('driverId') driverId: string) {
+    return this.profileService.getProfile(driverId);
   }
 
   @Put(':id')
   @UseGuards(ProfileCompleteGuard)
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-    return this.profileService.update(id, updateProfileDto);
+  update(
+    @Param('id') driverId: string,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    return this.profileService.update(driverId, updateProfileDto);
   }
 }

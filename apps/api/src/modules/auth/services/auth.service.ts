@@ -1,3 +1,6 @@
+import { Driver } from '@core/dashboard-driver/modules/driver/entities/driver.entity';
+import { Trainee } from '@core/dashboard-trainee/modules/trainee/entities/trainee.entity';
+import { User } from '@core/user/entities/auth.entity';
 import { UserService } from '@core/user/user.service';
 import { Roles } from '@driverhub/shared-types';
 import {
@@ -6,10 +9,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
 import { MaxAge_License } from '@shared/constants/jwt.constants';
 import { LicenseManager } from '@shared/lib/licence/licence.service';
 import { CacheService } from '@shared/services/cache.service';
 import { generateOtp } from '@shared/utils/code-generator.util';
+import { Repository } from 'typeorm';
 import { CreateAuthDto } from '../dto/create-phone.dto';
 import { LoginOwnerDto } from '../dto/login-owner.dto';
 import { VerifyOtpDto } from '../dto/verify-otp.dto';
@@ -20,6 +25,11 @@ export class AuthService {
     private readonly cacheService: CacheService,
     private readonly userService: UserService,
     private readonly configService: ConfigService,
+    private readonly licenseManager: LicenseManager,
+    @InjectRepository(Driver)
+    private driverRepository: Repository<Driver>,
+    @InjectRepository(Trainee)
+    private traineeRepository: Repository<Trainee>,
   ) {}
 
   async requestOtp(createAuthDto: CreateAuthDto) {
@@ -62,7 +72,6 @@ export class AuthService {
 
   async verifyOtp(verifyDto: VerifyOtpDto, roleSend: Roles) {
     const { phone, otp } = verifyDto;
-    console.log('3');
 
     const existOtp = await this.cacheService.get(`otp:${phone}`);
     if (!existOtp) {
@@ -70,12 +79,10 @@ export class AuthService {
         'کد تایید منقضی شده است. لطفا دوباره درخواست کنید',
       );
     }
-    console.log('4');
 
     if (existOtp !== otp.toString()) {
       const attemptsKey = `attempts:${phone}`;
       let attempts = await this.cacheService.get(attemptsKey);
-      console.log('5');
 
       if (!attempts) {
         attempts = '1';
@@ -93,27 +100,21 @@ export class AuthService {
 
       throw new BadRequestException('کد تایید اشتباه است');
     }
-    console.log('6');
 
     await this.cacheService.del(`otp:${phone}`);
     await this.cacheService.del(`attempts:${phone}`);
 
-    const manager = new LicenseManager();
     const now = new Date();
     const expireAt = new Date(now.getTime() + MaxAge_License).toISOString();
-    console.log(MaxAge_License, 'MaxAge_License');
     const user = await this.userService.findByPhone(phone);
 
     if (user) {
-      const payload = manager.buildPayload({
-        userId: Number(user.id),
+      const payload = this.licenseManager.buildPayload({
+        userId: user.id,
         role: user.role,
         expireAt,
       });
-      console.log('8');
-      const licenseToken = await manager.createLicense(payload);
-      console.log(licenseToken, 'token');
-
+      const licenseToken = await this.licenseManager.createLicense(payload);
       return {
         message: 'ورود با موفقیت انجام شد',
         user: {
@@ -124,40 +125,48 @@ export class AuthService {
         license: licenseToken,
       };
     } else {
-      console.log('9');
+      let newUser: User;
+      let driverId: string | undefined;
+      let traineeId: string | undefined;
 
-      let role: Roles;
-      if (roleSend === Roles.TEACHER) {
-        role = Roles.TEACHER;
-      } else if (roleSend === Roles.TRAINEE) {
-        role = Roles.TRAINEE;
-      } else {
-        throw new BadRequestException('نقش کاربری نامعتبر است');
-      }
-
-      const newUser = await this.userService.create({
+      newUser = await this.userService.create({
         phone,
-        role,
+        role: roleSend,
         isActive: true,
       });
-      console.log('10');
 
-      const payload = manager.buildPayload({
-        userId: Number(newUser.id),
+      if (roleSend === Roles.TRAINEE) {
+        const newTrainee = this.traineeRepository.create({
+          user: newUser,
+        });
+        console.log(newTrainee, 'newTrainee');
+        const savedTrainee = await this.traineeRepository.save(newTrainee);
+        traineeId = savedTrainee.id;
+      } else if (roleSend === Roles.TEACHER) {
+        const newDriver = this.driverRepository.create({
+          user: newUser,
+        });
+        console.log(newDriver, 'zxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+        const savedDriver = await this.driverRepository.save(newDriver);
+        console.log(
+          savedDriver,
+          'zxxxxxxسیشسیشسیxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        );
+        driverId = savedDriver.id;
+      }
+
+      const payload = this.licenseManager.buildPayload({
+        userId: newUser.id,
         role: newUser.role,
         expireAt,
+        driverId: driverId,
+        trineeId: traineeId,
       });
-      console.log('11');
-      const licenseToken = await manager.createLicense(payload);
-      console.log(licenseToken, 'out token side');
-
+      const licenseToken = await this.licenseManager.createLicense(payload);
+      console.log(payload, 'yyyyyyyyyyyyyyyyyyyyy');
       return {
         message: 'ثبت‌ نام با موفقیت انجام شد',
-        user: {
-          id: newUser.id,
-          phone: newUser.phone,
-          role: newUser.role,
-        },
+        user: { id: newUser.id, phone: newUser.phone, role: newUser.role },
         license: licenseToken,
       };
     }
@@ -173,20 +182,18 @@ export class AuthService {
     )
       throw new UnauthorizedException('رمز عبور دوم ادمین اشتباه است');
 
-    const manager = new LicenseManager();
-
     const expireAt = new Date(
       Date.now() + 15 * 24 * 60 * 60 * 1000,
     ).toISOString();
 
     const adminUserId = crypto.randomUUID();
 
-    const payload = manager.buildPayload({
-      userId: Number(adminUserId),
+    const payload = this.licenseManager.buildPayload({
+      userId: adminUserId,
       role: Roles.ADMIN,
       expireAt,
     });
-    const license = await manager.createLicense(payload);
+    const license = await this.licenseManager.createLicense(payload);
     return {
       message: 'ورود ادمین با موفقیت انجام شد',
       license: license,

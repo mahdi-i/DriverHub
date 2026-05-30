@@ -28,7 +28,7 @@ export class BookingController {
   @UseGuards(TraineeProfileCompleteGuard)
   create(
     @Body(ValidateStartvsEndPipe) dto: CreateBookingDto,
-    @UserInfo('id') traineeId: string,
+    @UserInfo('traineeId') traineeId: string,
   ) {
     return this.bookingService.create(dto, traineeId);
   }
@@ -38,11 +38,14 @@ export class BookingController {
   @PaginationOptions({
     sortOptions: [{ example: 'createdAt:DESC' }],
     filterOptions: [
-      { field: 'filter[profile.licenseType][$eq]', example: 'CAR' },
-      { field: 'filter[profile.gender][$eq]', example: 'MALE' },
-      { field: 'filter[profile.experienceYears][$gte]', example: '2' },
-      { field: 'filter[profile.age][$gte]', example: '25' },
-      { field: 'filter[profile.age][$lte]', example: '50' },
+      { field: 'licenseType', example: 'CAR' },
+      { field: 'gender', example: 'MALE' },
+      { field: 'experienceYears', example: '2' },
+      { field: 'age[$gte]', example: '25' },
+      { field: 'age[$lte]', example: '50' },
+      { field: 'startTime', example: '$eq:14:00' },
+      { field: 'endTime', example: '$eq:16:00' },
+      { field: 'dayOfWeek', example: 'MONDAY' },
     ],
     searchOptions: [
       { field: 'profile.fullName', example: 'علی' },
@@ -90,14 +93,14 @@ export class BookingController {
   @UseGuards(ProfileCompleteGuard)
   @PaginationOptions({
     filterOptions: [
-      { field: 'status', example: 'PENDING' },
+      { field: 'status', example: 'pending' },
       { field: 'student.gender', example: 'MALE' },
     ],
     searchOptions: [{ field: 'student.fullName', example: 'علی' }],
   })
   findIncomingRequests(
     @Paginate() query: PaginateQuery,
-    @UserInfo('id') driverId: string,
+    @UserInfo('driverId') driverId: string,
   ) {
     return this.bookingService.findAllForDriver(query, driverId);
   }
@@ -112,7 +115,7 @@ export class BookingController {
   @UseGuards(ProfileCompleteGuard)
   update(
     @Param('id') id: string,
-    @UserInfo('id') driverId: string,
+    @UserInfo('driverId') driverId: string,
     @Body() dto: UpdateBookingDto,
   ) {
     return this.bookingService.update(id, driverId, dto);

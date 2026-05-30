@@ -7,9 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ActionBookingController } from './controllers/action-booking.controller';
 import { BookingController } from './controllers/booking.controller';
 import { Booking } from './entities/booking.entity';
+import { BookingRepository } from './repository/booking.repository';
 import { ActionBookingService } from './services/action-booking.service';
 import { BookingService } from './services/booking.service';
-import { ScheduleValidationService } from './services/schedule-validation.service';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { ScheduleValidationService } from './services/schedule-validation.servic
     ]),
   ],
   controllers: [BookingController, ActionBookingController],
-  providers: [BookingService, ScheduleValidationService, ActionBookingService],
-  exports: [BookingService, ScheduleValidationService],
+  providers: [BookingService, ActionBookingService, BookingRepository],
+  exports: [BookingService],
 })
 export class BookingModule {}

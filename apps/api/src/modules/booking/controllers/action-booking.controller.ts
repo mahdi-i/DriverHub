@@ -1,8 +1,8 @@
 import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
+import { Roles } from '@driverhub/shared-types';
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { RolesDecorator } from '@shared/decorators/roles.decorator';
 import { UserInfo } from '@shared/decorators/user.decorator';
-import { Roles } from '@driverhub/shared-types';
 import { ActionBookingService } from '../services/action-booking.service';
 
 @Controller('action-booking')
@@ -10,7 +10,7 @@ export class ActionBookingController {
   constructor(private readonly actionBookingService: ActionBookingService) {}
 
   @Post(':id/cancel')
-  cancel(@Param('id') id: string, @UserInfo('id') userId: string) {
+  cancel(@Param('id') id: string, @UserInfo('driverId') userId: string) {
     return this.actionBookingService.cancel(id, userId);
   }
 
@@ -19,7 +19,7 @@ export class ActionBookingController {
   @UseGuards(ProfileCompleteGuard)
   confirm(
     @Param('id') id: string,
-    @UserInfo('id') driverId: string,
+    @UserInfo('driverId') driverId: string,
     @Body() body: { note?: string },
   ) {
     return this.actionBookingService.confirm(id, driverId, body.note);
@@ -30,7 +30,7 @@ export class ActionBookingController {
   @UseGuards(ProfileCompleteGuard)
   reject(
     @Param('id') id: string,
-    @UserInfo('id') driverId: string,
+    @UserInfo('driverId') driverId: string,
     @Body() body: { reason: string },
   ) {
     return this.actionBookingService.reject(id, driverId, body.reason);
@@ -41,7 +41,7 @@ export class ActionBookingController {
   @UseGuards(ProfileCompleteGuard)
   complete(
     @Param('id') id: string,
-    @UserInfo('id') driverId: string,
+    @UserInfo('driverId') driverId: string,
     @Body() body: { score?: number },
   ) {
     return this.actionBookingService.complete(id, driverId, body.score);
