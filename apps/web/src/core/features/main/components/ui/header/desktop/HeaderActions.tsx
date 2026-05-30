@@ -1,6 +1,7 @@
 "use client";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
 import { Button } from "@/core/components/shadcn/ui/button/button";
+import { Roles } from "@driverhub/shared-types";
 import { Calendar, Headphones, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -9,9 +10,11 @@ import { useEffect } from "react";
 export default function HeaderActions({
   setIsAuthModalOpen,
   isAuthModalOpen,
+  role,
 }: {
   setIsAuthModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   isAuthModalOpen?: boolean;
+  role: Roles;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -63,11 +66,24 @@ export default function HeaderActions({
           <TypographyP className="font-medium">رزروهای من</TypographyP>
         </Link>
       </Button>
-
-      <Button variant="default" className="gap-2" onClick={handleOpenModal}>
-        <User className="h-6 w-6 " />
-        <TypographyP className="font-medium">ورود یا ثبت نام</TypographyP>
-      </Button>
+      {role ? (
+        role === Roles.TEACHER ? (
+          <Button>
+            <Link href={"/dashboard/driver"}>ورود به پنل</Link>
+          </Button>
+        ) : (
+          <Button>
+            <Link href={"/dashboard/trainee"}>ورود به پنل</Link>
+          </Button>
+        )
+      ) : (
+        <Button className="gap-2" onClick={handleOpenModal}>
+          <>
+            <User className="h-6 w-6 " />
+            <TypographyP>ورود یا ثبت نام</TypographyP>
+          </>
+        </Button>
+      )}
     </div>
   );
 }

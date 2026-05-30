@@ -1,12 +1,13 @@
 "use client";
 
 import ModalAuthHeader from "@/core/features/auth/components/blocks/auth/ModalAuthHeader";
+import { Roles } from "@driverhub/shared-types";
 import { useState } from "react";
 import Logo from "../../logo/Logo";
 import HeaderActions from "./HeaderActions";
 import HeaderListNav from "./HeaderListNav";
 
-function DesktopHeader() {
+function DesktopHeader({ role }: { role: Roles }) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   return (
@@ -18,6 +19,7 @@ function DesktopHeader() {
       <HeaderActions
         setIsAuthModalOpen={setIsAuthModalOpen}
         isAuthModalOpen={isAuthModalOpen}
+        role={role}
       />
       <ModalAuthHeader
         setIsAuthModalOpen={setIsAuthModalOpen}
