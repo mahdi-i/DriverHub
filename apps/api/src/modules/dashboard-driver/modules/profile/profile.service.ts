@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { UserService } from '@core/user/user.service';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileService } from '@shared/services/file.service';
 import { Repository } from 'typeorm';
@@ -15,20 +20,25 @@ export class ProfileService {
     private readonly fileService: FileService,
     @InjectRepository(ProfileDriver)
     private profileRepository: Repository<ProfileDriver>,
+    private userService: UserService,
   ) {}
   async createProfile(
     createBasicProfile: CreateBasicProfileDto,
-    userId: string,
-    file: Express.Multer.File,
+    driverId: string,
+    id: string,
   ) {
-    let certificateUrl: string | undefined;
-
-    if (file) {
-      const uploadLicense = await this.fileService.uploadFile(file);
-      certificateUrl = uploadLicense.url;
+    const exsistProfile = await this.profileRepository.findOne({
+      where: { bankAccountNumber: createBasicProfile.bankAccountNumber },
+    });
+    console.log(exsistProfile);
+    if (exsistProfile) {
+      throw new BadRequestException('اطلاعات از قبل ثبت شده ');
     }
+    console.log(driverId, 'driverId driverId driverId driverId');
+    console.log(id, 'id id id id');
     const profile = this.profileRepository.create({
-      user: { id: userId },
+      user: { id },
+      driver: { id: driverId },
       fullName: createBasicProfile.fullName,
       gender: createBasicProfile.gender,
       licenseNumber: createBasicProfile.licenseNumber,
@@ -36,7 +46,6 @@ export class ProfileService {
       carModel: createBasicProfile.carModel,
       carColor: createBasicProfile.carColor,
       bankAccountNumber: createBasicProfile.bankAccountNumber,
-      certificateUrl: certificateUrl,
     });
     const savedProfile = await this.profileRepository.save(profile);
 
@@ -45,22 +54,51 @@ export class ProfileService {
       data: savedProfile,
     };
   }
+  async createFile(driverId: string, file: Express.Multer.File) {
+    let certificateUrl: string | undefined;
 
-  async getProfile(userId: string) {
+    if (file) {
+      const uploadLicense = await this.fileService.uploadFile(file);
+      certificateUrl = uploadLicense.url;
+    }
+
     const profile = await this.profileRepository.findOne({
-      where: { user: { id: userId } },
-      relations: ['user'],
+      where: { driver: { id: driverId } },
     });
 
     if (!profile) {
-      throw new BadRequestException('پروفایل یافت نشد');
+      throw new BadRequestException(
+        'پروفایل شما یافت نشد. لطفاً ابتدا اطلاعات اولیه پروفایل را تکمیل کنید.',
+      );
+    }
+
+    if (certificateUrl) {
+      profile.certificateUrl = certificateUrl;
+    }
+
+    const savedProfile = await this.profileRepository.save(profile);
+
+    return {
+      message: 'فایل با موفقیت آپلود و ذخیره شد.',
+      data: savedProfile,
+    };
+  }
+
+  async getProfile(driverId: string) {
+    const profile = await this.profileRepository.findOne({
+      where: { driver: { id: driverId } },
+      relations: ['user'],
+    });
+    if (!profile) {
+      throw new NotFoundException('پروفایل این راننده یافت نشد.');
     }
 
     return profile;
   }
+
   async completProfile(
     createCompletProfile: CreateCompletProfileDto,
-    userId: string,
+    driverId: string,
   ) {
     const { nationalCode } = createCompletProfile;
 
@@ -74,7 +112,7 @@ export class ProfileService {
       );
     }
     const profile = await this.profileRepository.findOne({
-      where: { user: { id: userId } },
+      where: { driver: { id: driverId } },
     });
 
     if (!profile) {
@@ -101,9 +139,9 @@ export class ProfileService {
       data: updatedProfile,
     };
   }
-  async update(userId: string, updateProfileDto: UpdateProfileDto) {
+  async update(driverId: string, updateProfileDto: UpdateProfileDto) {
     const profile = await this.profileRepository.findOne({
-      where: { user: { id: userId } },
+      where: { driver: { id: driverId } },
     });
 
     if (!profile) {

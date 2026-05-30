@@ -13,7 +13,7 @@ export class AnalysisController {
   @Get()
   @RolesDecorator(Roles.TEACHER, Roles.ADMIN)
   async getAnalysis(
-    @UserInfo('id') driverId: string,
+    @UserInfo('driverId') driverId: string,
   ): Promise<DriverAnalysisResponseDto> {
     return this.analysisService.getAnalysis(driverId);
   }

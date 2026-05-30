@@ -36,7 +36,7 @@ export class ProfileDriver extends BaseEntity {
   @Column({ unique: true, nullable: false })
   bankAccountNumber: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   certificateUrl: string;
 
   @Column({ nullable: true })

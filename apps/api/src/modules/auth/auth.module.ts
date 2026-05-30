@@ -1,3 +1,5 @@
+import { Driver } from '@core/dashboard-driver/modules/driver/entities/driver.entity';
+import { Trainee } from '@core/dashboard-trainee/modules/trainee/entities/trainee.entity';
 import { User } from '@core/user/entities/auth.entity';
 import { UserService } from '@core/user/user.service';
 import { Module } from '@nestjs/common';
@@ -10,7 +12,7 @@ import { AuthService } from './services/auth.service';
 import { TokenService } from './services/token.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, Driver, Trainee])],
   controllers: [AuthController],
   providers: [
     AuthService,

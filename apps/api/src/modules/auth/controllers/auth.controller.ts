@@ -28,7 +28,6 @@ export class AuthController {
     @Body() verifyDto: VerifyOtpDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    console.log('1');
     const result = await this.authService.verifyOtp(verifyDto, Roles.TRAINEE);
 
     this.cookieService.setToken(
