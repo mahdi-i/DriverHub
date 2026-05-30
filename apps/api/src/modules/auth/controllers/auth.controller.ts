@@ -87,9 +87,20 @@ export class AuthController {
     };
   }
 
-  @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('licenseToken');
-    return { message: 'با موفقیت خارج شدید' };
-  }
+//   @Post('logout')
+//   async logout(@Res({ passthrough: true }) res: Response) {
+//     res.clearCookie('licenseToken');
+//     return { message: 'با موفقیت خارج شدید' };
+//   }
+// }
+
+@Post('logout')
+async logout(@Res({ passthrough: true }) res: Response) {
+  res.clearCookie('licenseToken', {
+    path: '/',
+    sameSite: 'lax',
+    secure: false,
+  });
+
+  return { message: 'با موفقیت خارج شدید' };
 }
