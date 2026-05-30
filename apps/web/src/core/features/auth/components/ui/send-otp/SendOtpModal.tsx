@@ -144,7 +144,6 @@ export default function SendOtpModal({
 
 
     router.refresh();
-    router.push("/dashboard"); 
   } catch {
     toast.error("مشکل پیش آمد لطفا دوباره تلاش کنید");
   }
