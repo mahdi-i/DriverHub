@@ -8,7 +8,7 @@ function HeadTabelBookingDashboardTrainee() {
     <TableHeader>
       <TableRow>
         <TableHead className="w-12.5">ردیف</TableHead>
-        <TableHead>روز</TableHead>
+        <TableHead>تاریخ و ساعت</TableHead>
         <TableHead>تاریخ و ساعت</TableHead>
         <TableHead>استاد</TableHead>
         <TableHead>جنسیت</TableHead>

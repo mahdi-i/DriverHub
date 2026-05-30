@@ -70,12 +70,4 @@ export const quickAccessItemsTrainee = [
     icon: User,
     color: "text-purple-500 bg-purple-50 dark:bg-purple-900/20",
   },
-  {
-    href: "/dashboard/trainee/progress",
-    label: "پیشرفت",
-    icon: BarChart3,
-    color: "text-orange-500 bg-orange-50 dark:bg-orange-900/20",
-  },
 ];
-
-

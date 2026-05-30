@@ -126,8 +126,7 @@ function FormPostAndUpdateTraineeInfo({
 
       <div className="flex pt-4">
         <Button type="submit" className="gap-2">
-          <Save size={18} />
-          در حال ذخیره...
+          ذخیره کردن
         </Button>
       </div>
     </form>
