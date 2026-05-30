@@ -140,11 +140,19 @@ export function DashboardSidebar({
             })}
           </div>
 
+          <Button
+            size="sm"
+            className="w-full mt-3"
+            onClick={() => router.push("/")}
+          >
+            صفحه اصلی
+          </Button>
+
           {/* Logout */}
           <Button
             variant="destructive"
             size="sm"
-            className="w-full mt-4"
+            className="w-full mt-1"
             onClick={logOut}
           >
             خروج از حساب
