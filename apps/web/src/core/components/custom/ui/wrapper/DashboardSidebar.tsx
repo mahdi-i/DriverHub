@@ -25,7 +25,6 @@ interface DashboardSidebarTs {
 export function DashboardSidebar({
   sidebarOpen,
   setSidebarOpen,
-  license,
 }: DashboardSidebarTs) {
   const isMobile = useIsMobile();
   const pathname = usePathname();
@@ -140,6 +139,7 @@ export function DashboardSidebar({
             })}
           </div>
 
+          {/* back to main */}
           <Button
             size="sm"
             className="w-full mt-3"
