@@ -52,18 +52,29 @@ export function DashboardSidebar({
 
   async function logOut() {
     const res = await fetch(`${BASE_URL}/auth/logout`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${license}`,
-      },
-    });
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${license}`,
+    },
+  });
+  
+  //   const res = await fetch(`${BASE_URL}/auth/logout`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${license}`,
+  //     },
+  //   });
+
     const datt = await res.json();
     if (!res.ok) {
       return toast.error(datt.errors || "مشکل پیش آمد");
     }
     toast.success("با موفقیت خارج شدید");
   }
+
   return (
     <>
       {isMobile && sidebarOpen && (
