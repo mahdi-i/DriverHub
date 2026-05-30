@@ -18,7 +18,7 @@ export default function OtpInputField({
   onComplete,
 }: OtpInputFieldProps) {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center" dir="ltr">
       <InputOTP
         maxLength={length}
         value={value}
