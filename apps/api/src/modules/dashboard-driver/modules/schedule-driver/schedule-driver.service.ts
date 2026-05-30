@@ -1,12 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import {
-  FilterOperator,
-  paginate,
-  Paginated,
-  PaginateQuery,
-} from 'nestjs-paginate';
-import { Repository } from 'typeorm';
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { In, Repository } from 'typeorm';
+import { Driver } from '../driver/entities/driver.entity';
 import { CreateScheduleDriverDto } from './dto/create-schedule-driver.dto';
 import { UpdateScheduleDriverDto } from './dto/update-schedule-driver.dto';
 import { ScheduleDriver } from './entities/schedule-driver.entity';
@@ -16,11 +16,31 @@ export class ScheduleDriverService {
   constructor(
     @InjectRepository(ScheduleDriver)
     private readonly schduleDriverRepository: Repository<ScheduleDriver>,
+    @InjectRepository(Driver)
+    private driverRepository: Repository<Driver>,
   ) {}
   async create(dto: CreateScheduleDriverDto, userId: string) {
+    const driver = await this.driverRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+    if (!driver) {
+      throw new NotFoundException('رکورد راننده برای این کاربر یافت نشد');
+    }
+    const chdule = await this.schduleDriverRepository.findOne({
+      where: {
+        driverId: driver.id,
+        dayOfWeek: In(dto.dayOfWeek),
+      },
+    });
+    console.log(chdule, 'chdule');
+    if (chdule) {
+      throw new BadRequestException('روز از قبل وجود دارد');
+    }
+
     if (dto.dayOfWeek.length === 1) {
       const newWorkSchedule = this.schduleDriverRepository.create({
-        driverId: userId,
+        driverId: driver.id,
         dayOfWeek: dto.dayOfWeek[0],
         startTimeFirst: dto.startTimeFirst,
         endTimeFirst: dto.endTimeFirst,
@@ -31,7 +51,7 @@ export class ScheduleDriverService {
     } else {
       const schedules: ScheduleDriver[] = dto.dayOfWeek.map((day) => {
         return this.schduleDriverRepository.create({
-          driverId: userId,
+          driverId: driver.id,
           startTimeFirst: dto.startTimeFirst,
           endTimeFirst: dto.endTimeFirst,
           startTimeSecond: dto.startTimeSecond,
@@ -48,11 +68,22 @@ export class ScheduleDriverService {
     userId: string,
     query: PaginateQuery,
   ): Promise<Paginated<ScheduleDriver>> {
+    const driver = await this.driverRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+
+    if (!driver) {
+      throw new NotFoundException('کاربر با این ایدی پیدا نشد یا راننده نیست');
+    }
+    console.log(driver, 'driver');
     return await paginate(query, this.schduleDriverRepository, {
       where: {
-        driverId: userId,
+        driver: {
+          id: driver.id,
+        },
       },
-      searchableColumns: ['dayOfWeek'],
+      relations: ['driver'],
       defaultSortBy: [['createdAt', 'DESC']],
       select: [
         'id',
@@ -62,18 +93,16 @@ export class ScheduleDriverService {
         'startTimeSecond',
         'endTimeSecond',
         'createdAt',
+        'driver.id',
       ],
-      filterableColumns: {
-        driverId: [FilterOperator.EQ],
-        dayOfWeek: [FilterOperator.EQ],
-      },
+
       sortableColumns: ['dayOfWeek', 'createdAt'],
     });
   }
 
-  async findOne(id: string, userId: string) {
+  async findOne(id: string, driverId: string) {
     const schedule = await this.schduleDriverRepository.findOne({
-      where: { id, driverId: userId },
+      where: { id, driver: { id: driverId } },
       select: [
         'id',
         'driverId',
@@ -108,9 +137,9 @@ export class ScheduleDriverService {
     return await this.schduleDriverRepository.save(schedule);
   }
 
-  async remove(id: string, userId: string) {
+  async remove(id: string, driverId: string) {
     const schedule = await this.schduleDriverRepository.findOne({
-      where: { id, driverId: userId },
+      where: { id, driver: { id: driverId } },
     });
 
     if (!schedule) {
