@@ -1,17 +1,50 @@
+"use client";
+
 import { TableCell, TableRow } from "@/core/components/shadcn/ui/table/table";
+import { getDayOfWeekLabel } from "@/core/utils/getDayOfWeek";
+import { DaysOfWeek } from "@driverhub/shared-types";
+import { ScheduleData } from "../../../assets/types/scheduleItem";
 import ScheduleRowActions from "./ScheduleRowActions";
 
-export default function ScheduleRow({ day, shift1, shift2, getValue }) {
+export default function ScheduleRow({
+  day,
+  schedule,
+  license,
+}: {
+  day: DaysOfWeek;
+  schedule: ScheduleData;
+  license: string;
+}) {
+  const getValue = (value?: string) => value ?? "ست نشده";
+
+  const isSet = !!schedule;
+  const cellClass = isSet ? "" : "bg-black/3 rounded-md ";
+  console.log(schedule, "asidhfsiojfi");
   return (
     <TableRow>
-      <TableCell>{day}</TableCell>
-      <TableCell>{getValue(shift1?.start)}</TableCell>
-      <TableCell>{getValue(shift1?.end)}</TableCell>
-      <TableCell>{getValue(shift2?.start)}</TableCell>
-      <TableCell>{getValue(shift2?.end)}</TableCell>
+      <TableCell className="rounded-md">{getDayOfWeekLabel(day)}</TableCell>
+
+      <TableCell className={cellClass}>
+        {getValue(schedule?.startTimeFirst)}
+      </TableCell>
+      <TableCell className={cellClass}>
+        {getValue(schedule?.endTimeFirst)}
+      </TableCell>
+      <TableCell className={cellClass}>
+        {getValue(schedule?.startTimeSecond)}
+      </TableCell>
+      <TableCell className={cellClass}>
+        {getValue(schedule?.endTimeSecond)}
+      </TableCell>
 
       <TableCell className="flex items-center justify-center gap-2">
-        <ScheduleRowActions day={day} schedule={{ day, shift1, shift2 }} />
+        <ScheduleRowActions
+          day={day}
+          schedule={schedule}
+          license={license}
+          selectId={schedule?.id}
+          isSet={isSet}
+        />
       </TableCell>
     </TableRow>
   );

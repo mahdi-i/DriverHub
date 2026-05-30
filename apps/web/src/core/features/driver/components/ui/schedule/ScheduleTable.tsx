@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -5,11 +7,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/core/components/shadcn/ui/table/table";
+import { DaysOfWeek } from "@driverhub/shared-types";
+import { ScheduleData } from "../../../assets/types/scheduleItem";
 import ScheduleRow from "./ScheduleRow";
-
-const getValue = (value?: string) => value ?? "ست نشده";
-
-export default function ScheduleTable({ schedules }) {
+const ALL_DAYS: DaysOfWeek[] = [
+  DaysOfWeek.SATURDAY,
+  DaysOfWeek.SUNDAY,
+  DaysOfWeek.MONDAY,
+  DaysOfWeek.TUESDAY,
+  DaysOfWeek.WEDNESDAY,
+  DaysOfWeek.THURSDAY,
+  DaysOfWeek.FRIDAY,
+];
+export default function ScheduleTable({
+  schedules,
+  license,
+}: {
+  schedules: ScheduleData[];
+  license: string;
+}) {
   return (
     <Table>
       <TableHeader>
@@ -24,15 +40,20 @@ export default function ScheduleTable({ schedules }) {
       </TableHeader>
 
       <TableBody>
-        {schedules.map((item) => (
-          <ScheduleRow
-            key={item.day}
-            day={item.day}
-            shift1={item.shift1}
-            shift2={item.shift2}
-            getValue={getValue}
-          />
-        ))}
+        {ALL_DAYS.map((day) => {
+          const foundSchedule = schedules.find(
+            (item: ScheduleData) => item.dayOfWeek === day,
+          );
+
+          return (
+            <ScheduleRow
+              key={day}
+              day={day}
+              schedule={foundSchedule || null}
+              license={license}
+            />
+          );
+        })}
       </TableBody>
     </Table>
   );

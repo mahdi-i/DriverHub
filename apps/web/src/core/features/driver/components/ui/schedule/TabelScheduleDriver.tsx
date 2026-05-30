@@ -1,26 +1,56 @@
-"use client";
-
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/core/components/shadcn/ui/card/card";
-import { schedules } from "../../../assets/mock/schedules";
+import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
+import { DaysOfWeek } from "@driverhub/shared-types";
+import { ScheduleData } from "../../../assets/types/scheduleItem";
 import ScheduleTable from "./ScheduleTable";
+interface RawScheduleItem {
+  id: string;
+  dayOfWeek: DaysOfWeek;
+  startTimeFirst: string;
+  endTimeFirst: string;
+  startTimeSecond: string;
+  endTimeSecond: string;
+}
 
-function TabelScheduleDriver() {
+export default async function TabelScheduleDriver({
+  license,
+}: {
+  license: string;
+}) {
+  let schedules: ScheduleData[] = [];
+
+  const res = await fetch(`${BASE_URL}/schedule-driver/filter-my-schedule`, {
+    headers: {
+      Authorization: `Bearer ${license}`,
+    },
+    next: { tags: [`schedule-driver`] },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    const rawData: RawScheduleItem[] = data.data || [];
+    schedules = rawData.map((item: RawScheduleItem) => ({
+      id: item.id,
+      dayOfWeek: item.dayOfWeek,
+      startTimeFirst: item.startTimeFirst,
+      endTimeFirst: item.endTimeFirst,
+      startTimeSecond: item.startTimeSecond,
+      endTimeSecond: item.endTimeSecond,
+    }));
+  }
   return (
     <Card>
       <CardHeader>
         <CardTitle>جدول روزهای کاری</CardTitle>
       </CardHeader>
-
       <CardContent>
-        <ScheduleTable schedules={schedules} />
+        <ScheduleTable schedules={schedules} license={license} />
       </CardContent>
     </Card>
   );
 }
-
-export default TabelScheduleDriver;
