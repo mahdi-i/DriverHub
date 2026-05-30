@@ -8,6 +8,7 @@ export class UserController {
 
   @Get('me')
   async findByJwt(@UserInfo('id') userid: string) {
+    console.log(userid, 'userid');
     return this.userService.findByJwt(userid);
   }
 

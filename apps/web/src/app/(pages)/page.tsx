@@ -1,7 +1,5 @@
-import SectionLayout from "@/core/components/custom/ui/wrapper/SectionLayout";
+import CarPageComponents from "@/core/features/main/components/blocks/pages/CarPageComponents";
 
-function page() {
-  return <SectionLayout>1</SectionLayout>;
+export default function Page() {
+  return <CarPageComponents />;
 }
-
-export default page;

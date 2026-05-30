@@ -8,22 +8,22 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 @Entity()
 export class Trainee extends BaseEntity {
   @OneToOne(() => User, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn()
   user: User;
 
-  @Column()
+  @Column({ nullable: true })
   fullName: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true })
   nationalCode: string;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   age: number;
 
-  @Column({ type: 'enum', enum: GenderEnum })
+  @Column({ type: 'enum', enum: GenderEnum, nullable: true })
   gender: GenderEnum;
 
-  @Column({ default: false })
+  @Column({ default: false, nullable: true })
   hasGlasses: boolean;
 
   @Column({ type: 'text', nullable: true })
@@ -39,7 +39,7 @@ export class Trainee extends BaseEntity {
   @Column({ nullable: true })
   city: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 10, nullable: true })
   postalCode: string;
 
   @OneToMany(() => Booking, (booking) => booking.student)

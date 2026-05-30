@@ -9,6 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { SupportService } from './support.service';
+
 const ADMIN_SUPPORT_ID = 'fe335b0b-8a8c-4e55-ad8e-a736a54cbd68';
 
 @WebSocketGateway({
@@ -21,9 +22,7 @@ export class SupportGateway
 {
   @WebSocketServer()
   server: Server;
-
   private readonly logger = new Logger(SupportGateway.name);
-
   constructor(private readonly supportService: SupportService) {}
 
   handleConnection(client: Socket) {
@@ -54,7 +53,6 @@ export class SupportGateway
       const senderDetails = await this.supportService.getUserDetails(
         data.senderId,
       );
-
       const receiverDetails =
         await this.supportService.getUserDetails(targetReceiverId);
 
@@ -69,6 +67,20 @@ export class SupportGateway
       return { response: 'message sent' };
     } catch (error) {
       throw new BadRequestException('Error sending message:', error);
+    }
+  }
+
+  @SubscribeMessage('requestHistory')
+  async handleRequestHistory(@MessageBody() data: { userId: string }) {
+    try {
+      const history = await this.supportService.getChatHistoryWithUser(
+        data.userId,
+      );
+
+      return history;
+    } catch (error) {
+      this.logger.error('Error fetching history:', error);
+      throw new BadRequestException('Failed to fetch history');
     }
   }
 }

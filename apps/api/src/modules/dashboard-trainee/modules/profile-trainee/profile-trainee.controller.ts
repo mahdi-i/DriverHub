@@ -14,20 +14,22 @@ export class ProfileTraineeController {
   @SkipTraineeProfileCheck()
   async createProfile(
     @Body() createDto: CreateProfileTraineeDto,
-    @UserInfo('id') userId: string,
+    @UserInfo('traineeId') userId: string,
   ) {
+    console.log(userId, 'userId');
     return this.profileTraineeService.createProfile(createDto, userId);
   }
 
   @Get('profile')
-  async getProfile(@UserInfo('id') userId: string) {
+  async getProfile(@UserInfo('traineeId') userId: string) {
+    console.log(userId);
     return this.profileTraineeService.getProfile(userId);
   }
 
   @Put('profile')
   @UseGuards(TraineeProfileCompleteGuard)
   async updateProfile(
-    @UserInfo('id') userId: string,
+    @UserInfo('traineeId') userId: string,
     @Body() updateDto: UpdateProfileTraineeDto,
   ) {
     return this.profileTraineeService.updateProfile(userId, updateDto);
