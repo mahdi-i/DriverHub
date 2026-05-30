@@ -3,26 +3,19 @@ import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 @Injectable()
 export class ValidateStartvsEndPipe implements PipeTransform {
   transform(value: any) {
-    // if (value.startTime > value.endTime) {
-    //   throw new BadRequestException('start time can not be after end time');
-    // }
-    if (value.startTime > value.endTime) {
-      throw new BadRequestException('زمان شروع بعد از زمان پایان است');
+    if (!value.startTime || !value.endTime) {
+      throw new BadRequestException('زمان شروع و پایان الزامی است');
     }
 
-    // if (value.startTime && value.endTime) {
-    //   if (value.startTime === value.endTime) {
-    //     throw new BadRequestException(
-    //       'start time and end time can not be the same',
-    //     );
-    //   }
-    // }
-    if (value.startTime && value.endTime) {
-      if (value.startTime === value.endTime) {
-        throw new BadRequestException(
-          'زمان شروع و زمان پایان نمیتوانند مشترک باشند',
-        );
-      }
+    const start = new Date(`1970-01-01T${value.startTime}`);
+    const end = new Date(`1970-01-01T${value.endTime}`);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      throw new BadRequestException('فرمت زمان نامعتبر است');
+    }
+
+    if (start >= end) {
+      throw new BadRequestException('زمان شروع باید قبل از زمان پایان باشد.');
     }
 
     return value;
