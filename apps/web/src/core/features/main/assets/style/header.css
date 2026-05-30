@@ -1,7 +1,0 @@
-.link-nav-header {
-  @apply flex items-center  gap-1 p-1;
-}
-
-.link-nav-header:hover {
-  @apply bg-muted p-1 rounded-md transform duration-300;
-}

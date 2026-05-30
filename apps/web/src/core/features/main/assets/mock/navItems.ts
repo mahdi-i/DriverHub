@@ -8,10 +8,7 @@ export const navItems = [
     href: "/booking",
     label: "رزرو نوبت",
   },
-  {
-    href: "/blog",
-    label: "مجله",
-  },
+
   {
     href: "/about",
     label: "درباره ما",
