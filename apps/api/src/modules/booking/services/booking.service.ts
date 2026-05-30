@@ -4,6 +4,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,11 +14,11 @@ import {
   Paginated,
   PaginateQuery,
 } from 'nestjs-paginate';
-import { EntityManager, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateBookingDto } from '../dto/create-booking.dto';
 import { UpdateBookingDto } from '../dto/update-booking.dto';
 import { Booking } from '../entities/booking.entity';
-import { ScheduleValidationService } from './schedule-validation.service';
+import { BookingRepository } from '../repository/booking.repository';
 
 @Injectable()
 export class BookingService {
@@ -26,58 +27,61 @@ export class BookingService {
     private bookingRepo: Repository<Booking>,
     @InjectRepository(Driver)
     private driverRepo: Repository<Driver>,
-    private entityManager: EntityManager,
-    private scheduleValidationService: ScheduleValidationService,
+    private readonly bookingRepository: BookingRepository,
   ) {}
 
   async create(dto: CreateBookingDto, traineeId: string) {
-    const start = new Date(dto.startTime);
-    const end = new Date(dto.endTime);
+    const { driverId, bookingDate, startTime, endTime, message } = dto;
 
-    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-      throw new BadRequestException('فرمت تاریخ نامعتبر است.');
+    const startDateTimeStr = `${bookingDate}T${startTime}:00.000Z`;
+    const endDateTimeStr = `${bookingDate}T${endTime}:00.000Z`;
+    const start = new Date(startDateTimeStr);
+    const end = new Date(endDateTimeStr);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || end <= start) {
+      throw new BadRequestException('فرمت تاریخ یا زمان نامعتبر است.');
     }
-    if (end <= start) {
-      throw new BadRequestException('زمان پایان باید بعد از زمان شروع باشد.');
+
+    const queryRunner = await this.bookingRepository.startTransaction();
+    try {
+      await this.bookingRepository.startValidation();
+
+      await this.bookingRepository.checkWorkSchedule(
+        driverId,
+        start,
+        startTime,
+        endTime,
+      );
+
+      await this.bookingRepository.checkTimeConflict(driverId, start, end);
+
+      const validation = this.bookingRepository.validate();
+      if (!validation.valid) {
+        throw new BadRequestException(validation.errors.join(' '));
+      }
+
+      const booking = this.bookingRepository.manager.create(Booking, {
+        driver: { id: driverId },
+        student: { id: traineeId },
+        startTime: start,
+        endTime: end,
+        message,
+        status: AppointmentStatus.PENDING,
+      });
+
+      await queryRunner.manager.save(booking);
+      await this.bookingRepository.commitTransaction(queryRunner);
+      return booking;
+    } catch (error) {
+      await this.bookingRepository.rollbackTransaction(queryRunner);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException(error);
+    } finally {
+      await this.bookingRepository.release(queryRunner);
     }
-    return this.entityManager.transaction(
-      async (transactionalEntityManager) => {
-        await this.scheduleValidationService.checkWorkSchedule(
-          dto.driverId,
-          start,
-          start,
-          end,
-          transactionalEntityManager,
-        );
-        const isConflict =
-          await this.scheduleValidationService.checkTimeConflict(
-            dto.driverId,
-            start,
-            end,
-            transactionalEntityManager,
-          );
-
-        if (isConflict) {
-          throw new BadRequestException(
-            'متأسفانه این بازه زمانی قبلاً رزرو شده است یا تداخل دارد.',
-          );
-        }
-        const booking = transactionalEntityManager.create(Booking, {
-          driver: { id: dto.driverId },
-          student: { id: traineeId },
-          startTime: start,
-          endTime: end,
-          message: dto.message,
-          status: AppointmentStatus.PENDING,
-        });
-
-        const savedBooking = await transactionalEntityManager.save(booking);
-
-        return savedBooking;
-      },
-    );
   }
-
   async driversList(query: PaginateQuery) {
     return paginate(query, this.driverRepo, {
       sortableColumns: ['createdAt'],
@@ -166,14 +170,11 @@ export class BookingService {
   }
 
   async filterBooking(query: PaginateQuery) {
-    const qb = this.driverRepo
-      .createQueryBuilder('driver')
-      .leftJoinAndSelect('driver.profile', 'profile')
-      .leftJoinAndSelect('driver.schedules', 'schedules')
-      .where('profile.isProfileComplete = :isComplete', { isComplete: true });
-    return paginate(query, qb, {
+    return await paginate(query, this.driverRepo, {
       sortableColumns: ['createdAt'],
       defaultSortBy: [['createdAt', 'DESC']],
+      relations: ['profile', 'schedules'],
+      searchableColumns: ['profile.fullName', 'profile.carModel'],
       filterableColumns: {
         'profile.licenseType': [FilterOperator.EQ],
         'profile.gender': [FilterOperator.EQ],
@@ -182,6 +183,10 @@ export class BookingService {
         'profile.hasGlasses': [FilterOperator.EQ],
         'profile.experienceYears': [FilterOperator.GTE, FilterOperator.LTE],
         'profile.age': [FilterOperator.GTE, FilterOperator.LTE],
+
+        'schedules.startTimeFirst': [FilterOperator.EQ],
+        'schedules.endTimeFirst': [FilterOperator.EQ],
+        'schedules.dayOfWeek': [FilterOperator.EQ],
       },
       defaultLimit: 10,
       maxLimit: 50,
@@ -205,9 +210,9 @@ export class BookingService {
     driverId: string,
   ): Promise<Paginated<Booking>> {
     return paginate(query, this.bookingRepo, {
-      sortableColumns: ['createdAt', 'status', 'startTime'],
+      sortableColumns: ['createdAt', 'status', 'startTime', 'student.gender'],
       searchableColumns: ['student.fullName'],
-      filterableColumns: { status: true },
+      filterableColumns: { status: true, 'student.gender': true },
       relations: ['student', 'student.user'],
       where: { driver: { id: driverId } },
     });
