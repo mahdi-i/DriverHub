@@ -1,3 +1,4 @@
+"use client";
 import {
   TypographyLarge,
   TypographySpan,
@@ -9,7 +10,8 @@ import {
   CardTitle,
 } from "@/core/components/shadcn/ui/card/card";
 import Logo from "@/core/features/main/components/ui/logo/Logo";
-function CartBankDriverInfo() {
+import { ProfileDriverTs } from "../../../assets/types/profileDriverTs";
+function CartBankDriverInfo({ data }: { data: ProfileDriverTs }) {
   return (
     <Card className="bg-primary text-primary-foreground border-primary w-full md:w-[40%]">
       <CardHeader className="flex flex-row items-center justify-between w-full">
@@ -25,13 +27,20 @@ function CartBankDriverInfo() {
               شماره حساب بانکی
             </TypographySpan>
             <div className="mt-1 flex items-center justify-between gap-3">
-              <TypographyLarge>2044 - 2432 - 4545 - 5555</TypographyLarge>
-              <button className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors">
+              <TypographyLarge>{data.bankAccountNumber}</TypographyLarge>
+              <button
+                className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors"
+                onClick={() =>
+                  navigator.clipboard.writeText(data.bankAccountNumber)
+                }
+              >
                 کپی
               </button>
             </div>
           </div>
-          <TypographySpan>سوگند سنیور</TypographySpan>
+          <TypographySpan className="font-medium">
+            {data.fullName}
+          </TypographySpan>
         </div>
       </CardContent>
     </Card>

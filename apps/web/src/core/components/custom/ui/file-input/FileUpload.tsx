@@ -1,5 +1,4 @@
 "use client";
-
 import { cn } from "@/core/utils/shadcn/utils";
 import { CheckCircle2, File, Upload, X } from "lucide-react";
 import React, { ChangeEvent, useRef, useState } from "react";
@@ -16,12 +15,22 @@ function FileUpload({
   label = "آپلود فایل",
   accept = "image/*",
   placeholder = "فایل خود را اینجا بکشید یا کلیک کنید",
-  onFileChange,
+  onFileSelect,
   className,
+  currentFileUrl,
+}: {
+  label?: string;
+  accept?: string;
+  placeholder?: string;
+  onFileSelect?: (file: File | null) => void;
+  className?: string;
+  currentFileUrl?: string;
 }) {
-  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
+  const [localFile, setLocalFile] = useState<UploadedFile | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const displayUrl = localFile?.preview || currentFileUrl;
 
   function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
@@ -34,17 +43,13 @@ function FileUpload({
       alert("حجم فایل نباید بیشتر از 5 مگابایت باشد.");
       return;
     }
-
     const fileData: UploadedFile = {
       file,
-      preview: file.type.startsWith("image/")
-        ? URL.createObjectURL(file)
-        : undefined,
+      preview: URL.createObjectURL(file),
     };
-
-    setUploadedFile(fileData);
-    if (onFileChange) {
-      onFileChange(file);
+    setLocalFile(fileData);
+    if (onFileSelect) {
+      onFileSelect(file);
     }
   }
 
@@ -67,12 +72,12 @@ function FileUpload({
   }
 
   function handleRemoveFile() {
-    setUploadedFile(null);
+    setLocalFile(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-    if (onFileChange) {
-      onFileChange(null);
+    if (onFileSelect) {
+      onFileSelect(null);
     }
   }
 
@@ -84,7 +89,7 @@ function FileUpload({
         </label>
       )}
 
-      {!uploadedFile ? (
+      {!localFile && !currentFileUrl ? (
         <div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
@@ -104,7 +109,6 @@ function FileUpload({
             accept={accept}
             onChange={handleFileChange}
           />
-
           <div className="flex flex-col items-center gap-3 p-4 text-center">
             <div
               className={cn(
@@ -127,12 +131,12 @@ function FileUpload({
           </div>
         </div>
       ) : (
-        <div className="relative group w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-foreground rounded-sm p-4 shadow-sm transition-all hover:shadow-sm">
+        <div className="relative group w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-foreground rounded-sm p-4  transition-all ">
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-muted dark:bg-foreground border border-slate-200 dark:border-slate-700">
-              {uploadedFile.preview ? (
+              {displayUrl ? (
                 <ImgNormalCustom
-                  src={uploadedFile.preview}
+                  src={displayUrl}
                   alt="Preview"
                   width={100}
                   height={100}
@@ -143,20 +147,22 @@ function FileUpload({
                   <File className="w-8 h-8" />
                 </div>
               )}
-              <div className="absolute top-1 right-1 bg-green-500 text-white rounded-full p-0.5">
-                <CheckCircle2 className="w-3 h-3" />
-              </div>
+              {localFile && (
+                <div className="absolute top-1 right-1 bg-blue-500 text-white rounded-full p-0.5">
+                  <CheckCircle2 className="w-3 h-3" />
+                </div>
+              )}
             </div>
-
             <div className="flex-1 min-w-0">
               <TypographySpan className="block text-sm font-medium text-slate-900 dark:text-white truncate">
-                {uploadedFile.file.name}
+                {localFile ? localFile.file.name : "گواهینامه آپلود شده"}
               </TypographySpan>
               <TypographyMuted className="text-xs">
-                {(uploadedFile.file.size / 1024 / 1024).toFixed(2)} MB
+                {localFile
+                  ? `(انتخاب شده - آماده ارسال)`
+                  : "فایل از قبل موجود است"}
               </TypographyMuted>
             </div>
-
             <Button
               variant="ghost"
               size="icon"
