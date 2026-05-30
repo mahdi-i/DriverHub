@@ -1,6 +1,5 @@
 import { FetcherFunc } from "@/core/lib/fetcher/fetcher";
 import { cookies } from "next/headers";
-import { toast } from "sonner";
 import { ProfileTraineeTs } from "../../../assets/types/profileTrineeTs";
 import ProfileTraineeHeader from "../../ui/profile/ProfileTraineeHeader";
 import TraineeProfileCard from "../../ui/profile/TraineeProfileCard";
@@ -31,10 +30,7 @@ async function ProfileTrainee() {
       />
     );
   }
-  console.log(profileInfo, "profileInfo");
-  if (!profileInfo || !profileInfo.isProfileComplete) {
-    return toast.error("لطفا اطلاعات پروفایل تکمیل کنید برای باز شدن دسترسی.");
-  }
+
   return (
     <div className="space-y-6">
       <ProfileTraineeHeader data={profileInfo} license={license} />

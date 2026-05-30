@@ -69,7 +69,7 @@ function FormPostAndUpdateTraineeInfo({
           name="medicalConditions"
           type="text"
           placeholder="مثلاً: دیابت، آسم و..."
-          value={InfoData?.medicalConditions || "-"}
+          value={InfoData?.medicalConditions || "ندارم"}
           onChange={handleChange}
         />
       </div>

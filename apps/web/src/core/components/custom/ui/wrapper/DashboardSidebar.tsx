@@ -58,9 +58,9 @@ export function DashboardSidebar({
         Authorization: `Bearer ${license}`,
       },
     });
-    console.log(res);
+    const datt = await res.json();
     if (!res.ok) {
-      return toast.error("مشکل پیش آمد");
+      return toast.error(datt.errors || "مشکل پیش آمد");
     }
     toast.success("با موفقیت خارج شدید");
   }

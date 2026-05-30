@@ -71,12 +71,7 @@ async function BookingDashboardDriver({
       const result = await res.json();
       bookings = result.data || [];
     }
-  } catch (err) {
-    console.log(
-      err instanceof Error
-        ? err.message
-        : "خطای نامشخص در بارگذاری لیست نوبت‌ها",
-    );
+  } catch {
     bookings = defaultBookings;
   }
 

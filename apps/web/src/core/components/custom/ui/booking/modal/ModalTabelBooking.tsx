@@ -30,7 +30,7 @@ function ModalTabelBooking({ booking }) {
                   نام
                 </TypographyP>
                 <TypographyP className="font-medium">
-                  {booking.student.fullName}
+                  {booking?.student?.fullName || "-"}
                 </TypographyP>
               </div>
             </div>
@@ -41,7 +41,7 @@ function ModalTabelBooking({ booking }) {
                   سن
                 </TypographyP>
                 <TypographyP className="font-medium">
-                  {booking.student.age} سال
+                  {booking?.student?.age || 0} سال
                 </TypographyP>
               </div>
             </div>
@@ -53,7 +53,7 @@ function ModalTabelBooking({ booking }) {
                 جنسیت
               </TypographyP>
               <TypographyP className="font-medium">
-                {getGender(booking.student.gender)}
+                {getGender(booking?.student?.gender)}
               </TypographyP>
             </div>
             <div>
@@ -61,7 +61,8 @@ function ModalTabelBooking({ booking }) {
                 استان / شهر
               </TypographyP>
               <TypographyP className="font-medium">
-                {booking.student.address} / {booking.student.city}
+                {booking?.student?.address || "-"} /{" "}
+                {booking?.student?.city || "-"}
               </TypographyP>
             </div>
           </div>
@@ -73,7 +74,7 @@ function ModalTabelBooking({ booking }) {
                 عینک
               </TypographyP>
               <TypographyP className="font-medium">
-                {booking.student.hasGlasses ? "بله" : "خیر"}
+                {booking?.student?.hasGlasses ? "بله" : "خیر"}
               </TypographyP>
             </div>
           </div>
@@ -85,17 +86,17 @@ function ModalTabelBooking({ booking }) {
                 بیماری یا شرایط خاص
               </TypographyP>
               <TypographyP className="font-medium">
-                {booking.student.medicalConditions || "ندارد"}
+                {booking?.student?.medicalConditions || "ندارد"}
               </TypographyP>
             </div>
           </div>
 
-          {booking.note && (
+          {booking?.note && (
             <div className="rounded-lg bg-muted p-3">
               <TypographyP className="text-sm text-muted-foreground">
                 یادداشت
               </TypographyP>
-              <TypographyP className="font-medium">{booking.note}</TypographyP>
+              <TypographyP className="font-medium">{booking?.note}</TypographyP>
             </div>
           )}
         </div>

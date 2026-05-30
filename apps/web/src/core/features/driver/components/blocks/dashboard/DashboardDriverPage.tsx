@@ -42,8 +42,7 @@ async function DashboardDriverPage() {
       const result = await res.json();
       bookings = result.data || [];
     }
-  } catch (err) {
-    console.log(err.errors || "خطای نامشخص در بارگذاری داشبورد");
+  } catch {
     bookings = defaultBookings;
   }
 
