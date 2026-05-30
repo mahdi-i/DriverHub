@@ -1,4 +1,4 @@
-import DashboardTraineePage from "@/core/features/driver/components/blocks/dashboard/DashboardTraineePage";
+import DashboardTraineePage from "@/core/features/trainee/components/blocks/dashboard/DashboardTraineePage";
 
 function page() {
   return (

@@ -1,11 +1,7 @@
-import ProfileTrainee from "@/core/features/driver/components/blocks/profile/ProfileTrainee"
+import ProfileTrainee from "@/core/features/trainee/components/blocks/profile/ProfileTrainee";
 
 function page() {
-  return (
-    <div>
-      <ProfileTrainee />
-    </div>
-  )
+  return <ProfileTrainee />;
 }
 
-export default page
+export default page;

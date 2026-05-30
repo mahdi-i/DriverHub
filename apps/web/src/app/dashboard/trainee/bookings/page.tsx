@@ -1,9 +1,7 @@
+import BookingDashboardTrinee from "@/core/features/trainee/components/blocks/booking/BookingDashboardTrinee";
+
 function page() {
-  return (
-    <div>
-      bookings
-    </div>
-  )
+  return <BookingDashboardTrinee />;
 }
 
-export default page
+export default page;
