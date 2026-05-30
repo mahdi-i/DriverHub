@@ -14,12 +14,15 @@ import { Calendar } from "react-multi-date-picker";
 function CalendarBooking({
   valueCalendar,
   setValueCalendar,
+  numberMonth,
+  label = "تاریخ شروع",
 }: {
   valueCalendar: Date | null;
   setValueCalendar: React.Dispatch<React.SetStateAction<Date | null>>;
+  numberMonth?: number;
+  label?: string;
 }) {
   const isMobile = useIsMobile();
-  const numberOfMonths = isMobile ? 1 : 2;
 
   const formattedDate = valueCalendar
     ? new Intl.DateTimeFormat("fa-IR", {
@@ -31,7 +34,7 @@ function CalendarBooking({
 
   return (
     <div className="md:col-span-4 space-y-1.5">
-      <label className="text-select">تاریخ شروع</label>
+      <label className="text-select"> {label}</label>
       <Popover>
         <PopoverTrigger asChild>
           <button
@@ -56,7 +59,7 @@ function CalendarBooking({
                 setValueCalendar(null);
               }
             }}
-            numberOfMonths={numberOfMonths}
+            numberOfMonths={numberMonth ? numberMonth : isMobile ? 1 : 2}
             format="YYYY/MM/DD"
             calendar={persian}
             locale={persian_fa}

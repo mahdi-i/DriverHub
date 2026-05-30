@@ -1,6 +1,7 @@
 "use client";
 import { EType } from "@/core/assets/@types/etype";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
+import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import React from "react";
 import { toast } from "sonner";
 import { authdatafake } from "../../../assets/mock/authdatafake";
@@ -40,7 +41,7 @@ export default function SelectRoleModal({
     if (!phoneNumber) return toast.error("شماره موبایل وارد نشده");
     if (!selectedRole)
       return toast.error("نقش مورد نظر انتخاب نشده, لطفا دوباره تلاش کنید.");
-    const sendOp = await fetch(`http://localhost:3001/auth/request-otp`, {
+    const sendOp = await fetch(`${BASE_URL}/auth/request-otp`, {
       method: "POST",
       credentials: "include",
       headers: {
@@ -51,11 +52,11 @@ export default function SelectRoleModal({
       }),
     });
 
+    const data = await sendOp.json();
     if (!sendOp.ok) {
-      throw new Error("خطا در ارسال کد");
+      return toast.error(data.errors || "خطا در ارسال کد");
     }
 
-    const data = await sendOp.json();
     console.log("OTP Response:", data);
     setStep(3);
   }
