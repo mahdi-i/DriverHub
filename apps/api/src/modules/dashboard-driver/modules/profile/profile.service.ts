@@ -141,6 +141,7 @@ export class ProfileService {
     profile.address = createCompletProfile.address;
     profile.hasGlasses = createCompletProfile.hasGlasses;
     profile.age = createCompletProfile.age;
+    profile.city = createCompletProfile.city;
     profile.isProfileComplete = true;
 
     const updatedProfile = await this.profileRepository.save(profile);

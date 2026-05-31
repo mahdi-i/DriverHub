@@ -1,3 +1,4 @@
+import AddressInput from "@/core/components/custom/ui/address-input/AddressInput";
 import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Input } from "@/core/components/shadcn/ui/input/input";
 import {
@@ -7,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/core/components/shadcn/ui/select/select";
-import { Save } from "lucide-react";
 
 function FormPostAndUpdateTraineeInfo({
   handleSubmit,
@@ -15,6 +15,8 @@ function FormPostAndUpdateTraineeInfo({
   handleChange,
   handleGenderChange,
   isCreat,
+  selectedProvince,
+  handleProvinceSelect,
 }) {
   console.log(InfoData, "InfoInfoData");
   return (
@@ -75,13 +77,10 @@ function FormPostAndUpdateTraineeInfo({
       </div>
 
       <div className="space-y-2 ">
-        <label className="text-sm font-medium">آدرس محل سکونت</label>
-        <Input
-          name="address"
-          type="text"
-          placeholder="آدرس کامل را وارد کنید"
-          value={InfoData?.address || "-"}
-          onChange={handleChange}
+        <label className="text-sm font-medium">استان</label>
+        <AddressInput
+          address={selectedProvince}
+          setAddress={handleProvinceSelect}
         />
       </div>
 

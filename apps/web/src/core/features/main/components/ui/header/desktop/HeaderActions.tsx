@@ -2,7 +2,7 @@
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
 import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Roles } from "@driverhub/shared-types";
-import { Calendar, Headphones, User } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -50,13 +50,6 @@ export default function HeaderActions({
   }, [isAuthModalOpen, pathname, router, searchParams]);
   return (
     <div className="flex items-center ">
-      <Button variant="ghost" className="gap-2">
-        <Link href="/support" className="flex items-center gap-2">
-          <Headphones className="h-6 w-6 " />
-          <TypographyP className="font-medium">پشتیبانی</TypographyP>
-        </Link>
-      </Button>
-
       <Button variant="ghost" className="gap-2">
         <Link
           href="/dashboard/reservations"

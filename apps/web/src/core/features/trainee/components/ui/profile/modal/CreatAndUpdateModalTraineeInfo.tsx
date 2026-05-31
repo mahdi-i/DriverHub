@@ -22,6 +22,7 @@ function CreatAndUpdateModalTraineeInfo({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [InfoData, setInfoData] = useState<ProfileTraineeTs>(data);
+  const [selectedProvince, setSelectedProvince] = useState(data.address || "");
   const route = useRouter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
@@ -30,13 +31,23 @@ function CreatAndUpdateModalTraineeInfo({
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
+  function handleProvinceSelect(province: string) {
+    setSelectedProvince(province);
+    setInfoData((prev) => ({
+      ...prev,
+      address: province,
+    }));
+  }
   function handleGenderChange(value: GenderEnum) {
     setInfoData((prev) => ({ ...prev, gender: value }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (!selectedProvince) {
+      toast.error("لطفاً استان را انتخاب کنید");
+      return;
+    }
 
     try {
       const payload = {
@@ -46,7 +57,7 @@ function CreatAndUpdateModalTraineeInfo({
         gender: InfoData.gender,
         hasGlasses: InfoData.hasGlasses,
         medicalConditions: InfoData.medicalConditions,
-        address: InfoData.address,
+        address: selectedProvince,
         postalCode: InfoData.postalCode,
       };
 
@@ -98,6 +109,8 @@ function CreatAndUpdateModalTraineeInfo({
           handleChange={handleChange}
           handleGenderChange={handleGenderChange}
           isCreat={isCreat}
+          handleProvinceSelect={handleProvinceSelect}
+          selectedProvince={selectedProvince}
         />
       </Modal>
     </div>

@@ -9,6 +9,7 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
+  Max,
   Min,
 } from 'class-validator';
 
@@ -44,6 +45,8 @@ export class CreateBasicProfileDto {
 }
 export class CreateCompletProfileDto {
   @IsNotEmpty()
+  @Min(18)
+  @Max(80)
   age: number;
 
   @IsString()
@@ -58,7 +61,7 @@ export class CreateCompletProfileDto {
   @IsOptional()
   medicalConditions?: string;
 
-  @IsEnum(IranProvinceEnum)
+  @IsEnum(IranProvinceEnum, { message: 'فرمت استان را درست وارد کنید' })
   address: IranProvinceEnum;
 
   @IsString()

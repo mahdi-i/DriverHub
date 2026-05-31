@@ -1,4 +1,5 @@
 "use client";
+import AddressInput from "@/core/components/custom/ui/address-input/AddressInput";
 import Modal from "@/core/components/custom/ui/modal/Modal";
 import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Input } from "@/core/components/shadcn/ui/input/input";
@@ -17,7 +18,7 @@ function AdditionalModalDriverInfoCard({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoData, setInfoData] = useState(data);
-
+  const [selectedProvince, setSelectedProvince] = useState(data.address || "");
   function handleInfoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setInfoData((prev) => ({
@@ -25,17 +26,25 @@ function AdditionalModalDriverInfoCard({
       [name]: type === "checkbox" ? checked : value,
     }));
   }
-
+  function handleProvinceSelect(province: string) {
+    setSelectedProvince(province);
+    setInfoData((prev) => ({
+      ...prev,
+      address: province,
+    }));
+  }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+    if (!selectedProvince) {
+      return toast.error("لطفاً استان را انتخاب کنید");
+    }
     try {
       const payload = {
         age: Number(infoData.age),
         nationalCode: infoData.nationalCode,
         hasGlasses: infoData.hasGlasses,
         medicalConditions: infoData.medicalConditions,
-        address: infoData.address,
+        address: selectedProvince,
         city: infoData.city,
       };
 
@@ -100,13 +109,10 @@ function AdditionalModalDriverInfoCard({
             />
           </div>
           <div className="space-y-2 ">
-            <Input
-              name="address"
-              label="استان"
-              value={infoData.address}
-              onChange={handleInfoChange}
-              placeholder="اصفهان"
-              required
+            <label className="text-sm font-medium leading-none">استان</label>
+            <AddressInput
+              address={selectedProvince}
+              setAddress={handleProvinceSelect}
             />
           </div>
           <div className="space-y-2">

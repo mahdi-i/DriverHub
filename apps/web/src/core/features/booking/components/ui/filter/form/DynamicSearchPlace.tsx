@@ -1,5 +1,6 @@
+import AddressInput from "@/core/components/custom/ui/address-input/AddressInput";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
-import { Input } from "@/core/components/shadcn/ui/input/input";
+import { useState } from "react";
 
 function DynamicSearchPlace({
   isCar,
@@ -9,6 +10,7 @@ function DynamicSearchPlace({
   isBase1,
   isBase3,
 }) {
+  const [province, setProvince] = useState("");
   return (
     <>
       {(isCar ||
@@ -18,14 +20,8 @@ function DynamicSearchPlace({
         isBase3 ||
         isHeavyMotor) && (
         <div className="md:w-full space-y-1">
-          <TypographyP className="text-select">
-            منطقه آموزش
-          </TypographyP>
-          <Input
-            type="text"
-            placeholder="نام محله یا منطقه..."
-            className="w-full "
-          />
+          <TypographyP className="text-select">منطقه آموزش</TypographyP>
+          <AddressInput address={province} setAddress={setProvince} />
         </div>
       )}
     </>
