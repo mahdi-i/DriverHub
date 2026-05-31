@@ -96,7 +96,7 @@ function FileUpload({
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
           className={cn(
-            "relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-md cursor-pointer transition-all duration-300 ease-in-out bg-slate-50 dark:bg-slate-900/50",
+            "relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-md cursor-pointer transition-all duration-300 ease-in-out bg-slate-50 dark:bg-primary-foreground/50",
             isDragging
               ? "border-primary bg-primary/5 scale-[1.02]"
               : "border-slate-300 dark:border-slate-700 hover:border-primary hover:bg-muted dark:hover:bg-foreground",
@@ -131,7 +131,7 @@ function FileUpload({
           </div>
         </div>
       ) : (
-        <div className="relative group w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-foreground rounded-sm p-4  transition-all ">
+        <div className="relative group w-full bg-white dark:bg-primary-foreground border border-slate-200 dark:border-foreground rounded-sm p-4  transition-all ">
           <div className="flex items-center gap-4">
             <div className="relative w-16 h-16 shrink-0 rounded-lg overflow-hidden bg-muted dark:bg-foreground border border-slate-200 dark:border-slate-700">
               {displayUrl ? (
@@ -154,7 +154,7 @@ function FileUpload({
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <TypographySpan className="block text-sm font-medium text-slate-900 dark:text-white truncate">
+              <TypographySpan className="block text-sm font-medium text-primary-foreground dark:text-white truncate">
                 {localFile ? localFile.file.name : "گواهینامه آپلود شده"}
               </TypographySpan>
               <TypographyMuted className="text-xs">

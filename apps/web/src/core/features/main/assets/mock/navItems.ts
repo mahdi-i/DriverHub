@@ -1,8 +1,8 @@
 import { BookOpen, Calendar, Info, Mail, Users } from "lucide-react";
 export const navItems = [
   {
-    href: "/instructors",
-    label: "مربیان",
+    href: "/",
+    label: "خانه",
   },
   {
     href: "/booking",
@@ -10,18 +10,18 @@ export const navItems = [
   },
 
   {
-    href: "/about",
+    href: "/more/about",
     label: "درباره ما",
   },
   {
-    href: "/contact",
+    href: "/more/contact",
     label: "تماس با ما",
   },
 ];
 export const navItemsMobile = [
   {
-    href: "/instructors",
-    label: "مربیان",
+    href: "/",
+    label: "خانه",
     icon: Users,
   },
   {
@@ -35,12 +35,12 @@ export const navItemsMobile = [
     icon: BookOpen,
   },
   {
-    href: "/about",
+    href: "/more/about",
     label: "درباره ما",
     icon: Info,
   },
   {
-    href: "/contact",
+    href: "/more/contact",
     label: "تماس با ما",
     icon: Mail,
   },
