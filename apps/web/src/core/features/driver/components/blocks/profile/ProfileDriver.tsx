@@ -1,6 +1,7 @@
 import { FetcherFunc } from "@/core/lib/fetcher/fetcher";
 import { GetPayloadByLicense } from "@/core/lib/license/getPayloadByLicense";
 import { cookies } from "next/headers";
+import { Suspense } from "react";
 import { ProfileDriverTs } from "../../../assets/types/profileDriverTs";
 import AdditionalDriverInfoCard from "../../ui/profile/AdditionalDriverInfoCard";
 import CarInfoDriverCard from "../../ui/profile/CarInfoDriverCard";
@@ -8,6 +9,7 @@ import CartBankDriverInfo from "../../ui/profile/CartBankDriverInfo";
 import DriverProfileCard from "../../ui/profile/DriverProfileCard";
 import CompletModalDriverInfo from "../../ui/profile/modal/CompletModalDriverInfo";
 import ProfileDriverHeader from "../../ui/profile/ProfileDriverHeader";
+import ProfileDriverSkeleton from "../../ui/profile/skeleton/ProfileDriverSkeleton";
 
 async function ProfileDriver() {
   const cookieStore = await cookies();
@@ -33,21 +35,23 @@ async function ProfileDriver() {
   }
   return (
     <div className="space-y-6">
-      <ProfileDriverHeader
-        data={profileInfo}
-        token={license}
-        driverId={userId}
-      />
+      <Suspense fallback={<ProfileDriverSkeleton />}>
+        <ProfileDriverHeader
+          data={profileInfo}
+          token={license}
+          driverId={userId}
+        />
 
-      <DriverProfileCard data={profileInfo} />
+        <DriverProfileCard data={profileInfo} />
 
-      <div className="flex flex-col md:flex-row gap-4">
-        <CarInfoDriverCard data={profileInfo} />
+        <div className="flex flex-col md:flex-row gap-4">
+          <CarInfoDriverCard data={profileInfo} />
 
-        <CartBankDriverInfo data={profileInfo} />
-      </div>
+          <CartBankDriverInfo data={profileInfo} />
+        </div>
 
-      <AdditionalDriverInfoCard data={profileInfo} license={license} />
+        <AdditionalDriverInfoCard data={profileInfo} license={license} />
+      </Suspense>
     </div>
   );
 }

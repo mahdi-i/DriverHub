@@ -11,7 +11,7 @@ function FAQWrapper({ title, faqs }: FaqTs) {
   return (
     <div className="space-y-6">
       <div className="flex items-center mb-5">
-        <TypographyH3 className="md:text-xl text-xl"> {title}</TypographyH3>
+        <TypographyH3> {title}</TypographyH3>
       </div>
 
       <div className="grid border border-slate-200 rounded-sm ">
@@ -22,7 +22,7 @@ function FAQWrapper({ title, faqs }: FaqTs) {
           >
             <summary className="flex cursor-pointer items-center justify-between p-5 hover:bg-slate-50 transition-colors">
               <div className="flex items-center gap-4">
-                <TypographyH4 className="flex items-center justify-center  w-10 h-10 rounded-full bg-blue-100 text-blue-600">
+                <TypographyH4 className="flex items-center justify-center  w-10 h-10 rounded-full bg-blue-100 text-secondary">
                   ?
                 </TypographyH4>
                 <TypographyLarge className="text-[#4b5259] md:text-lg text-sm">
@@ -33,7 +33,7 @@ function FAQWrapper({ title, faqs }: FaqTs) {
             </summary>
 
             <div className="px-5 pb-5 pt-0 text-slate-600 leading-relaxed animate-in fade-in slide-in-from-top-2 duration-300">
-              <TypographyP className="mt-2 md:text-md text-xs">
+              <TypographyP className="mt-2 md:text-md text-sm">
                 {faq.answer}
               </TypographyP>
             </div>

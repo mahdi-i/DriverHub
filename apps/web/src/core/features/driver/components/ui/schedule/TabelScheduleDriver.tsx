@@ -6,8 +6,10 @@ import {
 } from "@/core/components/shadcn/ui/card/card";
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { DaysOfWeek } from "@driverhub/shared-types";
+import { Suspense } from "react";
 import { ScheduleData } from "../../../assets/types/scheduleItem";
 import ScheduleTable from "./ScheduleTable";
+import ScheduleTableSkeleton from "./skeleton/ScheduleTableSkeleton";
 interface RawScheduleItem {
   id: string;
   dayOfWeek: DaysOfWeek;
@@ -49,7 +51,9 @@ export default async function TabelScheduleDriver({
         <CardTitle>جدول روزهای کاری</CardTitle>
       </CardHeader>
       <CardContent>
-        <ScheduleTable schedules={schedules} license={license} />
+        <Suspense fallback={<ScheduleTableSkeleton />}>
+          <ScheduleTable schedules={schedules} license={license} />
+        </Suspense>
       </CardContent>
     </Card>
   );

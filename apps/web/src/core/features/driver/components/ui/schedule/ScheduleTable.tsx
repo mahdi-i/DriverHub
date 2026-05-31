@@ -7,18 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/core/components/shadcn/ui/table/table";
-import { DaysOfWeek } from "@driverhub/shared-types";
+import { ALL_DAYS } from "../../../assets/mock/allDats";
 import { ScheduleData } from "../../../assets/types/scheduleItem";
 import ScheduleRow from "./ScheduleRow";
-const ALL_DAYS: DaysOfWeek[] = [
-  DaysOfWeek.SATURDAY,
-  DaysOfWeek.SUNDAY,
-  DaysOfWeek.MONDAY,
-  DaysOfWeek.TUESDAY,
-  DaysOfWeek.WEDNESDAY,
-  DaysOfWeek.THURSDAY,
-  DaysOfWeek.FRIDAY,
-];
+
 export default function ScheduleTable({
   schedules,
   license,

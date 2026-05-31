@@ -1,14 +1,15 @@
 import { FetcherFunc } from "@/core/lib/fetcher/fetcher";
 import { cookies } from "next/headers";
+import { Suspense } from "react";
 import { ProfileTraineeTs } from "../../../assets/types/profileTrineeTs";
 import ProfileTraineeHeader from "../../ui/profile/ProfileTraineeHeader";
 import TraineeProfileCard from "../../ui/profile/TraineeProfileCard";
 import CompletModalTraineeInfo from "../../ui/profile/modal/CreatAndUpdateModalTraineeInfo";
+import ProfileTraineeSkeleton from "../../ui/profile/skeleton/ProfileTraineeSkeleton";
 
 async function ProfileTrainee() {
   const cookieStore = await cookies();
   const license = cookieStore.get("licenseToken")?.value;
-  console.log(license);
 
   let profileInfo: ProfileTraineeTs | null = null;
 
@@ -33,9 +34,10 @@ async function ProfileTrainee() {
 
   return (
     <div className="space-y-6">
-      <ProfileTraineeHeader data={profileInfo} license={license} />
-
-      <TraineeProfileCard data={profileInfo} />
+      <Suspense fallback={<ProfileTraineeSkeleton />}>
+        <ProfileTraineeHeader data={profileInfo} license={license} />
+        <TraineeProfileCard data={profileInfo} />
+      </Suspense>
     </div>
   );
 }
