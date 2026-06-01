@@ -16,6 +16,8 @@ import {
   MapPin,
   Star,
 } from "lucide-react";
+import { redirect } from "next/navigation";
+import BookingModalDriverMoreInfo from "./modal/BookingModalDriverMoreInfo";
 export default function DriverBookingCard({
   driver,
 }: {
@@ -29,6 +31,8 @@ export default function DriverBookingCard({
     age: number;
     city: string;
     isComplete: boolean;
+    hasGlasses: boolean;
+    medicalConditions: string;
   };
 }) {
   return (
@@ -90,6 +94,7 @@ export default function DriverBookingCard({
                 >
                   گواهینامه {getLicenseTypeLabel(driver.licenseType)}
                 </Badge>
+
                 <div className="flex items-center gap-1 text-yellow-500 text-sm font-medium">
                   <Star className="w-4 h-4 fill-current" />
                   <TypographySpan>{driver.rating}</TypographySpan>
@@ -100,12 +105,15 @@ export default function DriverBookingCard({
 
           <div className="flex sm:flex-col justify-between sm:justify-center items-center sm:items-end gap-2 sm:gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-border">
             <div className="flex-col flex  w-full md:flex gap-2">
-              <Button size="sm" variant="default" className="w-full">
+              <Button
+                size="sm"
+                variant="default"
+                className="w-full"
+                onClick={() => redirect(`/booking/${driver.id}`)}
+              >
                 رزرو
               </Button>
-              <Button size="sm" variant="outline" className="w-full">
-                جزئیات
-              </Button>
+              <BookingModalDriverMoreInfo driver={driver} />
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { Driver } from '@core/dashboard-driver/modules/driver/entities/driver.entity';
+import { ProfileDriver } from '@core/dashboard-driver/modules/profile/entities/profile.entity';
 import { AppointmentStatus } from '@driverhub/shared-types';
 import {
   BadRequestException,
@@ -27,6 +28,8 @@ export class BookingService {
     private bookingRepo: Repository<Booking>,
     @InjectRepository(Driver)
     private driverRepo: Repository<Driver>,
+    @InjectRepository(ProfileDriver)
+    private driverProfileRepo: Repository<ProfileDriver>,
     private readonly bookingRepository: BookingRepository,
   ) {}
 
@@ -92,6 +95,31 @@ export class BookingService {
       defaultLimit: 10,
       maxLimit: 50,
     });
+  }
+  async driverBookingProfile(driverId: string) {
+    const driver = await this.driverProfileRepo.findOne({
+      where: { driver: { id: driverId } },
+      relations: ['driver', 'user'],
+    });
+
+    if (!driver) throw new NotFoundException('راننده پیدا نشد');
+    console.log('Driver:', driver);
+
+    return {
+      fullName: driver.fullName,
+      gender: driver.gender,
+      carColor: driver.carColor,
+      carModel: driver.carModel,
+      experienceYears: driver.experienceYears,
+      medicalConditions: driver.medicalConditions,
+      hasGlasses: driver.hasGlasses,
+      age: driver.age,
+      bankAccountNumber: driver.bankAccountNumber,
+      city: driver.city,
+      address: driver.address,
+      licenseType: driver.licenseType,
+      phone: driver.user.phone,
+    };
   }
 
   async confirm(bookingId: string, driverId: string, note?: string) {

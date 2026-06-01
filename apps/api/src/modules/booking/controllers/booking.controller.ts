@@ -1,6 +1,6 @@
 import { ProfileCompleteGuard } from '@core/dashboard-driver/guards/profile-complete.guard';
 import { TraineeProfileCompleteGuard } from '@core/dashboard-trainee/guard/trainee-profile-complete.guard';
-import { Roles } from '@driverhub/shared-types';
+import { DaysOfWeek, Roles } from '@driverhub/shared-types';
 import {
   Body,
   Controller,
@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { PaginationOptions } from '@shared/decorators/pagination-option.decorator';
@@ -19,10 +20,14 @@ import { Paginate, PaginateQuery } from 'nestjs-paginate';
 import { CreateBookingDto } from '../dto/create-booking.dto';
 import { UpdateBookingDto } from '../dto/update-booking.dto';
 import { BookingService } from '../services/booking.service';
+import { GetFreeSlot } from '../services/get-Free-slots.service';
 
 @Controller('booking')
 export class BookingController {
-  constructor(private readonly bookingService: BookingService) {}
+  constructor(
+    private readonly bookingService: BookingService,
+    private readonly getFreeSlot: GetFreeSlot,
+  ) {}
 
   @Post()
   @UseGuards(TraineeProfileCompleteGuard)
@@ -74,6 +79,22 @@ export class BookingController {
   })
   driversList(@Paginate() query: PaginateQuery) {
     return this.bookingService.driversList(query);
+  }
+
+  @Get('drivers-booking-profile/:driverId')
+  @Public()
+  driverBookingProfile(@Param('driverId') driverId: string) {
+    return this.bookingService.driverBookingProfile(driverId);
+  }
+
+  @Get('drivers-schedule/:driverId/:dayofweek')
+  getFreeBusySlots(
+    @Param('driverId') driverId: string,
+    @Param('dayofweek') dayofweek: DaysOfWeek,
+    @Query('date') date: string,
+  ) {
+    const targetDate = date ? new Date(date) : new Date();
+    return this.getFreeSlot.getFreeBusySlots(driverId, dayofweek, targetDate);
   }
 
   @Get('my-list-trainee')

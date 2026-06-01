@@ -10,6 +10,7 @@ import { Booking } from './entities/booking.entity';
 import { BookingRepository } from './repository/booking.repository';
 import { ActionBookingService } from './services/action-booking.service';
 import { BookingService } from './services/booking.service';
+import { GetFreeSlot } from './services/get-Free-slots.service';
 
 @Module({
   imports: [
@@ -22,7 +23,12 @@ import { BookingService } from './services/booking.service';
     ]),
   ],
   controllers: [BookingController, ActionBookingController],
-  providers: [BookingService, ActionBookingService, BookingRepository],
+  providers: [
+    BookingService,
+    ActionBookingService,
+    BookingRepository,
+    GetFreeSlot,
+  ],
   exports: [BookingService],
 })
 export class BookingModule {}
