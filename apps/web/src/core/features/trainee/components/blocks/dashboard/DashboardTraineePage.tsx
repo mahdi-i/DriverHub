@@ -1,6 +1,7 @@
 import { BookingRequest } from "@/core/features/booking/assets/types/bookingTs";
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { getAccessTokenSSR } from "@/core/lib/coockie/getAccess";
+import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import TableBookingTrainee from "../../ui/bookings/TabelBookingDashboardTrinee";
 import AccessDashboardItemTrainee from "../../ui/dashboard/AccessDashboardItemTrainee";
@@ -8,6 +9,9 @@ const defaultBookings: BookingRequest[] = [];
 
 async function DashboardTraineePage() {
   const license = await getAccessTokenSSR();
+  if (!license) {
+    redirect("/");
+  }
   let bookings: BookingRequest[] = [];
   try {
     const res = await fetch(

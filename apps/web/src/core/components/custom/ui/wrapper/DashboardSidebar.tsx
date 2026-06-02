@@ -11,6 +11,7 @@ import Logo from "@/core/features/main/components/ui/logo/Logo";
 import { useIsMobile } from "@/core/hooks/useIsMobile";
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { X } from "lucide-react";
+import { Route } from "next";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
@@ -111,7 +112,7 @@ export function DashboardSidebar({
               return (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={item.href as Route}
                   onClick={() => isMobile && setSidebarOpen(false)}
                   className={`
                     flex items-center gap-3 px-4 py-2.5 rounded-sm transition-all

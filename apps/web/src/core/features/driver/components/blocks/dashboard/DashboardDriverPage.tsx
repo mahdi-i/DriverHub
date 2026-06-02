@@ -10,6 +10,7 @@ import { weeklyData } from "@/core/features/driver/assets/mock/analysis";
 import TabelBookingDashboard from "@/core/features/driver/components/ui/bookings/TabelBookingDashboard";
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { getAccessTokenSSR } from "@/core/lib/coockie/getAccess";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { toast } from "sonner";
 import AccessDashboardItem from "../../ui/dashboard/AccessDashboardItem";
@@ -18,6 +19,9 @@ import DashboardDriverSkeleton from "./skeleton/DashboardDriverSkeleton";
 const defaultBookings: BookingRequest[] = [];
 async function DashboardDriverPage() {
   const license = await getAccessTokenSSR();
+  if (!license) {
+    redirect("/");
+  }
   let bookings: BookingRequest[] = [];
   try {
     const res = await fetch(

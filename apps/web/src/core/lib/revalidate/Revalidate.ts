@@ -2,8 +2,8 @@
 import { revalidateTag } from "next/cache";
 
 export async function revalidateChache(driverId: string) {
-  revalidateTag(`schedule-driver-${driverId}`);
+  revalidateTag(`schedule-driver-${driverId}`, "max");
 }
 export async function revalidateBookingChache(driverId: string) {
-  revalidateTag(`booking-driver-${driverId}`);
+  revalidateTag(`booking-driver-${driverId}`, "max");
 }

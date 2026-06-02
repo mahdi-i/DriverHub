@@ -7,6 +7,7 @@ import {
 } from "@/core/components/custom/ui/typography/Typography";
 import { popularCities } from "@/core/features/main/assets/mock/popularCities";
 import { provinces } from "@/core/features/main/assets/mock/provinces";
+import { Route } from "next";
 import Link from "next/link";
 
 function MapSectionMainPage() {
@@ -35,7 +36,7 @@ function MapSectionMainPage() {
               <Link
                 className="bg-[#eaeef78a] p-1 px-2 rounded-md font-normal text-secondary border text-sm cursor-pointer hover:bg-[#dde2f0] transition-colors whitespace-nowrap"
                 key={p.id}
-                href={`${p.name}`}
+                href={`${p.name}` as Route}
               >
                 اموزشگاه رانندگی {p.name}
               </Link>
@@ -47,7 +48,7 @@ function MapSectionMainPage() {
               <Link
                 className="font-medium text-text-light text-sm hover:text-primary transition-colors cursor-pointer whitespace-nowrap"
                 key={p.id}
-                href={`${p.name}`}
+                href={`${p.name}` as Route}
               >
                 {p.name}
               </Link>

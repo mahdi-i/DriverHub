@@ -11,6 +11,8 @@ function NumberInputBookingFilter() {
     start: "",
     end: "",
   });
+  console.log(ageRange);
+  console.log(experienceRange);
   const handleAgeChange = (start: string, end: string) => {
     setAgeRange({ start, end });
     console.log("سن:", start, "تا", end);

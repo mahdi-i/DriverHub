@@ -1,6 +1,7 @@
 import { FetcherFunc } from "@/core/lib/fetcher/fetcher";
 import { GetPayloadByLicense } from "@/core/lib/license/getPayloadByLicense";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { ProfileDriverTs } from "../../../assets/types/profileDriverTs";
 import AdditionalDriverInfoCard from "../../ui/profile/AdditionalDriverInfoCard";
@@ -14,22 +15,21 @@ import ProfileDriverSkeleton from "../../ui/profile/skeleton/ProfileDriverSkelet
 async function ProfileDriver() {
   const cookieStore = await cookies();
   const license = cookieStore.get("licenseToken")?.value;
+  if (!license) {
+    redirect("/");
+  }
   const getUserInfo = await GetPayloadByLicense(license);
   const userId = getUserInfo?.driverId || null;
-
-  let profileInfo: ProfileDriverTs | null = null;
-  console.log("xxxxxxxxxxxxxxxxxxxxxxxxx");
-  console.log(profileInfo, "profileInfo");
-  console.log(getUserInfo, "userId");
-  try {
-    profileInfo = await FetcherFunc({
-      method: "GET",
-      path: `/profile-driver`,
-    });
-  } catch {
-    console.log("لطفا اطلاعات پروفایل تکمیل کنید برای باز شدن دسترسی.");
+  if (!getUserInfo?.driverId) {
+    redirect("/");
   }
-  console.log(profileInfo, "profileInfo");
+  let profileInfo: ProfileDriverTs | null = null;
+
+  profileInfo = await FetcherFunc({
+    method: "GET",
+    path: `/profile-driver`,
+  });
+
   if (!profileInfo) {
     return <CompletModalDriverInfo license={license} />;
   }

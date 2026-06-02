@@ -1,7 +1,5 @@
 import {
-  TypographyH1,
   TypographyH2,
-  TypographyH3,
   TypographyLarge,
   TypographyP,
 } from "@/core/components/custom/ui/typography/Typography";

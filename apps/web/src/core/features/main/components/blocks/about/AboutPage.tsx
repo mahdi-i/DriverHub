@@ -1,8 +1,6 @@
 import FAQWrapper from "@/core/components/custom/ui/faq/FAQWrapper";
 import {
-  TypographyH1,
   TypographyH2,
-  TypographyH3,
   TypographyH4,
   TypographyLarge,
   TypographyP,

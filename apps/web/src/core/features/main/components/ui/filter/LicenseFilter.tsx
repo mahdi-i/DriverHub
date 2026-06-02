@@ -1,5 +1,6 @@
 "use client";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
+import { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { licenses } from "../../../assets/mock/licenses";
@@ -15,7 +16,7 @@ export function LicenseFilter() {
 
         return (
           <Link
-            href={`/${license.id}`}
+            href={`/${license.id}` as Route}
             key={license.id}
             scroll={false}
             className={`

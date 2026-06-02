@@ -1,6 +1,7 @@
 "use client";
 import { TypographySpan } from "@/core/components/custom/ui/typography/Typography";
 import ModalAuthHeader from "@/core/features/auth/components/blocks/auth/ModalAuthHeader";
+import { Route } from "next";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,7 +18,7 @@ function Navigationbar() {
 
     const params = new URLSearchParams(searchParams);
     params.set("auth", "open");
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    router.push(`${pathname}?${params.toString()}` as Route, { scroll: false });
   }
 
   useEffect(() => {
@@ -35,7 +36,7 @@ function Navigationbar() {
           newUrl !==
           `${pathname}${searchParams.toString() ? "?" + searchParams.toString() : ""}`
         ) {
-          router.push(newUrl, { scroll: false });
+          router.push(newUrl as Route, { scroll: false });
         }
       }
     }
@@ -55,7 +56,7 @@ function Navigationbar() {
           return (
             <Link
               key={item.name}
-              href={item.href === "/auth" ? "/" : item.href}
+              href={item.href === "/auth" ? "/" : (item.href as Route)}
               className={`flex h-auto flex-col items-center gap-1 px-2 py-1 transition-colors duration-200 ${
                 isActive ? "text-secondary font-bold" : "text-muted-foreground"
               }`}

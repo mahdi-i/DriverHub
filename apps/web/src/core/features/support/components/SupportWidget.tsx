@@ -1,6 +1,6 @@
 //This section was completely developed with
-//  artificial intelligence, and it was developed
-//  with artificial intelligence because we do not
+//  ai, and it was developed
+//  with ai because we do not
 //  have enough experience in
 //  developing web sockets on the front end,
 //  and I only developed the back-end section myself.
@@ -96,10 +96,6 @@ export default function SupportWidget({ userId }: SupportWidgetProps) {
     });
 
     newSocket.on("disconnect", () => setStatus("Disconnected"));
-    newSocket.on("connect_error", (err) => {
-      console.error("خطا:", err.message);
-      setStatus("Disconnected");
-    });
 
     return () => {};
   }, [userId]);

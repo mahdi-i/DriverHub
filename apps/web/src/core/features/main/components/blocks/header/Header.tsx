@@ -2,7 +2,7 @@ import { Roles } from "@driverhub/shared-types";
 import DesktopHeader from "../../ui/header/desktop/DesktopHeader";
 import MobileHeader from "../../ui/header/mobile/MobileHeader";
 
-function Header({ role }: { role: Roles }) {
+function Header({ role }: { role?: Roles }) {
   return (
     <>
       <header className="hidden md:block">

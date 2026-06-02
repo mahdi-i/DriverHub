@@ -10,6 +10,7 @@ import HeadBookingDashboardSkeleton from "@/core/features/booking/components/ui/
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { getAccessTokenSSR } from "@/core/lib/coockie/getAccess";
 import { AppointmentStatus, GenderEnum } from "@driverhub/shared-types";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { toast } from "sonner";
 import HeadBookingDashboard from "../../../../../components/custom/ui/booking/HeadBookingDashboard";
@@ -29,6 +30,9 @@ async function BookingDashboardTrinee({
 }) {
   let bookings: BookingRequest[] = defaultBookings;
   const license = await getAccessTokenSSR();
+  if (!license) {
+    redirect("/");
+  }
   try {
     const Params = await searchParams;
     const page = Params.page || DEFAULT_PAGE;

@@ -1,5 +1,6 @@
 "use client";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
+import { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "../../../../assets/mock/navItems";
@@ -16,7 +17,7 @@ export default function HeaderListNav() {
           return (
             <li key={item.href}>
               <Link
-                href={item.href}
+                href={item.href as Route}
                 className={`link-nav-header ${isActive ? "text-primary" : ""}`}
               >
                 <TypographyP className="font-normal">{item.label}</TypographyP>

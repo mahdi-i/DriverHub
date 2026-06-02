@@ -35,21 +35,6 @@ export class LicenseManager {
     }
   }
 
-  private encryptText(plaintext: string): string {
-    const iv = crypto.randomBytes(this.ivLength);
-    const cipher = crypto.createCipheriv(
-      this.algorithm,
-      this.encKey,
-      iv,
-    ) as crypto.CipherGCM;
-    const encrypted = Buffer.concat([
-      cipher.update(plaintext, "utf8"),
-      cipher.final(),
-    ]);
-    const authTag = cipher.getAuthTag();
-    return Buffer.concat([iv, authTag, encrypted]).toString("base64");
-  }
-
   private decryptText(encryptedBase64: string): string {
     const buf = Buffer.from(encryptedBase64, "base64");
     const iv = buf.slice(0, this.ivLength);

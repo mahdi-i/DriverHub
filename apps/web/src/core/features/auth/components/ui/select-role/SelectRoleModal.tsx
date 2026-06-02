@@ -2,7 +2,6 @@
 import { EType } from "@/core/assets/@types/etype";
 import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
-import React from "react";
 import { toast } from "sonner";
 import { authdatafake } from "../../../assets/mock/authdatafake";
 import { formatPhoneNumber } from "../../../utils/formatPhoneNumber";

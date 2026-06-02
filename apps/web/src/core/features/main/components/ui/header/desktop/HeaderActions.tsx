@@ -3,6 +3,7 @@ import { TypographyP } from "@/core/components/custom/ui/typography/Typography";
 import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Roles } from "@driverhub/shared-types";
 import { Calendar, User } from "lucide-react";
+import { Route } from "next";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -25,7 +26,7 @@ export default function HeaderActions({
 
     const params = new URLSearchParams(searchParams);
     params.set("auth", "open");
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    router.push(`${pathname}?${params.toString()}` as Route, { scroll: false });
   }
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export default function HeaderActions({
           newUrl !==
           `${pathname}${searchParams.toString() ? "?" + searchParams.toString() : ""}`
         ) {
-          router.push(newUrl, { scroll: false });
+          router.push(newUrl as Route, { scroll: false });
         }
       }
     }
@@ -52,7 +53,7 @@ export default function HeaderActions({
     <div className="flex items-center ">
       <Button variant="ghost" className="gap-2">
         <Link
-          href="/dashboard/reservations"
+          href="/dashboard/driver/bookings"
           className="flex items-center gap-2"
         >
           <Calendar className="h-6 w-6 " />
