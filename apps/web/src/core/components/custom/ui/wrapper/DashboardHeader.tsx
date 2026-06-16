@@ -6,25 +6,22 @@ import { TypographyP } from "../typography/Typography";
 
 export function DashboardHeader({
   setSidebarOpen,
-  driverId,
+  license,
 }: {
   setSidebarOpen: (open: boolean) => void;
-  driverId?: string;
+  license?: string;
 }) {
   const [userFullname, setUserFullname] =
     useState<string>("در حال بارگذاری...");
   useEffect(() => {
     async function getSummaryInfo() {
-      const res = await fetch(
-        `${BASE_URL}/profile-driver/summary-driver/${driverId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const res = await fetch(`${BASE_URL}/user/me`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${license}`,
         },
-      );
+      });
       const data = await res.json();
-      console.log(data, "datadatadatadatadata");
       if (data && data.fullName) {
         setUserFullname(data.fullName);
       } else {
@@ -33,7 +30,7 @@ export function DashboardHeader({
     }
 
     getSummaryInfo();
-  }, [driverId]);
+  }, [license]);
   return (
     <header className="flex items-center justify-between px-5 py-3 border-b border-gray-100 bg-white shadow-sm">
       <div className="flex items-center gap-4">

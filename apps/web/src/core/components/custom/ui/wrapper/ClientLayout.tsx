@@ -5,10 +5,10 @@ import { DashboardSidebar } from "./DashboardSidebar";
 
 export default function ClientLayout({
   children,
-  driverId,
+  license,
 }: Readonly<{
   children: React.ReactNode;
-  driverId: string;
+  license: string;
 }>) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
@@ -20,7 +20,7 @@ export default function ClientLayout({
       />
 
       <section className="flex-1 flex flex-col overflow-hidden">
-        <DashboardHeader setSidebarOpen={setSidebarOpen} driverId={driverId} />
+        <DashboardHeader setSidebarOpen={setSidebarOpen} license={license} />
 
         <div className="flex-1 overflow-x-auto">{children}</div>
       </section>
