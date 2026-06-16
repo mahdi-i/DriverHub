@@ -39,7 +39,7 @@ export class AuthService {
 
     if (isRateLimited) {
       throw new BadRequestException(
-        'لطفاً چند دقیقه صبر کنید و دوباره تلاش کنید',
+        'درخواست شما محدود شد لطفا دوباره تلاش کنید.',
       );
     }
 
