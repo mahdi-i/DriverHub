@@ -85,6 +85,7 @@ export class BookingService {
       await this.bookingRepository.release(queryRunner);
     }
   }
+
   async driversList(query: PaginateQuery) {
     return paginate(query, this.driverRepo, {
       sortableColumns: ['createdAt'],
@@ -96,6 +97,7 @@ export class BookingService {
       maxLimit: 50,
     });
   }
+
   async driverBookingProfile(driverId: string) {
     const driver = await this.driverProfileRepo.findOne({
       where: { driver: { id: driverId } },
@@ -118,7 +120,7 @@ export class BookingService {
       city: driver.city,
       address: driver.address,
       licenseType: driver.licenseType,
-      phone: driver.user.phone,
+      user: driver.user,
     };
   }
 
@@ -198,27 +200,54 @@ export class BookingService {
   }
 
   async filterBooking(query: PaginateQuery) {
-    return await paginate(query, this.driverRepo, {
+    const drivers = await paginate(query, this.driverProfileRepo, {
       sortableColumns: ['createdAt'],
       defaultSortBy: [['createdAt', 'DESC']],
-      relations: ['profile', 'schedules'],
-      searchableColumns: ['profile.fullName', 'profile.carModel'],
+      relations: ['driver', 'driver.schedules', 'driver.bookings'],
+      searchableColumns: ['fullName', 'carModel'],
       filterableColumns: {
-        'profile.licenseType': [FilterOperator.EQ],
-        'profile.gender': [FilterOperator.EQ],
-        'profile.address': [FilterOperator.EQ],
-        'profile.city': [FilterOperator.EQ, FilterOperator.ILIKE],
-        'profile.hasGlasses': [FilterOperator.EQ],
-        'profile.experienceYears': [FilterOperator.GTE, FilterOperator.LTE],
-        'profile.age': [FilterOperator.GTE, FilterOperator.LTE],
-
-        'schedules.startTimeFirst': [FilterOperator.EQ],
-        'schedules.endTimeFirst': [FilterOperator.EQ],
-        'schedules.dayOfWeek': [FilterOperator.EQ],
+        licenseType: [FilterOperator.EQ],
+        gender: [FilterOperator.EQ],
+        address: [FilterOperator.EQ],
+        city: [FilterOperator.EQ, FilterOperator.ILIKE],
+        hasGlasses: [FilterOperator.EQ],
+        experienceYears: [FilterOperator.GTE, FilterOperator.LTE],
+        age: [FilterOperator.GTE, FilterOperator.LTE],
+        'driver.schedules.startTimeFirst': [FilterOperator.EQ],
+        'driver.schedules.endTimeFirst': [FilterOperator.EQ],
+        'driver.schedules.dayOfWeek': [FilterOperator.EQ],
       },
       defaultLimit: 10,
       maxLimit: 50,
     });
+    console.log(drivers);
+    if (!drivers || !drivers.data || drivers.data.length === 0) {
+      return { data: [], meta: drivers?.meta };
+    }
+
+    const payload = drivers.data.map((profile) => ({
+      driver: {
+        id: profile.driver?.id,
+        name: profile?.fullName,
+        licenseType: profile?.licenseType,
+        experience: profile?.experienceYears,
+        carColor: profile?.carColor,
+        carModel: profile?.carModel,
+        totalBooking: profile.driver?.bookings?.length || 0,
+        age: profile?.age,
+        city: profile?.city,
+        gender: profile?.gender,
+        isComplete: profile.isProfileComplete,
+        hasGlasses: profile?.hasGlasses,
+        medicalConditions: profile?.medicalConditions,
+      },
+    }));
+
+    return {
+      data: payload,
+      meta: drivers.meta,
+      links: drivers.links,
+    };
   }
 
   async findAllForTrainee(
