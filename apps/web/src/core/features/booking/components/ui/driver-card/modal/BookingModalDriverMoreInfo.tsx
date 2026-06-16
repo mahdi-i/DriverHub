@@ -6,8 +6,9 @@ import {
 } from "@/core/components/custom/ui/typography/Typography";
 import { Badge } from "@/core/components/shadcn/ui/badge/badge";
 import { Button } from "@/core/components/shadcn/ui/button/button";
+import { DriversBookingsTs } from "@/core/features/booking/assets/types/driversBookingsTs";
+import { getGender } from "@/core/utils/getGender";
 import { getLicenseTypeLabel } from "@/core/utils/getLicenseTypeLabel";
-import { LicenseTypeEnum } from "@driverhub/shared-types";
 import {
   Briefcase,
   CalendarDays,
@@ -16,28 +17,11 @@ import {
   EyeOff,
   FileText,
   MapPin,
-  Star,
   Stethoscope,
 } from "lucide-react";
 import { useState } from "react";
 
-function BookingModalDriverMoreInfo({
-  driver,
-}: {
-  driver: {
-    id: string;
-    name: string;
-    avatar: string;
-    licenseType: LicenseTypeEnum;
-    experience: number;
-    rating: number;
-    age: number;
-    city: string;
-    isComplete: boolean;
-    hasGlasses: boolean;
-    medicalConditions: string;
-  };
-}) {
+function BookingModalDriverMoreInfo({ driver }: { driver: DriversBookingsTs }) {
   const [isModalOpen, setisModalOpen] = useState(false);
 
   return (
@@ -56,7 +40,7 @@ function BookingModalDriverMoreInfo({
         <div className="flex items-center justify-between border-b pb-3">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
-              {driver.name.charAt(0)}
+              {driver.name?.charAt(0) || "-"}
             </div>
             <div>
               <TypographyH4>{driver.name}</TypographyH4>
@@ -71,10 +55,7 @@ function BookingModalDriverMoreInfo({
               )}
             </div>
           </div>
-          <div className="flex items-center gap-1 text-primary">
-            <Star className="w-5 h-5 fill-current" />
-            <span className="font-bold text-lg">{driver.rating}</span>
-          </div>
+          <Badge variant="outline"> {getGender(driver.gender)}</Badge>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -132,14 +113,7 @@ function BookingModalDriverMoreInfo({
               )}
               <span className="font-medium">وضعیت عینک</span>
             </div>
-            <Badge
-              variant={driver.hasGlasses ? "default" : "outline"}
-              className={
-                driver.hasGlasses
-                  ? "bg-secondary"
-                  : "text-muted-foreground border-muted-foreground"
-              }
-            >
+            <Badge variant={driver.hasGlasses ? "default" : "outline"}>
               {driver.hasGlasses ? "دارد" : "ندارد"}
             </Badge>
           </div>

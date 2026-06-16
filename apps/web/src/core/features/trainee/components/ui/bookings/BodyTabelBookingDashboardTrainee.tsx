@@ -23,7 +23,6 @@ function BodyTabelBookingDashboardTrainee({
   bookings: BookingRequest[];
   license: string;
 }) {
-  console.log(bookings, "bookingsbookings");
   return (
     <TableBody>
       {bookings.length === 0 ? (
@@ -70,7 +69,7 @@ function BodyTabelBookingDashboardTrainee({
                 bookingId={booking.id}
                 status={booking.status}
                 license={license}
-                userRole={"TEACHER"}
+                userRole={"DRIVER"}
               />
               <ModalTabelBooking booking={booking} />
             </TableCell>

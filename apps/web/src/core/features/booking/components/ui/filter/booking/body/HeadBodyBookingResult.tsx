@@ -1,4 +1,4 @@
-"use clinet";
+"use client";
 import { TypographyMuted } from "@/core/components/custom/ui/typography/Typography";
 import { useState } from "react";
 

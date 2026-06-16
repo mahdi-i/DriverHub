@@ -1,6 +1,6 @@
 import { Paginations } from "@/core/components/custom/ui/pagination/Pagination";
 
-import { mockBookingDrivers } from "@/core/features/booking/assets/mock/bookingDriver";
+import { DriversBookingsTs } from "@/core/features/booking/assets/types/driversBookingsTs";
 import DriverBookingCard from "@/core/features/booking/components/ui/driver-card/DriverBookingCard";
 import HeadBodyBookingResult from "./HeadBodyBookingResult";
 const paginationFake = {
@@ -9,14 +9,14 @@ const paginationFake = {
   limit: 5,
 };
 
-function BodyBookingResult() {
+function BodyBookingResult({ bookings }: { bookings: DriversBookingsTs[] }) {
   return (
     <div className="flex-1 space-y-6">
       <HeadBodyBookingResult />
 
       <div className="space-y-4">
-        {mockBookingDrivers.map((driver) => (
-          <DriverBookingCard key={driver.id} driver={driver} />
+        {bookings.map((driver, index) => (
+          <DriverBookingCard key={index} driver={driver} />
         ))}
       </div>
       <Paginations pagination={paginationFake} />

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import FormPostAndUpdateTraineeInfo from "../FormPostAndUpdateTraineeInfo";
+import { getErrorMessage } from "@/core/utils/getErrorMessage";
 
 function CreatAndUpdateModalTraineeInfo({
   isCreat = false,
@@ -83,8 +84,8 @@ function CreatAndUpdateModalTraineeInfo({
             : "اطلاعات با موفقیت بروزرسانی شد"),
       );
       route.refresh();
-    } catch {
-      toast.error("خ لطفاً دوباره تلاش کنید.");
+    } catch (err) {
+      toast.error(getErrorMessage(err));
     }
   }
   return (

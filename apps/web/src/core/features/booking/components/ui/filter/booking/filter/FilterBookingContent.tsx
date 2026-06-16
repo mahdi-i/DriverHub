@@ -1,7 +1,7 @@
+import { Button } from "@/core/components/shadcn/ui/button/button";
+import NumberInputBookingFilter from "./NumberInputBookingFilter";
 import SearchInputFilterBooking from "./SearchInputFilterBooking";
 import SelectorBookingFilter from "./SelectorBookingFilter";
-import NumberInputBookingFilter from "./NumberInputBookingFilter";
-import { Button } from "@/core/components/shadcn/ui/button/button";
 function FilterBookingContent() {
   return (
     <div className="space-y-6 p-2 ">

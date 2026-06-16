@@ -9,6 +9,7 @@ import BookingTableSkeleton from "@/core/features/booking/components/ui/skeleton
 import HeadBookingDashboardSkeleton from "@/core/features/booking/components/ui/skeleton/HeadBookingDashboardSkeleton";
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { getAccessTokenSSR } from "@/core/lib/coockie/getAccess";
+import { getErrorMessage } from "@/core/utils/getErrorMessage";
 import { AppointmentStatus, GenderEnum } from "@driverhub/shared-types";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -62,21 +63,13 @@ async function BookingDashboardTrinee({
       },
     );
 
+    const data = await res.json();
     if (!res.ok) {
-      let errorMessage = "خطا در دریافت درخواست‌ها";
-      try {
-        const errorData = await res.json();
-        errorMessage = errorData.errors || errorData.message || errorMessage;
-      } catch {
-        errorMessage = `خطای سرور (${res.status})`;
-      }
-
-      toast.error(errorMessage);
+      toast.error(getErrorMessage(data));
 
       bookings = defaultBookings;
     } else {
-      const result = await res.json();
-      bookings = result.data || [];
+      bookings = data.data || [];
     }
   } catch {
     bookings = defaultBookings;

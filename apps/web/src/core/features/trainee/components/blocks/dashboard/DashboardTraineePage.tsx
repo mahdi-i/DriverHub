@@ -1,6 +1,7 @@
 import { BookingRequest } from "@/core/features/booking/assets/types/bookingTs";
 import { BASE_URL } from "@/core/lib/basic-link/BackendBasicLink";
 import { getAccessTokenSSR } from "@/core/lib/coockie/getAccess";
+import { getErrorMessage } from "@/core/utils/getErrorMessage";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
 import TableBookingTrainee from "../../ui/bookings/TabelBookingDashboardTrinee";
@@ -25,18 +26,10 @@ async function DashboardTraineePage() {
     );
     const data = await res.json();
     if (!res.ok) {
-      let errorMessage = "خطا در دریافت درخواست‌ها";
-      try {
-        errorMessage = data.errors || data.message || errorMessage;
-      } catch {
-        errorMessage = `خطای سرور (${res.status})`;
-      }
-
-      toast.error(errorMessage);
+      toast.error(getErrorMessage(data));
       bookings = defaultBookings;
     } else {
-      const result = await res.json();
-      bookings = result.data || [];
+      bookings = data.data || [];
     }
   } catch {
     bookings = defaultBookings;

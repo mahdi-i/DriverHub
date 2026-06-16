@@ -13,15 +13,11 @@ async function ProfileTrainee() {
 
   let profileInfo: ProfileTraineeTs | null = null;
 
-  try {
-    profileInfo = await FetcherFunc({
-      method: "GET",
-      path: `/profile-trainee/profile`,
-    });
-    console.log(profileInfo, "xxxxxxxx");
-  } catch {
-    console.log("لطفا اطلاعات پروفایل تکمیل کنید برای باز شدن دسترسی.");
-  }
+  profileInfo = await FetcherFunc({
+    method: "GET",
+    path: `/profile-trainee/profile`,
+  });
+
   if (!profileInfo || !profileInfo.isProfileComplete) {
     return (
       <CompletModalTraineeInfo
