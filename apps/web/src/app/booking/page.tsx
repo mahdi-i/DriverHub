@@ -2,10 +2,10 @@ import BookingFilterComponnets from "@/core/features/booking/components/blocks/b
 import BookingPageSkeleton from "@/core/features/booking/components/ui/driver-card/skeleton/BookingPageSkeleton";
 import { Suspense } from "react";
 export const dynamic = "force-dynamic";
-export default function page() {
+export default function page({ searchParams }) {
   return (
     <Suspense fallback={<BookingPageSkeleton />}>
-      <BookingFilterComponnets />
+      <BookingFilterComponnets searchParams={searchParams} />
     </Suspense>
   );
 }
