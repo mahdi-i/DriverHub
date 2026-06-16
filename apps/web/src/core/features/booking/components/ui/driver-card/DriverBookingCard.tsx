@@ -5,10 +5,9 @@ import {
   TypographySpan,
 } from "@/core/components/custom/ui/typography/Typography";
 import { Badge } from "@/core/components/shadcn/ui/badge/badge";
-import { Button } from "@/core/components/shadcn/ui/button/button";
 import { Card, CardContent } from "@/core/components/shadcn/ui/card/card";
+import { getGender } from "@/core/utils/getGender";
 import { getLicenseTypeLabel } from "@/core/utils/getLicenseTypeLabel";
-import { LicenseTypeEnum } from "@driverhub/shared-types";
 import {
   Briefcase,
   CalendarDays,
@@ -16,24 +15,12 @@ import {
   MapPin,
   Star,
 } from "lucide-react";
-import { redirect } from "next/navigation";
-import BookingModalDriverMoreInfo from "./modal/BookingModalDriverMoreInfo";
+import { DriversBookingsTs } from "../../../assets/types/driversBookingsTs";
+import RedirectBookinkBtn from "./RedirectBookinkBtn";
 export default function DriverBookingCard({
   driver,
 }: {
-  driver: {
-    id: string;
-    name: string;
-    avatar: string;
-    licenseType: LicenseTypeEnum;
-    experience: number;
-    rating: number;
-    age: number;
-    city: string;
-    isComplete: boolean;
-    hasGlasses: boolean;
-    medicalConditions: string;
-  };
+  driver: DriversBookingsTs;
 }) {
   return (
     <Card className="w-full border-border/60">
@@ -41,19 +28,13 @@ export default function DriverBookingCard({
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex items-start gap-4 flex-1">
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm bg-muted">
-              {driver.avatar ? (
-                <ImgNormalCustom
-                  src={driver.avatar}
-                  alt={driver.name}
-                  width={100}
-                  height={100}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="h-full w-full flex items-center justify-center bg-primary/10 text-primary font-bold text-xl">
-                  {driver.name.charAt(0)}
-                </div>
-              )}
+              <ImgNormalCustom
+                src={"/img/dashboard/driver/profile/avatar-4c776756.svg"}
+                alt={driver.name}
+                width={100}
+                height={100}
+                className="h-full w-full object-cover"
+              />
             </div>
 
             <div className="space-y-1">
@@ -64,7 +45,7 @@ export default function DriverBookingCard({
                 {driver.isComplete && (
                   <Badge
                     variant="secondary"
-                    className="gap-1 text-xs bg-green-100 text-green-700 hover:bg-green-200"
+                    className="gap-1 text-xs bg-green-100 text-success hover:bg-green-200"
                   >
                     <CheckCircle2 className="w-3 h-3" />
                     تایید شده
@@ -95,27 +76,15 @@ export default function DriverBookingCard({
                   گواهینامه {getLicenseTypeLabel(driver.licenseType)}
                 </Badge>
 
-                <div className="flex items-center gap-1 text-yellow-500 text-sm font-medium">
+                <div className="flex items-center gap-1 text-primary text-sm font-medium">
                   <Star className="w-4 h-4 fill-current" />
-                  <TypographySpan>{driver.rating}</TypographySpan>
+                  <TypographySpan>{getGender(driver.gender)}</TypographySpan>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex sm:flex-col justify-between sm:justify-center items-center sm:items-end gap-2 sm:gap-4 pt-2 sm:pt-0 border-t sm:border-t-0 border-border">
-            <div className="flex-col flex  w-full md:flex gap-2">
-              <Button
-                size="sm"
-                variant="default"
-                className="w-full"
-                onClick={() => redirect(`/booking/${driver.id}`)}
-              >
-                رزرو
-              </Button>
-              <BookingModalDriverMoreInfo driver={driver} />
-            </div>
-          </div>
+          <RedirectBookinkBtn driver={driver} />
         </div>
       </CardContent>
     </Card>
