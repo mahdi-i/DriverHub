@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
 export interface CookieOptions {
@@ -18,6 +19,8 @@ export class CookieService {
     sameSite: 'lax',
     path: '/',
   };
+
+  constructor(private readonly configService: ConfigService) {}
 
   set(
     res: Response,

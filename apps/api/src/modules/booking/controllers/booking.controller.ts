@@ -82,7 +82,6 @@ export class BookingController {
   }
 
   @Get('drivers-booking-profile/:driverId')
-  @Public()
   driverBookingProfile(@Param('driverId') driverId: string) {
     return this.bookingService.driverBookingProfile(driverId);
   }
