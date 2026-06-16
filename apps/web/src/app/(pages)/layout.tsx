@@ -7,9 +7,15 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
-  title: "DriverHub",
-  description:
-    "Step up your shoe game with DriverHub! Find the latest styles for men and women, shop online, and get them fast.",
+  title: "Your App Name",
+  description: "Your app description",
+  manifest: "/manifest.json",
+  themeColor: "#1f2937",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
 };
 
 async function layout({
@@ -21,6 +27,7 @@ async function layout({
   const license = cookieStore.get("licenseToken")?.value;
 
   const getUserInfo = await GetPayloadByLicense(license);
+
   const userId = getUserInfo?.userId || null;
   const userRole = getUserInfo?.role || null;
   return (
@@ -28,6 +35,7 @@ async function layout({
       <Header role={userRole} />
       <HeroSection />
       <SupportWidget userId={userId} />
+
       {children}
       <Footer />
     </main>
