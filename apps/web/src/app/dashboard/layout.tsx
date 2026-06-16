@@ -14,16 +14,11 @@ export default async function RootLayout({
   if (!license) {
     redirect("/");
   }
-
   const payloadLicense = await GetPayloadByLicense(license);
-
-  if (!payloadLicense?.driverId) {
-    redirect("/");
-  }
-  const driverId = payloadLicense.driverId;
+  console.log(payloadLicense);
 
   return (
-    <ClientLayout driverId={driverId}>
+    <ClientLayout license={license}>
       <ContainerDashboard>{children}</ContainerDashboard>
     </ClientLayout>
   );
