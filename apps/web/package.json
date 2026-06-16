@@ -28,7 +28,7 @@
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-date-object": "^2.1.9",
-    "react-dom": "19.2.4",
+    "react-dom": "19.2.7",
     "react-multi-date-picker": "^4.5.2",
     "recharts": "^3.8.1",
     "socket.io-client": "^4.8.3",
