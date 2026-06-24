@@ -55,7 +55,7 @@
     "eslint-config-next": "16.2.4",
     "eslint-plugin-storybook": "^10.4.0",
     "playwright": "^1.60.0",
-    "postcss": "^8.5.13",
+    "postcss": "^8.5.15",
     "storybook": "^10.4.0",
     "tailwindcss": "^4",
     "tailwindcss-animate": "^1.0.7",
