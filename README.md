@@ -20,20 +20,6 @@
 
 ---
 
-## 🏗️ معماری
-
-### Monorepo Structure
-DriverHub/
-├── apps/
-│ ├── api/ # NestJS Backend
-│ └── web/ # Next.js Frontend
-│
-└── packages/
-├── shared-constants/ # Constants مشترک
-├── shared-types/ # TypeScript Types مشترک
-└── shared-utils/ # Utility Functions مشترک
-
-
 ### Tech Stack
 
 | بخش | تکنولوژی |
